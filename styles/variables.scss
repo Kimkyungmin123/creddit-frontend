@@ -1,0 +1,22 @@
+body,
+body[data-theme='light'] {
+  --bg-page1: #dae6e4;
+  --bg-page2: #fff;
+  --text1: #262626;
+}
+
+@mixin dark {
+  --bg-page1: #0f0f0f;
+  --bg-page2: #0f0f0f;
+  --text1: #dbdbdb;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    @include dark;
+  }
+}
+
+body[data-theme='dark'] {
+  @include dark;
+}

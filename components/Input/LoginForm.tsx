@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import styles from './Input.module.css';
 
-const Input = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -33,4 +33,4 @@ const Input = () => {
   );
 };
 
-export default Input;
+export default LoginForm;

@@ -16,7 +16,7 @@
 .loginEmail {
   padding: 0.625rem 1.5rem;
   width: 100%;
-  border: solid 1px var(--border);
+  border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
 }
 
@@ -86,7 +86,7 @@
 }
 
 .snsLoginBtn {
-  background-color: var(--fff);
+  background-color: var(--bg-page2);
   width: 100%;
   border-radius: 0.25rem;
   cursor: pointer;
@@ -101,13 +101,9 @@
 
 .snsLoginBtn span {
   align-items: center;
-
   padding: 0 0.125rem;
 }
 
 .snsLoginBtn:active {
   color: var(--text2);
-}
-
-.snsLogiIcon > svg {
 }

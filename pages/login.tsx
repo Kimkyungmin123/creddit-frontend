@@ -13,7 +13,6 @@ const Login: NextPage = () => {
         <h1>로그인</h1>
         {/* <Input /> */}
         <LoginForm />
-
         <SocialLogin />
         <NonLogin />
       </div>

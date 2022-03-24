@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Home: NextPage = () => {
   return (
-    <Layout title="제목">
+    <Layout title="creddit">
       <div className={styles.container}>
         <Link href="/login">
           <a>로그인</a>

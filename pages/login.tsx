@@ -5,7 +5,7 @@ import styles from '../styles/Login.module.css';
 
 const Login: NextPage = () => {
   return (
-    <Layout title="제목: 로그인">
+    <Layout title="creddit: 로그인">
       <div className={styles.container}>
         로그인
         <Input />

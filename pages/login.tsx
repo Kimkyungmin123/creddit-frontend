@@ -7,7 +7,7 @@ const Login: NextPage = () => {
   return (
     <Layout title="제목: 로그인">
       <div className={styles.container}>
-        로그인
+        <h1>로그인</h1>
         <Input />
       </div>
     </Layout>

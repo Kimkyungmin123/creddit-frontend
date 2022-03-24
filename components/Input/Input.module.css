@@ -82,6 +82,11 @@
     
 }
 
+.nonAccount a{
+    text-decoration: none;
+    color: var(--text3);
+}
+
 .snsLoginBtn > span{
     vertical-align: middle;
     padding: 0 2px;

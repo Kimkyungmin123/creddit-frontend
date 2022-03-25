@@ -1,3 +1,3 @@
-import Input from '../Input';
+import NonLogin from './NonLogin';
 
-export default Input;
+export default NonLogin;

@@ -1,3 +1,3 @@
-import Input from '../Input';
+import LoginForm from './LoginForm';
 
-export default Input;
+export default LoginForm;

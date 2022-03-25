@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
 // import Input from '../components/Input';
-import LoginForm from '../components/Input/LoginForm';
-import NonLogin from '../components/Input/NonLogin';
-import SocialLogin from '../components/Input/SocialLoginButton';
+
 import Layout from '../components/Layout';
+import LoginForm from '../components/LoginForm/LoginForm';
+import NonLogin from '../components/NonLogin/NonLogin';
+import SocialLoginButton from '../components/SocialLoginButton/SocialLoginButton';
 import styles from '../styles/Login.module.css';
 
 const Login: NextPage = () => {
@@ -13,7 +14,7 @@ const Login: NextPage = () => {
         <h1>로그인</h1>
         {/* <Input /> */}
         <LoginForm />
-        <SocialLogin />
+        <SocialLoginButton />
         <NonLogin />
       </div>
     </Layout>

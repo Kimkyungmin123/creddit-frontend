@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import styles from './Input.module.css';
+import styles from './NonLogin.module.css';
+
 const NonLogin = () => {
   return (
     <div className={styles.nonLogin}>
@@ -8,6 +9,7 @@ const NonLogin = () => {
           <a>비밀번호를 잊으셨습니까?</a>
         </Link>
       </span>
+
       <span className={styles.nonAccount}>
         아직 회원이 아니신가요?
         <Link href="../../">

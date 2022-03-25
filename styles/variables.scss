@@ -14,10 +14,6 @@ body[data-theme='light'] {
   --border: #cccccc;
 }
 
-button {
-  font-family: inherit;
-}
-
 @mixin dark {
   --bg-page1: #0f0f0f;
   --bg-page2: #0f0f0f;

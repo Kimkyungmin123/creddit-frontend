@@ -12,7 +12,7 @@ const SocialLoginButtons = () => {
       </button>
 
       <button className={styles.socialLoginBtn}>
-        <span className={styles.socialLogincon}>
+        <span className={styles.socialLoginIcon}>
           <Github />
         </span>
         <span className={styles.socialLoginText}>GitHub 계정으로 계속하기</span>

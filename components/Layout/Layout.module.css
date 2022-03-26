@@ -1,5 +1,4 @@
 .container {
   background-color: var(--bg-page1);
   color: var(--text1);
-  min-height: 100vh;
 }

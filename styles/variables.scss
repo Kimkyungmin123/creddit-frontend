@@ -2,7 +2,16 @@ body,
 body[data-theme='light'] {
   --bg-page1: #dae6e4;
   --bg-page2: #fff;
+
   --text1: #262626;
+  --text2: #dbdbdb;
+  --text3: #1b80e4;
+
+  --btn: #1b80e4;
+  --btn-active: #1666b6;
+  --btn-disabled: #76b3ef;
+
+  --border: #cccccc;
 }
 
 @mixin dark {

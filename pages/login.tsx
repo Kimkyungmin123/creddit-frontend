@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Button from '../components/Button';
 import Layout from '../components/Layout';
 import LoginForm from '../components/LoginForm';
 import NonLogin from '../components/NonLogin';
@@ -10,7 +11,8 @@ const Login: NextPage = () => {
     <Layout title="제목: 로그인">
       <div className={styles.container}>
         <h1>로그인</h1>
-        <LoginForm />
+        <LoginForm firstName="이메일" secondName="비밀번호" />
+        <Button btnName="로그인" />
         <SocialLoginButtons />
         <NonLogin />
       </div>

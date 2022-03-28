@@ -1,0 +1,14 @@
+.findPWcontainer {
+  background-color: var(--bg-page2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 4.375rem;
+}
+
+.findPWText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 1rem;
+}

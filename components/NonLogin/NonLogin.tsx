@@ -5,8 +5,8 @@ const NonLogin = () => {
   return (
     <div className={styles.nonLogin}>
       <span className={styles.forgotPW}>
-        <Link href="/findPW">
-          <a>비밀번호를 잊으셨습니까?</a>
+        <Link href="/FindPassword">
+          <a aria-label="비밀번호 찾기">비밀번호를 잊으셨습니까?</a>
         </Link>
       </span>
 

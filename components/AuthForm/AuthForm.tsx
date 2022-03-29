@@ -2,20 +2,11 @@ import { useState } from 'react';
 import styles from './AuthForm.module.css';
 
 type AuthFormProps = {
-  emailInput?: string;
-  nicknameInput?: string;
-  passwordInput?: string;
-  authFormBtn: string;
-  type: string;
+  btnName: string;
+  type: 'login' | 'signup' | 'resetPassword' | 'findPassword';
 };
 
-const AuthForm = ({
-  emailInput,
-  nicknameInput,
-  passwordInput,
-  authFormBtn,
-  type,
-}: AuthFormProps) => {
+const AuthForm = ({ btnName, type }: AuthFormProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
@@ -28,8 +19,8 @@ const AuthForm = ({
             className={styles.AuthFormInput}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder={emailInput}
-            type="text"
+            placeholder="이메일"
+            type="email"
           />
         )}
 
@@ -38,21 +29,31 @@ const AuthForm = ({
             className={styles.AuthFormInput}
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
-            placeholder={nicknameInput}
+            placeholder="닉네임"
             type="text"
           />
         )}
 
-        {type !== 'findPassword' && (
+        {(type === 'signup' || type === 'login') && (
           <input
             className={styles.AuthFormInput}
             type="password"
-            placeholder={passwordInput}
+            placeholder="비밀번호"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         )}
-        <button className={styles.authFormBtn}>{authFormBtn}</button>
+
+        {type === 'resetPassword' && (
+          <input
+            className={styles.AuthFormInput}
+            type="password"
+            placeholder="새 비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        )}
+        <button className={styles.btnName}>{btnName}</button>
       </form>
     </div>
   );

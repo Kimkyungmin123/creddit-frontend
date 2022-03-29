@@ -19,7 +19,7 @@
   outline: solid 0.125rem var(--border);
 }
 
-.authFormBtn {
+.btnName {
   width: 27rem;
   padding: 0.625rem 1.5rem;
   background-color: var(--btn);
@@ -29,6 +29,6 @@
   cursor: pointer;
 }
 
-.authFormBtn:active {
+.btnName:active {
   background-color: var(--btn-active);
 }

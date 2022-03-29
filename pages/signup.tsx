@@ -10,14 +10,7 @@ const Signup: NextPage = () => {
     <Layout title="creddit: 회원가입">
       <div className={styles.container}>
         <h1>회원가입</h1>
-        <AuthForm
-          type="signup"
-          emailInput="이메일"
-          nicknameInput="닉네임"
-          passwordInput="비밀번호"
-          authFormBtn="회원가입"
-        />
-
+        <AuthForm type="signup" btnName="회원가입" />
         <SocialLoginButtons />
         <div className={styles.alreadyJoin}>
           <span>이미 회원이신가요?</span>

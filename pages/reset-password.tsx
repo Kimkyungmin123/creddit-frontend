@@ -8,11 +8,7 @@ const resetPassword: NextPage = () => {
     <Layout title="creddit: 비밀번호 찾기">
       <div className={styles.resetPasswordContainer}>
         <h1>비밀번호 재설정</h1>
-        <AuthForm
-          type="resetPassword"
-          authFormBtn="확인"
-          passwordInput="새 비밀번호"
-        />
+        <AuthForm type="resetPassword" btnName="확인" />
       </div>
     </Layout>
   );

@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import AuthForm from '../components/AuthForm';
 import Layout from '../components/Layout';
-import styles from '../styles/reset-password.module.css';
+import styles from '../styles/ResetPassword.module.css';
 
-const resetPassword: NextPage = () => {
+const ResetPassword: NextPage = () => {
   return (
     <Layout title="creddit: 비밀번호 찾기">
       <div className={styles.resetPasswordContainer}>
@@ -14,4 +14,4 @@ const resetPassword: NextPage = () => {
   );
 };
 
-export default resetPassword;
+export default ResetPassword;

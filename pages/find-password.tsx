@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import AuthForm from '../components/AuthForm';
 import Layout from '../components/Layout';
-import styles from '../styles/find-password.module.css';
+import styles from '../styles/FindPassword.module.css';
 
 const FindPassword: NextPage = () => {
   return (

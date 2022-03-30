@@ -1,0 +1,87 @@
+.headerContainer {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  background-color: var(--bg-page2);
+  border-bottom: 0.0625rem solid var(--border-header);
+}
+
+.headerbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 72rem;
+  height: 3rem;
+  background-color: var(--bg-page2);
+  border-bottom: 0.0625rem solid var(--border-header);
+}
+.headerLogo {
+  display: flex;
+  margin-right: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.headerLogo a {
+  text-decoration: none;
+  color: var(--text1);
+}
+
+.headerAccount {
+  padding-right: 49.94rem;
+  width: 49.94rem;
+  height: 2.25rem;
+}
+
+.headerPostSearch {
+  display: flex;
+  height: 2.25rem;
+}
+
+.headerInput {
+  position: relative;
+  width: 45.688rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: 0.25rem;
+  background-color: var(--bg-input);
+}
+
+.headerInput:focus {
+  outline: 0.125rem solid var(--border);
+  z-index: 4;
+}
+
+.searchIcon {
+  position: absolute;
+  z-index: 3;
+
+  /* 색, 위치 임시 */
+  opacity: 60%;
+  margin-left: 1.0625rem;
+  margin-top: 0.5rem;
+  width: 1.09rem;
+}
+
+.headerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 1.5rem;
+}
+
+.moonOutlineIcon {
+  display: flex;
+}
+
+.editOutlineIcon {
+  display: flex;
+}
+
+.headerNav a {
+  display: flex;
+  text-decoration: none;
+  color: var(--text1);
+}

@@ -1,9 +1,9 @@
-.container {
+.signupContainer {
   background-color: var(--bg-page2);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 4.375rem;
+  padding-top: 1.375rem;
 }
 
 .alreadyJoin {

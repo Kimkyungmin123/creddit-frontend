@@ -25,28 +25,33 @@ const Header = ({ type }: HeaderProps) => {
         )}
         <div className={styles.headerNav}>
           <div className={styles.moonOutlineIcon}>
-            <MoonOutline onClick={() => console.log('hi')} />
+            <MoonOutline />
           </div>
           {type === 'post' && (
             <div className={styles.editOutlineIcon}>
-              <EditOutline />
+              <Link href="/create-post">
+                <a aria-label="글 작성">
+                  <EditOutline />
+                </a>
+              </Link>
             </div>
           )}
           <div className={styles.gitIcon}>
-            <Link href="https://github.com/">
-              <a>
-                <Github />
-              </a>
-            </Link>
+            <a
+              aria-label="깃허브 저장소"
+              href="https://github.com/project-creddit/creddit-frontend"
+            >
+              <Github />
+            </a>
           </div>
           <div className={styles.loginText}>
             <Link href="/login">
-              <a>로그인</a>
+              <a aria-label="로그인">로그인</a>
             </Link>
           </div>
           <div className={styles.signupText}>
             <Link href="/signup">
-              <a>회원가입</a>
+              <a aria-label="회원가입">회원가입</a>
             </Link>
           </div>
         </div>

@@ -5,17 +5,17 @@
   justify-content: center;
   height: 3rem;
   background-color: var(--bg-page2);
-  border-bottom: 0.0625rem solid var(--border-header);
+  border-bottom: 0.0625rem solid var(--border2);
 }
 
 .headerbox {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72rem;
+  width: 75rem;
   height: 3rem;
   background-color: var(--bg-page2);
-  border-bottom: 0.0625rem solid var(--border-header);
+  border-bottom: 0.0625rem solid var(--border2);
 }
 .headerLogo {
   display: flex;
@@ -43,13 +43,13 @@
 .headerInput {
   position: relative;
   width: 45.688rem;
-  border: 0.0625rem solid var(--border);
+  border: 0.0625rem solid var(--border1);
   border-radius: 0.25rem;
-  background-color: var(--bg-input);
+  background-color: var(--bg-page2);
 }
 
 .headerInput:focus {
-  outline: 0.125rem solid var(--border);
+  outline: 0.125rem solid var(--border1);
   z-index: 4;
 }
 

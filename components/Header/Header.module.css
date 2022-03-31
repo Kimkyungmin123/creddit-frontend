@@ -45,7 +45,7 @@
   width: 45.688rem;
   border: 0.0625rem solid var(--border1);
   border-radius: 0.25rem;
-  background-color: var(--bg-input);
+  background-color: var(--bg-page2);
 }
 
 .headerInput:focus {

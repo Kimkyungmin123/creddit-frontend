@@ -1,0 +1,49 @@
+.createFormContainer {
+  background-color: var(--bg-page1);
+  display: flex;
+}
+
+.createFormContainer form {
+  padding-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  width: 36.75rem;
+}
+
+.createFormContainer input {
+  border: solid 0.0625rem var(--border1);
+  border-radius: 0.25rem;
+  padding: 0.75rem 0.875rem;
+  margin: 0;
+}
+
+.createFormContainer input:focus {
+  outline: solid 0.125rem var(--border1);
+}
+
+.createFormContainer textarea {
+  margin-top: 0.625rem;
+  border: solid 0.0625rem var(--border1);
+  border-radius: 0.25rem;
+  padding: 0.75rem 0.875rem;
+  height: 11.75rem;
+  resize: none;
+}
+
+.createFormContainer textarea:focus {
+  outline: solid 0.125rem var(--border1);
+}
+
+.createFormContainer button {
+  padding: 0.625rem 1.5rem;
+  margin-top: 0.625rem;
+  border-radius: 0.25rem;
+  border: none;
+  background-color: var(--btn);
+  color: var(--text4);
+  cursor: pointer;
+}
+
+.createFormContainer button:active {
+  background-color: var(--btn-active);
+}

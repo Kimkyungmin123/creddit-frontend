@@ -29,7 +29,11 @@ const Header = ({ type }: HeaderProps) => {
           </div>
           {type === 'post' && (
             <div className={styles.editOutlineIcon}>
-              <EditOutline />
+              <Link href="/create-post">
+                <a aria-label="글 작성">
+                  <EditOutline />
+                </a>
+              </Link>
             </div>
           )}
           <div className={styles.gitIcon}>
@@ -42,12 +46,12 @@ const Header = ({ type }: HeaderProps) => {
           </div>
           <div className={styles.loginText}>
             <Link href="/login">
-              <a>로그인</a>
+              <a aria-label="로그인">로그인</a>
             </Link>
           </div>
           <div className={styles.signupText}>
             <Link href="/signup">
-              <a>회원가입</a>
+              <a aria-label="회원가입">회원가입</a>
             </Link>
           </div>
         </div>

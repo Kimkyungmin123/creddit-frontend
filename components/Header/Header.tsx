@@ -8,7 +8,7 @@ type HeaderProps = {
 
 const Header = ({ type }: HeaderProps) => {
   return (
-    <div className={styles.headerContainer}>
+    <header className={styles.headerContainer}>
       <div className={styles.headerbox}>
         <div className={styles.headerLogo}>
           <Link href="/">
@@ -44,19 +44,19 @@ const Header = ({ type }: HeaderProps) => {
               <Github />
             </a>
           </div>
-          <div className={styles.loginText}>
+          <div>
             <Link href="/login">
               <a aria-label="로그인">로그인</a>
             </Link>
           </div>
-          <div className={styles.signupText}>
+          <div>
             <Link href="/signup">
               <a aria-label="회원가입">회원가입</a>
             </Link>
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

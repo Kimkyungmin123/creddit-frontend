@@ -15,8 +15,7 @@ const Layout = ({ children, title, type }: Props) => {
       <Head>
         <title>{title}</title>
       </Head>
-      {type === 'post' && <Header type="post" />}
-      {type === 'account' && <Header type="account" />}
+      <Header type={type} />
       {children}
     </div>
   );

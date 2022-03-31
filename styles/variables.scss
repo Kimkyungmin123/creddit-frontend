@@ -8,15 +8,14 @@ body[data-theme='light'] {
   --text2: #dbdbdb;
   --text3: #1b80e4;
   --text4: #fff;
+  --text5: #737373;
 
   --btn: #1b80e4;
   --btn-active: #1666b6;
   --btn-disabled: #76b3ef;
 
-  --border: #cccccc;
-  --border-header: #dbdbdb;
-
-  --icon-search: #737373;
+  --border1: #cccccc;
+  --border2: #dbdbdb;
 }
 
 @mixin dark {

@@ -36,7 +36,7 @@ const Header = ({ type }: HeaderProps) => {
               </Link>
             </div>
           )}
-          <div className={styles.gitIcon}>
+          <div>
             <a
               aria-label="깃허브 저장소"
               href="https://github.com/project-creddit/creddit-frontend"

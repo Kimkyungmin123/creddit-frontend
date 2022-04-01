@@ -21,7 +21,14 @@ body[data-theme='light'] {
 @mixin dark {
   --bg-page1: #0f0f0f;
   --bg-page2: #0f0f0f;
+
   --text1: #dbdbdb;
+
+  --btn: #4d4d4d;
+  --btn-active: #262626;
+  --btn-disabled: #737373;
+
+  --border1: #999999;
 }
 
 @media (prefers-color-scheme: dark) {

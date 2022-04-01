@@ -1,5 +1,12 @@
 import Link from 'next/link';
-import { Github, MoonOutline, EditOutline, Search } from '../../icons';
+import { useState } from 'react';
+import {
+  Github,
+  MoonOutline,
+  EditOutline,
+  Search,
+  SunOutline,
+} from '../../icons';
 import styles from './Header.module.css';
 
 type HeaderProps = {
@@ -7,6 +14,18 @@ type HeaderProps = {
 };
 
 const Header = ({ type }: HeaderProps) => {
+  const [clicked, setClicked] = useState(true);
+  const [nextMode, setNextMode] = useState('light');
+
+  const handle = () => {
+    setClicked(!clicked);
+    setNextMode(() =>
+      nextMode === 'light'
+        ? (document.body.dataset.theme = 'dark')
+        : (document.body.dataset.theme = 'light')
+    );
+  };
+
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerbox}>
@@ -24,8 +43,8 @@ const Header = ({ type }: HeaderProps) => {
           </div>
         )}
         <div className={styles.headerNav}>
-          <div className={styles.moonOutlineIcon}>
-            <MoonOutline />
+          <div className={styles.modeIcon} onClick={handle}>
+            {clicked ? <MoonOutline /> : <SunOutline />}
           </div>
           {type === 'post' && (
             <div className={styles.editOutlineIcon}>

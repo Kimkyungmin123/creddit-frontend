@@ -1,18 +1,21 @@
 body,
 body[data-theme='light'] {
-  --bg-page1: #dae6e4;
+  --bg-page1: #f9fafe;
   --bg-page2: #fff;
+  --bg-input: #f2f8f7;
 
   --text1: #262626;
   --text2: #dbdbdb;
-  --text3: #1b80e4;
+  --text3: #7c3ffd;
   --text4: #fff;
+  --text5: #737373;
 
-  --btn: #1b80e4;
-  --btn-active: #1666b6;
-  --btn-disabled: #76b3ef;
+  --btn: #7c3ffd;
+  --btn-active: #5028a7;
+  --btn-disabled: #a495fe;
 
-  --border: #cccccc;
+  --border1: #cccccc;
+  --border2: #dbdbdb;
 }
 
 @mixin dark {

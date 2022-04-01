@@ -7,8 +7,8 @@ import styles from '../styles/Login.module.css';
 
 const Login: NextPage = () => {
   return (
-    <Layout title="creddit: 로그인">
-      <div className={styles.container}>
+    <Layout type="account" title="creddit: 로그인">
+      <div className={styles.loginContainer}>
         <h1>로그인</h1>
         <AuthForm type="login" btnName="로그인" />
         <SocialLoginButtons />

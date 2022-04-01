@@ -5,7 +5,7 @@ import styles from '../styles/FindPassword.module.css';
 
 const FindPassword: NextPage = () => {
   return (
-    <Layout title="creddit: 비밀번호 찾기">
+    <Layout type="account" title="creddit: 비밀번호 찾기">
       <div className={styles.FindPasswordContainer}>
         <h1>비밀번호 찾기</h1>
         <div className={styles.FindPasswordText}>

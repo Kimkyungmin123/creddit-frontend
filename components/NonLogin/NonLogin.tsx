@@ -3,7 +3,7 @@ import styles from './NonLogin.module.css';
 
 const NonLogin = () => {
   return (
-    <div className={styles.nonLogin}>
+    <div className={styles.nonLoginContainer}>
       <span className={styles.forgotPW}>
         <Link href="/find-password">
           <a aria-label="비밀번호 찾기">비밀번호를 잊으셨습니까?</a>

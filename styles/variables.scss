@@ -23,12 +23,14 @@ body[data-theme='light'] {
   --bg-page2: #0f0f0f;
 
   --text1: #dbdbdb;
+  --text5: #999999;
 
   --btn: #4d4d4d;
   --btn-active: #262626;
   --btn-disabled: #737373;
 
   --border1: #999999;
+  --border2: #4d4d4d;
 }
 
 @media (prefers-color-scheme: dark) {

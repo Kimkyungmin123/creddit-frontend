@@ -14,13 +14,11 @@ type HeaderProps = {
 };
 
 const Header = ({ type }: HeaderProps) => {
-  const [clicked, setClicked] = useState(true);
-  const [nextMode, setNextMode] = useState('light');
+  const [screenTheme, setScreenTheme] = useState('light');
 
-  const handle = () => {
-    setClicked(!clicked);
-    setNextMode(() =>
-      nextMode === 'light'
+  const themeHandle = () => {
+    setScreenTheme(() =>
+      screenTheme === 'light'
         ? (document.body.dataset.theme = 'dark')
         : (document.body.dataset.theme = 'light')
     );
@@ -43,9 +41,13 @@ const Header = ({ type }: HeaderProps) => {
           </div>
         )}
         <div className={styles.headerNav}>
-          <div className={styles.modeIcon} onClick={handle}>
-            {clicked ? <MoonOutline /> : <SunOutline />}
-          </div>
+          <button className={styles.modeIcon} onClick={themeHandle}>
+            {screenTheme === 'light' ? (
+              <MoonOutline aria-label="색상 모드 변경(현재 어두운 모드)" />
+            ) : (
+              <SunOutline aria-label="색상 모드 변경(현재 밝은 모드)" />
+            )}
+          </button>
           {type === 'post' && (
             <div className={styles.editOutlineIcon}>
               <Link href="/create-post">

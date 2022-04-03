@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Github,
   MoonOutline,
@@ -14,7 +14,27 @@ type HeaderProps = {
 };
 
 const Header = ({ type }: HeaderProps) => {
-  const [screenTheme, setScreenTheme] = useState('light');
+  const [screenTheme, setScreenTheme] = useState('');
+
+  useEffect(() => {
+    let localTheme = window.localStorage.getItem('theme');
+    let stringLocalTheme = JSON.stringify(localTheme);
+
+    if (document.body.dataset.theme === undefined) {
+      document.body.dataset.theme = JSON.parse(stringLocalTheme);
+    } else {
+      if (screenTheme === 'light') {
+        document.body.dataset.theme = 'light';
+        window.localStorage.setItem('theme', 'light');
+      } else {
+        document.body.dataset.theme = 'dark';
+        window.localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    console.log('a' + screenTheme);
+    console.log(stringLocalTheme);
+  }, [screenTheme]);
 
   const themeHandle = () => {
     setScreenTheme(() =>

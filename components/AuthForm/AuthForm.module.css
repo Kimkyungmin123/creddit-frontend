@@ -7,16 +7,14 @@
   background-color: var(--bg-page2);
 }
 
-.AuthFormInput {
-  width: 27rem;
-  padding: 0.625rem 1.5rem;
-  border: solid 0.0625rem var(--border1);
-  border-radius: 0.25rem;
-  margin-bottom: 1rem;
+.AuthFormContainer form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.AuthFormInput:focus {
-  outline: solid 0.125rem var(--border1);
+.AuthFormContainer label {
+  width: 100%;
 }
 
 .btnName {

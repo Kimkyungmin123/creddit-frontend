@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Input from '../Input';
 import styles from './AuthForm.module.css';
 
 type AuthFormProps = {
@@ -15,8 +16,7 @@ const AuthForm = ({ btnName, type }: AuthFormProps) => {
     <div className={styles.AuthFormContainer}>
       <form>
         {type !== 'resetPassword' && (
-          <input
-            className={styles.AuthFormInput}
+          <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="이메일"
@@ -25,32 +25,28 @@ const AuthForm = ({ btnName, type }: AuthFormProps) => {
         )}
 
         {type === 'signup' && (
-          <input
-            className={styles.AuthFormInput}
+          <Input
             value={nickname}
             onChange={(e) => setNickname(e.target.value)}
             placeholder="닉네임"
-            type="text"
           />
         )}
 
         {(type === 'signup' || type === 'login') && (
-          <input
-            className={styles.AuthFormInput}
-            type="password"
-            placeholder="비밀번호"
+          <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호"
+            type="password"
           />
         )}
 
         {type === 'resetPassword' && (
-          <input
-            className={styles.AuthFormInput}
-            type="password"
-            placeholder="새 비밀번호"
+          <Input
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="새 비밀번호"
+            type="password"
           />
         )}
         <button className={styles.btnName}>{btnName}</button>

@@ -17,6 +17,7 @@
   background-color: var(--bg-page2);
   border-bottom: 0.0625rem solid var(--border2);
 }
+
 .headerLogo {
   display: flex;
   margin-right: 1.5rem;
@@ -72,8 +73,11 @@
   margin-left: 1.5rem;
 }
 
-.moonOutlineIcon {
+.modeIcon button {
   display: flex;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
 }
 
 .editOutlineIcon {

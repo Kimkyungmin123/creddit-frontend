@@ -7,7 +7,7 @@ import styles from '../styles/Signup.module.css';
 
 const Signup: NextPage = () => {
   return (
-    <Layout type="post" title="creddit: 회원가입">
+    <Layout type="account" title="creddit: 회원가입">
       <div className={styles.signupContainer}>
         <h1>회원가입</h1>
         <AuthForm type="signup" btnName="회원가입" />

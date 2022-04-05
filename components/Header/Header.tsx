@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import {
   Github,
   MoonOutline,
@@ -14,36 +14,31 @@ type HeaderProps = {
 };
 
 const Header = ({ type }: HeaderProps) => {
-  const [screenTheme, setScreenTheme] = useState('');
+  const [screenTheme, setScreenTheme] = useState(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     let localTheme = window.localStorage.getItem('theme');
     let stringLocalTheme = JSON.stringify(localTheme);
 
     if (document.body.dataset.theme === undefined) {
       document.body.dataset.theme = JSON.parse(stringLocalTheme);
-    } else {
-      if (screenTheme === 'light') {
-        document.body.dataset.theme = 'light';
-        window.localStorage.setItem('theme', 'light');
-      } else {
-        document.body.dataset.theme = 'dark';
-        window.localStorage.setItem('theme', 'dark');
-      }
     }
 
-    console.log('a' + screenTheme);
-    console.log(stringLocalTheme);
-  }, [screenTheme]);
+    if (document.body.dataset.theme === 'dark') {
+      setScreenTheme(false);
+    }
+  }, []);
 
   const themeHandle = () => {
-    setScreenTheme(() =>
-      screenTheme === 'light'
-        ? (document.body.dataset.theme = 'dark')
-        : (document.body.dataset.theme = 'light')
-    );
+    setScreenTheme(() => !screenTheme);
+    if (window.localStorage.getItem('theme') === 'light') {
+      window.localStorage.setItem('theme', 'dark');
+      document.body.dataset.theme = 'dark';
+    } else {
+      window.localStorage.setItem('theme', 'light');
+      document.body.dataset.theme = 'light';
+    }
   };
-
   return (
     <header className={styles.headerContainer}>
       <div className={styles.headerbox}>
@@ -61,13 +56,17 @@ const Header = ({ type }: HeaderProps) => {
           </div>
         )}
         <div className={styles.headerNav}>
-          <button className={styles.modeIcon} onClick={themeHandle}>
-            {screenTheme === 'light' ? (
-              <MoonOutline aria-label="색상 모드 변경(현재 어두운 모드)" />
+          <div className={styles.modeIcon} onClick={themeHandle}>
+            {screenTheme ? (
+              <button aria-label="색상 모드 변경(현재 어두운 모드)">
+                <MoonOutline />
+              </button>
             ) : (
-              <SunOutline aria-label="색상 모드 변경(현재 밝은 모드)" />
+              <button aria-label="색상 모드 변경(현재 밝은 모드)">
+                <SunOutline />
+              </button>
             )}
-          </button>
+          </div>
           {type === 'post' && (
             <div className={styles.editOutlineIcon}>
               <Link href="/create-post">

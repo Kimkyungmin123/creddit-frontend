@@ -73,11 +73,10 @@
   margin-left: 1.5rem;
 }
 
-.modeIcon {
+.modeIcon button {
   display: flex;
   cursor: pointer;
   border: none;
-  outline: none;
   background-color: transparent;
 }
 

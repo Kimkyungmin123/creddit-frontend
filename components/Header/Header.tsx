@@ -17,8 +17,8 @@ const Header = ({ type }: HeaderProps) => {
   const [screenTheme, setScreenTheme] = useState(true);
 
   useLayoutEffect(() => {
-    let localTheme = window.localStorage.getItem('theme');
-    let stringLocalTheme = JSON.stringify(localTheme);
+    const localTheme = window.localStorage.getItem('theme');
+    const stringLocalTheme = JSON.stringify(localTheme);
 
     if (document.body.dataset.theme === undefined) {
       document.body.dataset.theme = JSON.parse(stringLocalTheme);

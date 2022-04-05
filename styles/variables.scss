@@ -16,6 +16,8 @@ body[data-theme='light'] {
 
   --border1: #cccccc;
   --border2: #dbdbdb;
+
+  --error: #ff0000;
 }
 
 @mixin dark {
@@ -32,6 +34,8 @@ body[data-theme='light'] {
 
   --border1: #999999;
   --border2: #4d4d4d;
+
+  --error: #ff0000;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -46,4 +46,17 @@ describe('Input', () => {
     fireEvent.change(input, { target: { value: 'abc@gma' } });
     expect(onChange).toHaveBeenCalled();
   });
+
+  it('calls onBlur if the onBlur is defined and blur', () => {
+    const onBlur = jest.fn();
+    const { input } = setup({ onBlur });
+    fireEvent.blur(input);
+    expect(onBlur).toHaveBeenCalled();
+  });
+
+  it('shows error when there is an error', () => {
+    const error = 'error';
+    setup({ error });
+    expect(screen.getByText(error)).toBeInTheDocument();
+  });
 });

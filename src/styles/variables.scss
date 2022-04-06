@@ -2,40 +2,37 @@ body,
 body[data-theme='light'] {
   --bg-page1: #f9fafe;
   --bg-page2: #fff;
-  --bg-input: #f2f8f7;
-
+  --bg-element1: #fff;
+  --bg-element2: #f5f5f5;
   --text1: #262626;
-  --text2: #dbdbdb;
+  --text2: #737373;
   --text3: #7c3ffd;
   --text4: #fff;
-  --text5: #737373;
-
+  --text5: #ff0000;
   --btn: #7c3ffd;
-  --btn-active: #5028a7;
+  --btn-hover: #733ee3;
+  --btn-active: #6331ce;
   --btn-disabled: #a495fe;
-
   --border1: #cccccc;
   --border2: #dbdbdb;
-
-  --error: #ff0000;
 }
 
 @mixin dark {
   --bg-page1: #0f0f0f;
   --bg-page2: #0f0f0f;
-
+  --bg-element1: #262626;
+  --bg-element2: #262626;
   --text1: #dbdbdb;
-  --text2: #dbdbdb;
-  --text5: #999999;
-
+  --text2: #999999;
+  --text3: #7c3ffd;
+  --text4: #fff;
+  --text5: #ff0000;
   --btn: #4d4d4d;
-  --btn-active: #262626;
+  --btn-hover: #383838;
+  --btn-active: #2f2f2f;
   --btn-disabled: #737373;
-
-  --border1: #999999;
+  --border1: #4d4d4d;
   --border2: #4d4d4d;
-
-  --error: #ff0000;
 }
 
 @media (prefers-color-scheme: dark) {

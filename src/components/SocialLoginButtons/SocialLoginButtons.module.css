@@ -15,6 +15,10 @@
   cursor: pointer;
 }
 
+.socialLoginBtn:hover {
+  background-color: var(--bg-element2);
+}
+
 .socialLoginBtn:active {
   color: var(--text2);
 }

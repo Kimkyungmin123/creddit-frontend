@@ -7,6 +7,10 @@
   color: var(--text4);
   cursor: pointer;
 
+  &:hover {
+    background-color: var(--btn-hover);
+  }
+
   &:active {
     background-color: var(--btn-active);
   }

@@ -75,7 +75,7 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
             error={touched.email && errors.email}
           />
           <Input
-            value={values.nickname || ''}
+            value={values.nickname}
             onChange={handleChange}
             placeholder="닉네임"
             name="nickname"

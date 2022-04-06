@@ -1,13 +1,13 @@
+import Button from 'components/Button';
+import Input from 'components/Input';
+import Layout from 'components/Layout';
+import SocialLoginButtons from 'components/SocialLoginButtons';
+import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import styles from 'styles/Signup.module.css';
 import { object, string } from 'yup';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Layout from '../components/Layout';
-import SocialLoginButtons from '../components/SocialLoginButtons';
-import { ERRORS } from '../constants';
-import styles from '../styles/Signup.module.css';
 
 const Signup: NextPage = () => {
   return (

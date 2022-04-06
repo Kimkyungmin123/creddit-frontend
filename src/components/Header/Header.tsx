@@ -1,12 +1,6 @@
+import { EditOutline, Github, MoonOutline, Search, SunOutline } from 'icons';
 import Link from 'next/link';
 import { useLayoutEffect, useState } from 'react';
-import {
-  Github,
-  MoonOutline,
-  EditOutline,
-  Search,
-  SunOutline,
-} from '../../icons';
 import styles from './Header.module.css';
 
 type HeaderProps = {

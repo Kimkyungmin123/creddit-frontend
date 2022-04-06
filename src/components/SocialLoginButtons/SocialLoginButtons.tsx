@@ -1,4 +1,4 @@
-import { Github, Google } from '../../icons';
+import { Github, Google } from 'icons';
 import styles from './SocialLoginButtons.module.css';
 
 const SocialLoginButtons = () => {

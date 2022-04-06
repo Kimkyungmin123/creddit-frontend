@@ -1,7 +1,7 @@
+import CreateForm from 'components/CreateForm';
+import Layout from 'components/Layout';
 import type { NextPage } from 'next';
-import CreateForm from '../components/CreateForm';
-import Layout from '../components/Layout';
-import styles from '../styles/CreatePost.module.css';
+import styles from 'styles/CreatePost.module.css';
 
 const CreatePost: NextPage = () => {
   return (

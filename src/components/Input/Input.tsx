@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -5,7 +6,6 @@ import {
   useState,
 } from 'react';
 import styles from './Input.module.scss';
-import classnames from 'classnames';
 
 export type InputProps = {
   value: string;

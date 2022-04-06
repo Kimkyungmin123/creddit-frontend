@@ -3,7 +3,7 @@ import styles from './SocialLoginButtons.module.css';
 
 const SocialLoginButtons = () => {
   return (
-    <div className={styles.socialLoginButtons}>
+    <div className={styles.socialLoginButtons} data-testid="socialLoginButtons">
       <button className={styles.socialLoginBtn}>
         <span className={styles.socialLoginIcon}>
           <Google />

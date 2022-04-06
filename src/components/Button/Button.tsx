@@ -9,7 +9,14 @@ export type ButtonProps = {
   ariaLabel?: string;
 };
 
-function Button({ children, type, onClick, disabled, ariaLabel }: ButtonProps) {
+function Button({
+  children,
+  type,
+  onClick,
+  disabled,
+  ariaLabel,
+  ...props
+}: ButtonProps) {
   return (
     <button
       className={styles.button}
@@ -17,6 +24,7 @@ function Button({ children, type, onClick, disabled, ariaLabel }: ButtonProps) {
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
+      {...props}
     >
       {children}
     </button>

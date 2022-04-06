@@ -11,7 +11,7 @@ type Props = {
 
 const Layout = ({ children, title, type }: Props) => {
   return (
-    <div className={styles.container}>
+    <div className={styles.container} data-testid="layout">
       <Head>
         <title>{title}</title>
       </Head>

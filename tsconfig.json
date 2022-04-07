@@ -25,6 +25,7 @@
     "styles/*": ["styles/*"],
     "icons/*": ["icons/*"],
     "utils/*": ["utils/*"],
-    "hooks/*": ["hooks/*"]
+    "hooks/*": ["hooks/*"],
+    "image/*": ["image/*"]
   }
 }

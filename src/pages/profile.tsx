@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
-import ProfileBox from '../components/ProfileBox';
-import Layout from '../components/Layout';
-import styles from '../styles/Profile.module.css';
+import ProfileBox from 'components/ProfileBox';
+import Layout from 'components/Layout';
+import styles from 'styles/Profile.module.css';
 
 const Profile: NextPage = () => {
   return (

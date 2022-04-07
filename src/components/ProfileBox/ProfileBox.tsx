@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './ProfileBox.module.scss';
-import profileImg from '../../../img/profileImg.png';
+import profileImg from 'image/profileImg.png';
 import Link from 'next/link';
 
 export type ProfileProps = {
@@ -18,7 +18,6 @@ function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
       <div className={styles.profileContainerRight}>
         <div className={styles.profileBox}>
           <div className={styles.profileBoxTop}></div>
-
           <div className={styles.profileContent}>
             <div className={styles.profileImg}>
               <Image

@@ -1,26 +1,26 @@
+import Button from 'components/Button';
+import Input from 'components/Input';
+import Layout from 'components/Layout';
+import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
+import styles from 'styles/FindPassword.module.scss';
 import { object, string } from 'yup';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Layout from '../components/Layout';
-import { ERRORS } from '../constants';
-import styles from '../styles/FindPassword.module.css';
 
 const FindPassword: NextPage = () => {
   return (
     <Layout type="account" title="creddit: 비밀번호 찾기">
-      <div className={styles.FindPasswordContainer}>
+      <div className={styles.findPasswordContainer}>
         <h1>비밀번호 찾기</h1>
+        <p className={styles.description}>
+          이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로 비밀번호 재설정
+          링크를 보내드립니다.
+        </p>
         <FindPasswordForm
           onSubmit={(values) => {
             console.log(values);
           }}
         />
-        <div className={styles.FindPasswordText}>
-          <p>이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로</p>
-          <p>비밀번호 재설정 링크를 보내드립니다.</p>
-        </div>
       </div>
     </Layout>
   );

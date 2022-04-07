@@ -1,13 +1,13 @@
+import Button from 'components/Button';
+import Input from 'components/Input';
+import Layout from 'components/Layout';
+import SocialLoginButtons from 'components/SocialLoginButtons';
+import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Layout from '../components/Layout';
-import SocialLoginButtons from '../components/SocialLoginButtons';
-import { ERRORS } from '../constants';
-import styles from '../styles/Login.module.css';
 
 const Login: NextPage = () => {
   return (
@@ -20,18 +20,18 @@ const Login: NextPage = () => {
           }}
         />
         <SocialLoginButtons />
-        <div className={styles.nonLoginContainer}>
-          <span className={styles.forgotPW}>
-            <Link href="/find-password">
-              <a aria-label="비밀번호 찾기">비밀번호를 잊으셨습니까?</a>
-            </Link>
-          </span>
-          <span className={styles.nonAccount}>
-            아직 회원이 아니신가요?
+        <div className={styles.bottomPanel}>
+          <Link href="/find-password">
+            <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
+              비밀번호를 잊으셨습니까?
+            </a>
+          </Link>
+          <div className={styles.signupSuggestion}>
+            <span>아직 회원이 아니신가요?</span>
             <Link href="/signup">
               <a>회원가입</a>
             </Link>
-          </span>
+          </div>
         </div>
       </div>
     </Layout>
@@ -66,7 +66,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         handleSubmit,
         isSubmitting,
       }) => (
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit}>
           <Input
             value={values.email}
             onChange={handleChange}

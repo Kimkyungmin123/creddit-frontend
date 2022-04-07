@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { ERRORS } from '../constants';
-import FindPassword, { FindPasswordForm } from '../pages/find-password';
+import ERRORS from 'constants/errors';
+import FindPassword, { FindPasswordForm } from 'pages/find-password';
 
 describe('FindPassword', () => {
   const setupElements = () => {
@@ -25,10 +25,9 @@ describe('FindPassword', () => {
     expect(emailInput).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
     expect(
-      screen.getByText('이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('비밀번호 재설정 링크를 보내드립니다.')
+      screen.getByText(
+        '이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로 비밀번호 재설정 링크를 보내드립니다.'
+      )
     ).toBeInTheDocument();
   });
 

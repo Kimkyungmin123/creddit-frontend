@@ -5,6 +5,13 @@
   gap: 0.125rem;
 }
 
+@mixin movePlaceholder {
+  span {
+    transform: translateY(-110%) scale(0.75);
+    font-weight: bold;
+  }
+}
+
 .label {
   position: relative;
   user-select: none;
@@ -17,15 +24,16 @@
     transform: translateY(-50%);
     transform-origin: left;
     transition: transform 200ms;
-    color: var(--text5);
+    color: var(--text2);
+  }
+
+  &:hover {
+    @include movePlaceholder;
   }
 }
 
 .filling {
-  span {
-    transform: translateY(-110%) scale(0.75);
-    font-weight: bold;
-  }
+  @include movePlaceholder;
 }
 
 .input {
@@ -33,6 +41,8 @@
   padding: 1.5rem 0.625rem 0.5rem;
   border: solid 0.0625rem var(--border1);
   border-radius: 0.25rem;
+  background-color: var(--bg-element1);
+  color: var(--text1);
 
   &:focus {
     outline: solid 0.125rem var(--border1);
@@ -41,5 +51,5 @@
 
 .error {
   font-size: 0.875rem;
-  color: var(--error);
+  color: var(--text5);
 }

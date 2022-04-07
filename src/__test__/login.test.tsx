@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { ERRORS } from '../constants';
-import Login, { LoginForm } from '../pages/login';
+import ERRORS from 'constants/errors';
+import Login, { LoginForm } from 'pages/login';
 
 describe('Login', () => {
   const setupElements = () => {

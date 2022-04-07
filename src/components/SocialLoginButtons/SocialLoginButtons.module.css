@@ -7,12 +7,15 @@
 .socialLoginBtn {
   display: flex;
   justify-content: center;
-  width: 27rem;
   padding: 0.625rem 0;
   background-color: var(--bg-page2);
   border: solid 0.0625rem var(--border1);
   border-radius: 0.25rem;
   cursor: pointer;
+}
+
+.socialLoginBtn:hover {
+  background-color: var(--bg-element2);
 }
 
 .socialLoginBtn:active {

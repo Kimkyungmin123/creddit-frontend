@@ -1,0 +1,15 @@
+@import 'app';
+
+.signupContainer {
+  @include formContainer;
+}
+
+.loginSuggestion {
+  text-align: end;
+
+  a {
+    margin-left: 0.25rem;
+    font-weight: bold;
+    color: var(--text3);
+  }
+}

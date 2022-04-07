@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { ERRORS } from '../constants';
-import Signup, { SignupForm } from '../pages/signup';
+import ERRORS from 'constants/errors';
+import Signup, { SignupForm } from 'pages/signup';
 
 describe('Signup', () => {
   const setupElements = () => {

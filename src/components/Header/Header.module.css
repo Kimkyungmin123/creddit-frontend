@@ -14,7 +14,6 @@
   justify-content: center;
   width: 75rem;
   height: 3rem;
-  background-color: var(--bg-page2);
   border-bottom: 0.0625rem solid var(--border2);
 }
 

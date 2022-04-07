@@ -1,13 +1,13 @@
+import Button from 'components/Button';
+import Input from 'components/Input';
+import Layout from 'components/Layout';
+import SocialLoginButtons from 'components/SocialLoginButtons';
+import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import styles from 'styles/Signup.module.scss';
 import { object, string } from 'yup';
-import Button from '../components/Button';
-import Input from '../components/Input';
-import Layout from '../components/Layout';
-import SocialLoginButtons from '../components/SocialLoginButtons';
-import { ERRORS } from '../constants';
-import styles from '../styles/Signup.module.css';
 
 const Signup: NextPage = () => {
   return (
@@ -20,7 +20,7 @@ const Signup: NextPage = () => {
           }}
         />
         <SocialLoginButtons />
-        <div className={styles.alreadyJoin}>
+        <div className={styles.loginSuggestion}>
           <span>이미 회원이신가요?</span>
           <Link href="/login">
             <a>로그인</a>
@@ -64,7 +64,7 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         handleSubmit,
         isSubmitting,
       }) => (
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit}>
           <Input
             value={values.email}
             onChange={handleChange}

@@ -7,5 +7,8 @@
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "files.eol": "\n",
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "cssModules.pathAlias": {
+    "styles": "${workspaceFolder}/src/styles"
+  }
 }

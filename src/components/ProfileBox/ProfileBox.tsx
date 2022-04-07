@@ -10,7 +10,7 @@ export type ProfileProps = {
 };
 
 function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
-  const profileImage = profileImg;
+  const userProfileImage = profileImg;
 
   return (
     <div className={styles.profileContainer}>
@@ -22,10 +22,10 @@ function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
           <div className={styles.profileContent}>
             <div className={styles.profileImg}>
               <Image
-                src={profileImage}
+                src={userProfileImage}
                 alt="Defulat Profile Image"
-                // width={96}
-                // height={96}
+                width={96}
+                height={96}
               />
             </div>
             <span className={styles.nickName}>{nickName}</span>

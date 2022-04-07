@@ -25,10 +25,9 @@ describe('FindPassword', () => {
     expect(emailInput).toBeInTheDocument();
     expect(submitButton).toBeInTheDocument();
     expect(
-      screen.getByText('이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로')
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('비밀번호 재설정 링크를 보내드립니다.')
+      screen.getByText(
+        '이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로 비밀번호 재설정 링크를 보내드립니다.'
+      )
     ).toBeInTheDocument();
   });
 

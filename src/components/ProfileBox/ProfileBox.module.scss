@@ -1,6 +1,26 @@
+@mixin btn {
+  width: 15.125rem;
+  background-color: var(--btn);
+  border-radius: 0.9375rem;
+  border: none;
+  padding: 0.25rem 1.5rem;
+  font-size: 1rem;
+  color: var(--text4);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--btn-hover);
+  }
+
+  &:active {
+    background-color: var(--btn-active);
+  }
+}
+
 .profileContainer {
   display: flex;
-  height: 21.75rem;
+  height: 24.4375rem;
+  margin-top: 0.75rem;
 
   .profileContainerLeft {
     display: flex;
@@ -12,12 +32,12 @@
     display: flex;
     flex-grow: 1;
     width: 50%;
-    padding-left: 13.44rem;
+    padding-left: 13.5rem;
 
     .profileBox {
       display: flex;
       width: 17.625rem;
-      margin-top: 0.75rem;
+      border: solid 0.0625rem var(--border1);
       background-color: var(--fill3);
       border-radius: 0.25rem;
 
@@ -38,30 +58,45 @@
         position: absolute;
         z-index: 3;
 
-        .profileImg {
-          border: solid 0.125rem var(--border2);
-          border-radius: 0.25rem;
+        .userInfo {
+          display: flex;
+          flex-direction: column;
           width: 6rem;
-          height: 6rem;
-        }
+          align-items: center;
 
-        .nickName {
-          padding-top: 0.75rem;
-          font-size: 1.25rem;
-          font-weight: 700;
+          .profileImg {
+            border: solid 0.125rem var(--border2);
+            border-radius: 0.25rem;
+            height: 6rem;
+
+            img {
+              object-fit: cover;
+              border-radius: 0.25rem;
+            }
+          }
+          .nickName {
+            padding-top: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text1);
+          }
         }
 
         .statusMessage {
           padding-top: 1.25rem;
           font-size: 0.875rem;
+          color: var(--text1);
         }
 
         .signUpDate {
           padding-top: 1.25rem;
+          color: var(--text1);
 
           .signUpDateText {
             font-size: 0.75rem;
             padding-right: 1.25rem;
+            color: var(--text1);
+            font-weight: 700;
           }
 
           .signUpDateNum {
@@ -71,27 +106,19 @@
 
         .createNewPostBtn {
           margin-top: 1.25rem;
-          width: 15.125rem;
-          background-color: var(--btn);
-          border-radius: 0.9375rem;
-          border: none;
-          padding: 0.25rem 1.5rem;
-          font-size: 1rem;
-          color: var(--text4);
-          cursor: pointer;
-
-          &:hover {
-            background-color: var(--btn-hover);
-          }
-
-          &:active {
-            background-color: var(--btn-active);
-          }
+          @include btn;
         }
+
+        .chatListBtn {
+          margin-top: 0.75rem;
+          @include btn;
+        }
+
         .modifyProfile {
           margin-top: 1.25rem;
           font-size: 0.75rem;
           cursor: pointer;
+          color: var(--text6);
 
           &:hover {
             text-decoration: underline;

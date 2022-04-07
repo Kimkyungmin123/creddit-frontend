@@ -1,83 +1,102 @@
-.profileBox {
-  margin-top: 12px;
-  margin-left: 1176px;
-  width: 282px;
-  height: 348px;
+.profileContainer {
+  display: flex;
+  height: 21.75rem;
 
-  .profileBoxTop {
-    position: absolute;
-    background-color: var(--fill1);
-    border-radius: 4px 4px 0 0;
-    width: 282px;
-    height: 72px;
-    z-index: 2;
-  }
-  .profileContent {
-    position: absolute;
-    z-index: 3;
+  .profileContainerLeft {
     display: flex;
-    flex-direction: column;
-    padding-left: 20px;
-    .profileImg {
-      margin-top: 30px;
-      width: 96px;
-      height: 96px;
-      border: solid 2px var(--border3);
-      border-radius: 4px;
-
-      img {
-        object-fit: contain;
-        width: 96px;
-        height: 96px;
-        border-radius: 4px;
-        object-fit: cover;
-      }
-    }
-
-    .nickName {
-      padding-top: 12px;
-      font-size: 20px;
-      font-weight: 700;
-    }
-    .statusMessage {
-      padding-top: 20px;
-      font-size: 14px;
-    }
-
-    .signUpDate {
-      padding-top: 20px;
-
-      .signUpDateText {
-        font-size: 12px;
-        padding-right: 20px;
-      }
-      .signUpDateNum {
-        font-size: 12px;
-      }
-    }
-    .createNewPostBtn {
-      align-content: center;
-      margin-top: 20px;
-      width: 242px;
-      background-color: var(--btn);
-      border-radius: 15px;
-      border: none;
-      padding: 4px 24px;
-      font-size: 16px;
-      color: var(--text4);
-    }
-    .modifyProfile {
-      margin-top: 20px;
-      font-size: 12px;
-    }
+    flex-grow: 1;
+    width: 50%;
   }
-
-  .profileBoxBottom {
-    background-color: var(--fill3);
-    border-radius: 4px;
+  .profileContainerRight {
     display: flex;
-    width: 282px;
-    height: 100%;
-    z-index: 1;
+    flex-grow: 1;
+    width: 50%;
+    padding-left: 13.44rem;
+
+    .profileBox {
+      display: flex;
+      width: 17.625rem;
+      margin-top: 0.75rem;
+      background-color: var(--fill3);
+      border-radius: 0.25rem;
+
+      .profileBoxTop {
+        position: absolute;
+        background-color: var(--fill1);
+        border-radius: 0.25rem 0.25rem 0 0;
+        width: 17.625rem;
+        height: 4.5rem;
+        z-index: 2;
+      }
+
+      .profileContent {
+        margin-top: 1.875rem;
+        padding: 0px 1.25rem 1rem;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        z-index: 3;
+
+        .profileImg {
+          border: solid 4px var(--border2);
+          border-radius: 0.25rem;
+          width: 6rem;
+          height: 6rem;
+        }
+
+        .nickName {
+          padding-top: 0.75rem;
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+
+        .statusMessage {
+          padding-top: 1.25rem;
+          font-size: 0.875rem;
+        }
+
+        .signUpDate {
+          padding-top: 1.25rem;
+
+          .signUpDateText {
+            font-size: 0.75rem;
+            padding-right: 1.25rem;
+          }
+
+          .signUpDateNum {
+            font-size: 0.75rem;
+          }
+        }
+
+        .createNewPostBtn {
+          margin-top: 1.25rem;
+          width: 15.125rem;
+          background-color: var(--btn);
+          border-radius: 0.9375rem;
+          border: none;
+          padding: 0.25rem 1.5rem;
+          font-size: 1rem;
+          color: var(--text4);
+          cursor: pointer;
+
+          &:hover {
+            background-color: var(--btn-hover);
+          }
+
+          &:active {
+            background-color: var(--btn-active);
+          }
+        }
+        .modifyProfile {
+          margin-top: 1.25rem;
+          font-size: 0.75rem;
+          cursor: pointer;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
   }
 }

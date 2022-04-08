@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styles from './ProfileBox.module.scss';
-import cat from 'image/cat.jpg';
+import cat from 'images/cat.jpg';
 import Link from 'next/link';
 
 export type ProfileProps = {
@@ -10,23 +10,16 @@ export type ProfileProps = {
 };
 
 function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
-  const userProfileImage = cat;
-
   return (
     <div className={styles.profileContainer}>
-      <div className={styles.profileContainerLeft}></div>
+      <div className={styles.profileContainerLeft} />
       <div className={styles.profileContainerRight}>
         <div className={styles.profileBox}>
-          <div className={styles.profileBoxTop}></div>
+          <div className={styles.profileBoxTop} />
           <div className={styles.profileContent}>
             <div className={styles.userInfo}>
               <div className={styles.profileImg}>
-                <Image
-                  src={userProfileImage}
-                  alt="Defulat Profile Image"
-                  width={96}
-                  height={96}
-                />
+                <Image src={cat} alt="프로필 이미지" width={96} height={96} />
               </div>
               <span className={styles.nickName}>{nickName}</span>
             </div>
@@ -35,13 +28,15 @@ function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
               <span className={styles.signUpDateText}>가입일</span>
               <span className={styles.signUpDateNum}>{signUpDateNum}</span>
             </div>
-            <Link href="/create-post">
-              <a>
-                <button className={styles.createNewPostBtn}>새 글 작성</button>
-              </a>
-            </Link>
-            <button className={styles.chatListBtn}>대화 목록</button>
-            <span className={styles.modifyProfile}>프로필 수정</span>
+            <div className={styles.btn}>
+              <Link href="/create-post">
+                <a className={styles.createNewPostBtn} aria-label="새 글 작성">
+                  새 글 작성
+                </a>
+              </Link>
+              <button className={styles.chatListBtn}>대화 목록</button>
+            </div>
+            <button className={styles.modifyProfile}>프로필 수정</button>
           </div>
         </div>
       </div>

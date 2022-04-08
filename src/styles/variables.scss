@@ -2,10 +2,11 @@ body,
 body[data-theme='light'] {
   --bg-page1: #f9fafe;
   --bg-page2: #fff;
-  --bg-input: #f2f8f7;
-  --bg-post: #eeecf3;
   --bg-element1: #fff;
   --bg-element2: #f5f5f5;
+  --bg-element3: #501eba;
+  --bg-element4: #e8e5f6;
+  --bg-element5: #fff;
   --text1: #262626;
   --text2: #737373;
   --text3: #7c3ffd;
@@ -18,11 +19,6 @@ body[data-theme='light'] {
   --btn-disabled: #a495fe;
   --border1: #cccccc;
   --border2: #dbdbdb;
-  --fill1: #501eba;
-  --fill2: #e8e5f6;
-  --fill3: #fff;
-
-  --error: #ff0000;
 }
 
 @mixin dark {
@@ -30,6 +26,9 @@ body[data-theme='light'] {
   --bg-page2: #0f0f0f;
   --bg-element1: #262626;
   --bg-element2: #262626;
+  --bg-element3: #574a73;
+  --bg-element4: #3e364f;
+  --bg-element5: #4d4d4d;
   --text1: #dbdbdb;
   --text2: #999999;
   --text3: #7c3ffd;
@@ -42,11 +41,6 @@ body[data-theme='light'] {
   --btn-disabled: #737373;
   --border1: #4d4d4d;
   --border2: #4d4d4d;
-  --fill1: #574a73;
-  --fill2: #3e364f;
-  --fill3: #4d4d4d;
-
-  --error: #ff0000;
 }
 
 @media (prefers-color-scheme: dark) {

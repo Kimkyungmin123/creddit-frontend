@@ -17,14 +17,5 @@
     "baseUrl": "src"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
-  "paths": {
-    "pages/*": ["pages/*"],
-    "components/*": ["components/*"],
-    "constants/*": ["constants/*"],
-    "styles/*": ["styles/*"],
-    "icons/*": ["icons/*"],
-    "utils/*": ["utils/*"],
-    "hooks/*": ["hooks/*"]
-  }
+  "exclude": ["node_modules"]
 }

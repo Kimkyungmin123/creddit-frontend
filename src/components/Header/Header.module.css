@@ -88,3 +88,9 @@
   text-decoration: none;
   color: var(--text1);
 }
+
+.logoutButton {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}

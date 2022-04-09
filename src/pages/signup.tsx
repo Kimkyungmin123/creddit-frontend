@@ -4,19 +4,27 @@ import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
+import useLogin from 'hooks/useLogin';
+import useUser from 'hooks/useUser';
+import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import styles from 'styles/Signup.module.scss';
+import api from 'utils/api';
 import { object, string } from 'yup';
 
 const Signup: NextPage = () => {
+  useUser({ redirectTo: '/' });
+  const login = useLogin();
+
   return (
     <Layout type="account" title="creddit: 회원가입">
       <div className={styles.signupContainer}>
         <h1>회원가입</h1>
         <SignupForm
-          onSubmit={(values) => {
-            console.log(values);
+          onSubmit={async (values) => {
+            await api.post('/auth/signup', values);
+            await login(values);
           }}
         />
         <SocialLoginButtons />
@@ -36,7 +44,7 @@ type SignupFormProps = {
     email: string;
     nickname: string;
     password: string;
-  }) => void;
+  }) => Promise<void>;
 };
 
 export function SignupForm({ onSubmit }: SignupFormProps) {
@@ -47,11 +55,22 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         email: string()
           .email(ERRORS.emailInvalid)
           .required(ERRORS.emailRequired),
-        nickname: string().required(ERRORS.nicknameRequired),
-        password: string().required(ERRORS.passwordRequired),
+        nickname: string()
+          .matches(/^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]+$/, ERRORS.nicknameInvalid)
+          .min(2, ERRORS.nicknameShort)
+          .max(10, ERRORS.nicknameLong)
+          .required(ERRORS.nicknameRequired),
+        password: string()
+          .matches(
+            /(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*\W)(?=\S+$).+/,
+            ERRORS.passwordInvalid
+          )
+          .min(8, ERRORS.passwordShort)
+          .max(20, ERRORS.passwordLong)
+          .required(ERRORS.passwordRequired),
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
+      onSubmit={async (values, { setSubmitting }) => {
+        await onSubmit(values);
         setSubmitting(false);
       }}
     >
@@ -96,7 +115,7 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
             disabled={isSubmitting}
             data-testid="submitButton"
           >
-            가입
+            {isSubmitting ? <LoadingSpokes /> : '가입'}
           </Button>
         </form>
       )}

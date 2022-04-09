@@ -6,6 +6,11 @@
   color: var(--text4);
   cursor: pointer;
 
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
   &:hover {
     background-color: var(--btn-hover);
   }

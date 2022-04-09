@@ -1,3 +1,4 @@
+import useUser from 'hooks/useUser';
 import { EditOutline, Github, MoonOutline, Search, SunOutline } from 'icons';
 import Link from 'next/link';
 import { useLayoutEffect, useState } from 'react';
@@ -8,6 +9,7 @@ type HeaderProps = {
 };
 
 const Header = ({ type }: HeaderProps) => {
+  const { user, isLoading, logout } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
 
   useLayoutEffect(() => {
@@ -78,16 +80,31 @@ const Header = ({ type }: HeaderProps) => {
               <Github />
             </a>
           </div>
-          <div>
-            <Link href="/login">
-              <a aria-label="로그인">로그인</a>
-            </Link>
-          </div>
-          <div>
-            <Link href="/signup">
-              <a aria-label="회원가입">회원가입</a>
-            </Link>
-          </div>
+          {!isLoading && (
+            <>
+              {user ? (
+                <>
+                  <div>{user.nickname}</div>
+                  <button onClick={logout} className={styles.logoutButton}>
+                    로그아웃
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <Link href="/login">
+                      <a aria-label="로그인">로그인</a>
+                    </Link>
+                  </div>
+                  <div>
+                    <Link href="/signup">
+                      <a aria-label="회원가입">회원가입</a>
+                    </Link>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </header>

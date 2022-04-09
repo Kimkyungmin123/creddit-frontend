@@ -16,60 +16,33 @@
   }
 }
 
-.profileContainer {
-  display: flex;
-  height: 24.4375rem;
-  margin-top: 0.75rem;
-}
-
-.profileContainerLeft {
-  display: flex;
-  flex-grow: 1;
-  width: 50%;
-}
-
-.profileContainerRight {
-  display: flex;
-  flex-grow: 1;
-  width: 50%;
-  padding-left: 13.5rem;
-}
-
-.profileBox {
-  display: flex;
-  width: 17.625rem;
-  border: solid 0.0625rem var(--border1);
-  background-color: var(--bg-element5);
-  border-radius: 0.25rem;
-}
-
 .profileBoxTop {
-  width: 100%;
   height: 4.5rem;
   background-color: var(--bg-element3);
   border-radius: 0.25rem 0.25rem 0 0;
 }
 
 .profileContent {
-  width: 17.625rem;
-  position: absolute;
   display: flex;
   flex-direction: column;
   padding: 1.875rem 1.25rem 1rem;
-  z-index: 3;
+  border: solid 0.0625rem var(--border1);
+  border-radius: 0.25rem;
 }
 
 .userInfo {
   display: flex;
   flex-direction: column;
-  width: 6rem;
-  align-items: center;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-bottom: 1.25rem;
 }
 
 .profileImg {
   border: solid 0.125rem var(--border2);
   border-radius: 0.25rem;
   height: 6rem;
+  overflow: hidden;
 
   img {
     object-fit: cover;
@@ -78,14 +51,13 @@
 }
 
 .nickName {
-  padding-top: 0.75rem;
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text1);
+  padding-left: 0.344rem;
 }
 
 .statusMessage {
-  padding-top: 1.25rem;
   font-size: 0.875rem;
   color: var(--text1);
 }
@@ -106,13 +78,14 @@
   font-size: 0.75rem;
 }
 
-.btn {
+.profileBoxBtns {
   display: flex;
   flex-direction: column;
-  margin-top: 1.25rem;
+  gap: 0.75rem;
 }
 
 .createNewPostBtn {
+  margin-top: 1.25rem;
   display: flex;
   justify-content: center;
   text-decoration: none;
@@ -120,7 +93,6 @@
 }
 
 .chatListBtn {
-  margin-top: 0.75rem;
   @include btn;
 }
 

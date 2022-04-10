@@ -7,6 +7,8 @@ import Github from './assets/github.svg';
 import Google from './assets/google.svg';
 import HeartFill from './assets/heart-fill.svg';
 import HeartOutline from './assets/heart-outline.svg';
+import LoadingSpin from './assets/loading-spin.svg';
+import LoadingSpokes from './assets/loading-spokes.svg';
 import Menu from './assets/menu.svg';
 import MoonFill from './assets/moon-fill.svg';
 import MoonOutline from './assets/moon-outline.svg';
@@ -27,6 +29,8 @@ export {
   Google,
   HeartFill,
   HeartOutline,
+  LoadingSpin,
+  LoadingSpokes,
   Menu,
   MoonFill,
   MoonOutline,

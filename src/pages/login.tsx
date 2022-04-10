@@ -3,20 +3,26 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
-import { Formik } from 'formik';
+import { Formik, FormikErrors } from 'formik';
+import useLogin from 'hooks/useLogin';
+import useUser from 'hooks/useUser';
+import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
 
 const Login: NextPage = () => {
+  useUser({ redirectTo: '/' });
+  const login = useLogin();
+
   return (
     <Layout type="account" title="creddit: 로그인">
       <div className={styles.loginContainer}>
         <h1>로그인</h1>
         <LoginForm
-          onSubmit={(values) => {
-            console.log(values);
+          onSubmit={async (values) => {
+            await login(values);
           }}
         />
         <SocialLoginButtons />
@@ -39,7 +45,7 @@ const Login: NextPage = () => {
 };
 
 type LoginFormProps = {
-  onSubmit: (values: { email: string; password: string }) => void;
+  onSubmit: (values: { email: string; password: string }) => Promise<void>;
 };
 
 export function LoginForm({ onSubmit }: LoginFormProps) {
@@ -52,49 +58,65 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           .required(ERRORS.emailRequired),
         password: string().required(ERRORS.passwordRequired),
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
-        setSubmitting(false);
+      onSubmit={async (values, { setSubmitting, setFieldError }) => {
+        try {
+          await onSubmit(values);
+        } catch (err) {
+          setFieldError('emailOrPassword', ERRORS.emailOrPasswordInvalid);
+        } finally {
+          setSubmitting(false);
+        }
       }}
     >
       {({
         values,
-        errors,
         touched,
         handleChange,
         handleBlur,
         handleSubmit,
         isSubmitting,
-      }) => (
-        <form onSubmit={handleSubmit}>
-          <Input
-            value={values.email}
-            onChange={handleChange}
-            placeholder="이메일"
-            type="email"
-            name="email"
-            onBlur={handleBlur}
-            error={touched.email && errors.email}
-          />
+        ...rest
+      }) => {
+        const errors = rest.errors as FormikErrors<{
+          email: string;
+          password: string;
+          emailOrPassword: string;
+        }>;
 
-          <Input
-            value={values.password}
-            onChange={handleChange}
-            placeholder="비밀번호"
-            type="password"
-            name="password"
-            onBlur={handleBlur}
-            error={touched.password && errors.password}
-          />
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            data-testid="submitButton"
-          >
-            로그인
-          </Button>
-        </form>
-      )}
+        return (
+          <form onSubmit={handleSubmit}>
+            <Input
+              value={values.email}
+              onChange={handleChange}
+              placeholder="이메일"
+              type="email"
+              name="email"
+              onBlur={handleBlur}
+              error={touched.email && errors.email}
+            />
+
+            <Input
+              value={values.password}
+              onChange={handleChange}
+              placeholder="비밀번호"
+              type="password"
+              name="password"
+              onBlur={handleBlur}
+              error={touched.password && errors.password}
+            />
+            {errors.emailOrPassword && (
+              <p className={styles.fieldError}>{errors.emailOrPassword}</p>
+            )}
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              data-testid="submitButton"
+            >
+              {isSubmitting ? <LoadingSpokes /> : '로그인'}
+            </Button>
+          </form>
+        );
+      }}
     </Formik>
   );
 }

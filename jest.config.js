@@ -12,7 +12,8 @@ const customJestConfig = {
   moduleNameMapper: {
     '^(pages|components|constants|styles|utils|hooks)/(.*)':
       '<rootDir>/src/$1/$2',
-    icons: '<rootDir>/src/icons',
+    // icons: '<rootDir>/src/icons',
+    icons: '<rootDir>/src/icons/test-icons',
   },
 };
 

@@ -2,7 +2,7 @@ import useUser from 'hooks/useUser';
 import { EditOutline, Github, MoonOutline, Search, SunOutline } from 'icons';
 import Link from 'next/link';
 import { useLayoutEffect, useState } from 'react';
-import styles from './Header.module.css';
+import styles from './Header.module.scss';
 
 type HeaderProps = {
   type: 'post' | 'account';
@@ -48,7 +48,7 @@ const Header = ({ type }: HeaderProps) => {
         {type === 'post' && (
           <div className={styles.headerPostSearch}>
             <Search className={styles.searchIcon} />
-            <input className={styles.headerInput} type="text" placeholder="" />
+            <input type="text" placeholder="검색" />
           </div>
         )}
         <div className={styles.headerNav}>

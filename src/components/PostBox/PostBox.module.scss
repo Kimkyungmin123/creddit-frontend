@@ -38,14 +38,23 @@
   }
 }
 
-.likeCount {
+.likeCountBtn {
   display: flex;
   align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
-.heartIcon {
+.heartOutlineIcon {
   height: 100%;
   padding-right: 0.25rem;
+}
+
+.heartFillIcon {
+  height: 100%;
+  padding-right: 0.25rem;
+  color: var(--text8);
 }
 
 .postDetailsLeft {

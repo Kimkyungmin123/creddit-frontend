@@ -19,8 +19,8 @@ const Home: NextPage = () => {
               postTitle={data.title}
               postContent={data.content}
               nickName={data.member}
-              commentsCount={data.likeCount}
-              likeCount={data.commentCount}
+              commentsCount={data.commentCount}
+              likeCount={data.likeCount}
               date={data.createdDate}
             />
           ))}

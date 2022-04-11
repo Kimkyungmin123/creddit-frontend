@@ -1,4 +1,5 @@
-import { HeartOutline } from 'icons';
+import { HeartFill, HeartOutline } from 'icons';
+import { useState } from 'react';
 import styles from './PostBox.module.scss';
 
 export type PostBoxProps = {
@@ -18,6 +19,11 @@ const PostBox = ({
   likeCount,
   date,
 }: PostBoxProps) => {
+  const [clickLike, setClickLike] = useState(false);
+  const handleLikebtn = () => {
+    setClickLike(() => !clickLike);
+  };
+
   return (
     <div className={styles.postBox}>
       <section>
@@ -35,10 +41,15 @@ const PostBox = ({
               {nickName}
             </div>
             <div className={styles.comments}>댓글 {commentsCount}개</div>
-            <div className={styles.likeCount}>
-              <HeartOutline className={styles.heartIcon} />
-              {likeCount}
-            </div>
+            <button className={styles.likeCountBtn} onClick={handleLikebtn}>
+              {!clickLike ? (
+                <HeartOutline className={styles.heartOutlineIcon} />
+              ) : (
+                <HeartFill className={styles.heartFillIcon} />
+              )}
+
+              {!clickLike ? likeCount : likeCount + 1}
+            </button>
           </div>
           <div className={styles.postDetailsRight}>
             <div className={styles.postDate}>{date}</div>

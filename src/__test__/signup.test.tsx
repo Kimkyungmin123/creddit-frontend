@@ -116,4 +116,26 @@ describe('Signup', () => {
       expect(onSubmit).toHaveBeenCalledWith(values);
     });
   });
+
+  it('shows an duplicate error message if an email or nickname already exists', async () => {
+    render(<Signup />);
+    const { emailInput, nicknameInput, passwordInput, submitButton } =
+      setupElements();
+
+    const values = {
+      email: 'duplicate@a.com',
+      nickname: 'duplicate',
+      password: 'ab12AB!@#',
+    };
+    fireEvent.change(emailInput, { target: { value: values.email } });
+    fireEvent.change(nicknameInput, { target: { value: values.nickname } });
+    fireEvent.change(passwordInput, { target: { value: values.password } });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText(ERRORS.emailDuplicate)).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.getByText(ERRORS.nicknameDuplicate)).toBeInTheDocument();
+    });
+  });
 });

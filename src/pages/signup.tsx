@@ -20,7 +20,7 @@ const Signup: NextPage = () => {
   const login = useLogin();
 
   return (
-    <Layout type="account" title="creddit: 회원가입">
+    <Layout title="creddit: 회원가입" backgroundColor="clean">
       <div className={styles.signupContainer}>
         <h1>회원가입</h1>
         <SignupForm

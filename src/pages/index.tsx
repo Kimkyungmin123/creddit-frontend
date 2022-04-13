@@ -4,7 +4,7 @@ import styles from 'styles/Home.module.css';
 
 const Home: NextPage = () => {
   return (
-    <Layout type="post" title="creddit">
+    <Layout title="creddit">
       <div className={styles.container}>홈</div>
     </Layout>
   );

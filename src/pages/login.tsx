@@ -17,7 +17,7 @@ const Login: NextPage = () => {
   const login = useLogin();
 
   return (
-    <Layout type="account" title="creddit: 로그인">
+    <Layout title="creddit: 로그인" backgroundColor="clean">
       <div className={styles.loginContainer}>
         <h1>로그인</h1>
         <LoginForm

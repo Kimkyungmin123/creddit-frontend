@@ -5,7 +5,7 @@ import styles from 'styles/EditPost.module.css';
 
 const EditPost: NextPage = () => {
   return (
-    <Layout type="post" title="creddit: 글 수정">
+    <Layout title="creddit: 글 수정">
       <div className={styles.editPostContainer}>
         <h1>글 수정</h1>
         <CreateForm />

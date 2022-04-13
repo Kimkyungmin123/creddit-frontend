@@ -5,10 +5,10 @@ import { useLayoutEffect, useState } from 'react';
 import styles from './Header.module.scss';
 
 type HeaderProps = {
-  type: 'post' | 'account';
+  hideSearchBar?: boolean;
 };
 
-const Header = ({ type }: HeaderProps) => {
+const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading, logout } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
 
@@ -36,17 +36,15 @@ const Header = ({ type }: HeaderProps) => {
     }
   };
   return (
-    <header className={styles.headerContainer}>
+    <header className={styles.headerContainer} data-testid="header">
       <div className={styles.headerbox}>
         <div className={styles.headerLogo}>
           <Link href="/">
             <a>creddit</a>
           </Link>
         </div>
-        {type === 'account' && <div className={styles.headerAccount}></div>}
-
-        {type === 'post' && (
-          <div className={styles.headerPostSearch}>
+        {!hideSearchBar && (
+          <div className={styles.headerPostSearch} data-testid="search-bar">
             <Search className={styles.searchIcon} />
             <input type="text" placeholder="검색" />
           </div>
@@ -63,15 +61,13 @@ const Header = ({ type }: HeaderProps) => {
               </button>
             )}
           </div>
-          {type === 'post' && (
-            <div className={styles.editOutlineIcon}>
-              <Link href="/create-post">
-                <a aria-label="글 작성">
-                  <EditOutline />
-                </a>
-              </Link>
-            </div>
-          )}
+          <div className={styles.editOutlineIcon}>
+            <Link href="/create-post">
+              <a aria-label="글 작성">
+                <EditOutline />
+              </a>
+            </Link>
+          </div>
           <div>
             <a
               aria-label="깃허브 저장소"

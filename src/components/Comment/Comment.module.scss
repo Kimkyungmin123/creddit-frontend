@@ -1,0 +1,64 @@
+@mixin btn {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.commentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.commentBoxTop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.commentInfo {
+  display: flex;
+  font-size: 0.75rem;
+  font-family: roboto;
+  color: var(--text2);
+
+  span:first-child {
+    color: var(--text1);
+    font-weight: 700;
+  }
+  span:nth-child(2) {
+    padding: 0 0.1875rem;
+  }
+}
+
+.commentBtn {
+  padding-left: 0.75rem;
+  display: flex;
+  gap: 0.75rem;
+  button {
+    @include btn;
+  }
+}
+
+.commentBoxBottom {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+  font-size: 0.75rem;
+
+  button:first-child {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    @include btn;
+  }
+
+  button:last-child {
+    @include btn;
+  }
+}
+
+.HeartFillIcon {
+  height: 0.75rem;
+}

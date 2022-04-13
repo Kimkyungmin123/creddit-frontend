@@ -3,7 +3,7 @@ import Layout from 'components/Layout';
 import PostBox from 'components/PostBox';
 import type { NextPage } from 'next';
 import styles from 'styles/Home.module.scss';
-import dummy from '../data/dataset.json';
+import dummy from '../data/posts.json';
 
 const Home: NextPage = () => {
   return (

@@ -1,10 +1,21 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
+import { server } from 'mocks/server';
+import { rest } from 'msw';
 import Login, { LoginForm } from 'pages/login';
 
+server.use(
+  rest.get('/api/me', (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
+  })
+);
+
 describe('Login', () => {
-  const setupElements = () => {
-    const emailInput = screen.getByLabelText('이메일') as HTMLInputElement;
+  const setupElements = async () => {
+    let emailInput!: HTMLInputElement;
+    await waitFor(() => {
+      emailInput = screen.getByLabelText('이메일');
+    });
     const passwordInput = screen.getByLabelText('비밀번호') as HTMLInputElement;
     const submitButton = screen.getByTestId(
       'submitButton'
@@ -16,9 +27,9 @@ describe('Login', () => {
     };
   };
 
-  it('renders properly', () => {
+  it('renders properly', async () => {
     render(<Login />);
-    const { emailInput, passwordInput, submitButton } = setupElements();
+    const { emailInput, passwordInput, submitButton } = await setupElements();
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(screen.getByText('로그인', { selector: 'h1' })).toBeInTheDocument();
@@ -38,7 +49,7 @@ describe('Login', () => {
 
   it('shows an email error message if the email is invalid', async () => {
     render(<Login />);
-    const { emailInput } = setupElements();
+    const { emailInput } = await setupElements();
     fireEvent.blur(emailInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.emailRequired)).toBeInTheDocument();
@@ -51,7 +62,7 @@ describe('Login', () => {
 
   it('shows an password error message if the password is invalid', async () => {
     render(<Login />);
-    const { passwordInput } = setupElements();
+    const { passwordInput } = await setupElements();
     fireEvent.blur(passwordInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.passwordRequired)).toBeInTheDocument();
@@ -61,7 +72,7 @@ describe('Login', () => {
   it('submit the values if the values are valid', async () => {
     const onSubmit = jest.fn();
     render(<LoginForm onSubmit={onSubmit} />);
-    const { emailInput, passwordInput, submitButton } = setupElements();
+    const { emailInput, passwordInput, submitButton } = await setupElements();
 
     const values = { email: '123@a.com', password: '123' };
     fireEvent.change(emailInput, { target: { value: values.email } });

@@ -1,10 +1,21 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
+import { server } from 'mocks/server';
+import { rest } from 'msw';
 import Signup, { SignupForm } from 'pages/signup';
 
+server.use(
+  rest.get('/api/me', (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({}));
+  })
+);
+
 describe('Signup', () => {
-  const setupElements = () => {
-    const emailInput = screen.getByLabelText('이메일') as HTMLInputElement;
+  const setupElements = async () => {
+    let emailInput!: HTMLInputElement;
+    await waitFor(() => {
+      emailInput = screen.getByLabelText('이메일');
+    });
     const nicknameInput = screen.getByLabelText('닉네임') as HTMLInputElement;
     const passwordInput = screen.getByLabelText('비밀번호') as HTMLInputElement;
     const submitButton = screen.getByTestId(
@@ -18,10 +29,10 @@ describe('Signup', () => {
     };
   };
 
-  it('renders properly', () => {
+  it('renders properly', async () => {
     render(<Signup />);
     const { emailInput, nicknameInput, passwordInput, submitButton } =
-      setupElements();
+      await setupElements();
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(
@@ -40,7 +51,7 @@ describe('Signup', () => {
 
   it('shows an email error message if the email is invalid', async () => {
     render(<Signup />);
-    const { emailInput } = setupElements();
+    const { emailInput } = await setupElements();
     fireEvent.blur(emailInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.emailRequired)).toBeInTheDocument();
@@ -53,7 +64,7 @@ describe('Signup', () => {
 
   it('shows an nickname error message if the nickname is invalid', async () => {
     render(<Signup />);
-    const { nicknameInput } = setupElements();
+    const { nicknameInput } = await setupElements();
     fireEvent.blur(nicknameInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.nicknameRequired)).toBeInTheDocument();
@@ -74,7 +85,7 @@ describe('Signup', () => {
 
   it('shows an password error message if the password is invalid', async () => {
     render(<Signup />);
-    const { passwordInput } = setupElements();
+    const { passwordInput } = await setupElements();
     fireEvent.blur(passwordInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.passwordRequired)).toBeInTheDocument();
@@ -101,7 +112,7 @@ describe('Signup', () => {
     const onSubmit = jest.fn();
     render(<SignupForm onSubmit={onSubmit} />);
     const { emailInput, nicknameInput, passwordInput, submitButton } =
-      setupElements();
+      await setupElements();
 
     const values = {
       email: '123@a.com',
@@ -120,7 +131,7 @@ describe('Signup', () => {
   it('shows an duplicate error message if an email or nickname already exists', async () => {
     render(<Signup />);
     const { emailInput, nicknameInput, passwordInput, submitButton } =
-      setupElements();
+      await setupElements();
 
     const values = {
       email: 'duplicate@a.com',

@@ -13,33 +13,37 @@ import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
 
 const Login: NextPage = () => {
-  useUser({ redirectTo: '/' });
+  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
 
   return (
     <Layout title="creddit: 로그인" backgroundColor="clean">
-      <div className={styles.loginContainer}>
-        <h1>로그인</h1>
-        <LoginForm
-          onSubmit={async (values) => {
-            await login(values);
-          }}
-        />
-        <SocialLoginButtons />
-        <div className={styles.bottomPanel}>
-          <Link href="/find-password">
-            <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
-              비밀번호를 잊으셨습니까?
-            </a>
-          </Link>
-          <div className={styles.signupSuggestion}>
-            <span>아직 회원이 아니신가요?</span>
-            <Link href="/signup">
-              <a>회원가입</a>
-            </Link>
+      {!isLoading && !user && (
+        <>
+          <div className={styles.loginContainer}>
+            <h1>로그인</h1>
+            <LoginForm
+              onSubmit={async (values) => {
+                await login(values);
+              }}
+            />
+            <SocialLoginButtons />
+            <div className={styles.bottomPanel}>
+              <Link href="/find-password">
+                <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
+                  비밀번호를 잊으셨습니까?
+                </a>
+              </Link>
+              <div className={styles.signupSuggestion}>
+                <span>아직 회원이 아니신가요?</span>
+                <Link href="/signup">
+                  <a>회원가입</a>
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </Layout>
   );
 };

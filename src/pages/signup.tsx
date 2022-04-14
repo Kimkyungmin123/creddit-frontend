@@ -16,47 +16,51 @@ import api from 'utils/api';
 import { object, string } from 'yup';
 
 const Signup: NextPage = () => {
-  useUser({ redirectTo: '/' });
+  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
 
   return (
     <Layout title="creddit: 회원가입" backgroundColor="clean">
-      <div className={styles.signupContainer}>
-        <h1>회원가입</h1>
-        <SignupForm
-          onSubmit={async (values) => {
-            const error: { [key: string]: boolean } = {};
-            const checkEmailDuplicate = async () => {
-              const duplicate = await isEmailDuplicate(values.email);
-              if (duplicate) error.emailDuplicate = true;
-            };
+      {!isLoading && !user && (
+        <>
+          <div className={styles.signupContainer}>
+            <h1>회원가입</h1>
+            <SignupForm
+              onSubmit={async (values) => {
+                const error: { [key: string]: boolean } = {};
+                const checkEmailDuplicate = async () => {
+                  const duplicate = await isEmailDuplicate(values.email);
+                  if (duplicate) error.emailDuplicate = true;
+                };
 
-            const checkNicknameDuplicate = async () => {
-              const duplicate = await isNicknameDuplicate(values.nickname);
-              if (duplicate) error.nicknameDuplicate = true;
-            };
+                const checkNicknameDuplicate = async () => {
+                  const duplicate = await isNicknameDuplicate(values.nickname);
+                  if (duplicate) error.nicknameDuplicate = true;
+                };
 
-            await Promise.all([
-              checkEmailDuplicate(),
-              checkNicknameDuplicate(),
-            ]);
+                await Promise.all([
+                  checkEmailDuplicate(),
+                  checkNicknameDuplicate(),
+                ]);
 
-            if (Object.keys(error).length > 0) {
-              throw error;
-            }
+                if (Object.keys(error).length > 0) {
+                  throw error;
+                }
 
-            await api.post('/auth/signup', values);
-            await login(values);
-          }}
-        />
-        <SocialLoginButtons />
-        <div className={styles.loginSuggestion}>
-          <span>이미 회원이신가요?</span>
-          <Link href="/login">
-            <a>로그인</a>
-          </Link>
-        </div>
-      </div>
+                await api.post('/auth/signup', values);
+                await login(values);
+              }}
+            />
+            <SocialLoginButtons />
+            <div className={styles.loginSuggestion}>
+              <span>이미 회원이신가요?</span>
+              <Link href="/login">
+                <a>로그인</a>
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
     </Layout>
   );
 };

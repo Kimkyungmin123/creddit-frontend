@@ -33,12 +33,13 @@
   width: 100%;
   padding: 1.5rem 0.625rem 0.5rem;
   border: solid 0.0625rem var(--border1);
+  outline: none;
   border-radius: 0.25rem;
   background-color: var(--bg-element1);
   color: var(--text1);
 
   &:focus {
-    outline: solid 0.125rem var(--border1);
+    border: solid 0.0625rem var(--border3);
   }
 }
 

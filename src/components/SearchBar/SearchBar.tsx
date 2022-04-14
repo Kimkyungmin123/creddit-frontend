@@ -1,12 +1,28 @@
-import { Search } from 'icons';
+import { Close, Search } from 'icons';
+import { useState } from 'react';
 import styles from './SearchBar.module.scss';
 
 function SearchBar() {
+  const [value, setValue] = useState('');
+
   return (
-    <div className={styles.headerPostSearch} data-testid="search-bar">
+    <label className={styles.searchBar} data-testid="search-bar">
       <Search className={styles.searchIcon} />
-      <input type="text" placeholder="검색" />
-    </div>
+      <input
+        placeholder="검색"
+        onChange={(event) => setValue(event.target.value)}
+        value={value}
+      />
+      {value && (
+        <button
+          className={styles.closeButton}
+          aria-label="검색 내용 지우기"
+          onClick={() => setValue('')}
+        >
+          <Close />
+        </button>
+      )}
+    </label>
   );
 }
 

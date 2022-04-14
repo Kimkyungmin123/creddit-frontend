@@ -11,14 +11,16 @@ function AccountMenu() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div data-testid="account-menu" className={styles.accountMenu}>
+    <div
+      data-testid="account-menu"
+      className={styles.accountMenu}
+      onBlur={() => setExpanded(false)}
+    >
       <button
         className={styles.accountMenuButton}
         aria-expanded={expanded ? 'true' : 'false'}
         aria-label="계정 메뉴"
-        onClick={() => {
-          setExpanded((prev) => !prev);
-        }}
+        onClick={() => setExpanded((prev) => !prev)}
       >
         <div className={styles.imageContainer}>
           <Image src={cat} alt="사용자 프로필 이미지" />

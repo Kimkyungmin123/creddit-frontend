@@ -14,13 +14,7 @@
   gap: 1.5rem;
   width: 75rem;
 
-  & > button {
-    display: flex;
-    padding: 0;
-  }
-
   & > a {
-    display: flex;
     color: var(--text1);
   }
 }
@@ -32,4 +26,37 @@
   // 유저 정보 로딩 이후 1px의 간격 차이가 생기게 됨.
   // 로고 높이와 검색바 높이를 맞추기 위해 margin-bottom에 1px을 추가했음.
   margin-bottom: 0.0625rem;
+}
+
+.hoverElement {
+  display: flex;
+  padding: 0.375rem;
+  margin: -0.375rem;
+  border-radius: 50%;
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--bg-element7);
+    }
+  }
+}
+
+.githubLink {
+  display: flex;
+  padding: 0.375rem;
+  margin: -0.375rem;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text8);
+    }
+  }
+}
+
+.authLink {
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text8);
+    }
+  }
 }

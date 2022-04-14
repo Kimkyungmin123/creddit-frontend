@@ -6,6 +6,12 @@
   display: flex;
   align-items: center;
   padding: 0;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--text8);
+    }
+  }
 }
 
 .imageContainer {
@@ -23,8 +29,8 @@
   list-style: none;
   white-space: nowrap;
   background-color: var(--bg-element1);
-  border: 0.0625rem solid #cccccc;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+  border: 0.0625rem solid var(--border1);
+  box-shadow: 0 0.0625rem 0.125rem var(--box-shadow);
 
   & > li > a,
   & > li > button {

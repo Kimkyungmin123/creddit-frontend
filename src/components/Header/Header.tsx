@@ -50,6 +50,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
           <>
             {!hideSearchBar && <SearchBar />}
             <button
+              className={styles.hoverElement}
               onClick={themeHandle}
               aria-label={
                 screenTheme
@@ -57,16 +58,17 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
                   : '색상 모드 변경(현재 어두운 모드)'
               }
             >
-              {screenTheme ? <MoonOutline /> : <SunOutline />}
+              {screenTheme ? <SunOutline /> : <MoonOutline />}
             </button>
             {user && (
               <Link href="/create-post">
-                <a aria-label="글 작성">
+                <a className={styles.hoverElement} aria-label="글 작성">
                   <EditOutline />
                 </a>
               </Link>
             )}
             <a
+              className={styles.githubLink}
               aria-label="깃허브 저장소"
               href="https://github.com/project-creddit"
             >
@@ -77,10 +79,10 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             ) : (
               <>
                 <Link href="/login">
-                  <a>로그인</a>
+                  <a className={styles.authLink}>로그인</a>
                 </Link>
                 <Link href="/signup">
-                  <a>회원가입</a>
+                  <a className={styles.authLink}>회원가입</a>
                 </Link>
               </>
             )}

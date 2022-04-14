@@ -1,15 +1,17 @@
+import AccountMenu from 'components/AccountMenu';
+import SearchBar from 'components/SearchBar';
 import useUser from 'hooks/useUser';
-import { EditOutline, Github, MoonOutline, Search, SunOutline } from 'icons';
+import { EditOutline, Github, MoonOutline, SunOutline } from 'icons';
 import Link from 'next/link';
 import { useLayoutEffect, useState } from 'react';
 import styles from './Header.module.scss';
 
-type HeaderProps = {
+export type HeaderProps = {
   hideSearchBar?: boolean;
 };
 
 const Header = ({ hideSearchBar }: HeaderProps) => {
-  const { user, isLoading, logout } = useUser();
+  const { user, isLoading } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
 
   useLayoutEffect(() => {
@@ -35,73 +37,55 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
       document.body.dataset.theme = 'light';
     }
   };
+
   return (
-    <header className={styles.headerContainer} data-testid="header">
-      <div className={styles.headerbox}>
-        <div className={styles.headerLogo}>
-          <Link href="/">
-            <a>creddit</a>
-          </Link>
-        </div>
-        {!hideSearchBar && (
-          <div className={styles.headerPostSearch} data-testid="search-bar">
-            <Search className={styles.searchIcon} />
-            <input type="text" placeholder="검색" />
-          </div>
-        )}
-        <div className={styles.headerNav}>
-          <div className={styles.modeIcon} onClick={themeHandle}>
-            {screenTheme ? (
-              <button aria-label="색상 모드 변경(현재 어두운 모드)">
-                <MoonOutline />
-              </button>
-            ) : (
-              <button aria-label="색상 모드 변경(현재 밝은 모드)">
-                <SunOutline />
-              </button>
+    <header className={styles.header} data-testid="header">
+      <div className={styles.container}>
+        <Link href="/">
+          <a aria-label="홈" className={styles.logo}>
+            creddit
+          </a>
+        </Link>
+        {!isLoading && (
+          <>
+            {!hideSearchBar && <SearchBar />}
+            <button
+              onClick={themeHandle}
+              aria-label={
+                screenTheme
+                  ? '색상 모드 변경(현재 밝은 모드)'
+                  : '색상 모드 변경(현재 어두운 모드)'
+              }
+            >
+              {screenTheme ? <MoonOutline /> : <SunOutline />}
+            </button>
+            {user && (
+              <Link href="/create-post">
+                <a aria-label="글 작성">
+                  <EditOutline />
+                </a>
+              </Link>
             )}
-          </div>
-          <div className={styles.editOutlineIcon}>
-            <Link href="/create-post">
-              <a aria-label="글 작성">
-                <EditOutline />
-              </a>
-            </Link>
-          </div>
-          <div>
             <a
               aria-label="깃허브 저장소"
-              href="https://github.com/project-creddit/creddit-frontend"
+              href="https://github.com/project-creddit"
             >
               <Github />
             </a>
-          </div>
-          {!isLoading && (
-            <>
-              {user ? (
-                <>
-                  <div>{user.nickname}</div>
-                  <button onClick={logout} className={styles.logoutButton}>
-                    로그아웃
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div>
-                    <Link href="/login">
-                      <a aria-label="로그인">로그인</a>
-                    </Link>
-                  </div>
-                  <div>
-                    <Link href="/signup">
-                      <a aria-label="회원가입">회원가입</a>
-                    </Link>
-                  </div>
-                </>
-              )}
-            </>
-          )}
-        </div>
+            {user ? (
+              <AccountMenu />
+            ) : (
+              <>
+                <Link href="/login">
+                  <a>로그인</a>
+                </Link>
+                <Link href="/signup">
+                  <a>회원가입</a>
+                </Link>
+              </>
+            )}
+          </>
+        )}
       </div>
     </header>
   );

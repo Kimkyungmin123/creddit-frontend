@@ -1,0 +1,41 @@
+.accountMenu {
+  position: relative;
+}
+
+.accountMenuButton {
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.imageContainer {
+  width: 1.875rem;
+  height: 1.875rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.detail {
+  position: absolute;
+  top: calc(100% + 0.5625rem);
+  right: 0;
+  padding: 0;
+  list-style: none;
+  white-space: nowrap;
+  background-color: var(--bg-element1);
+  border: 0.0625rem solid #cccccc;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
+
+  & > li > a,
+  & > li > button {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 3rem 0.75rem 1rem;
+    width: 100%;
+    color: var(--text1);
+
+    &:hover {
+      background-color: var(--bg-element4);
+    }
+  }
+}

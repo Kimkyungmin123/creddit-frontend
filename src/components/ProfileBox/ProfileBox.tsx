@@ -15,7 +15,7 @@ function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
       <div className={styles.profileContent}>
         <div className={styles.userInfo}>
           <div className={styles.profileImg}>
-            <Image src={cat} alt="프로필 이미지" width={96} height={96} />
+            <Image src={cat} alt="프로필 이미지" />
           </div>
           <span className={styles.nickName}>{nickName}</span>
         </div>

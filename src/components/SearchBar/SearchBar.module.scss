@@ -1,0 +1,26 @@
+.headerPostSearch {
+  flex-grow: 1;
+  display: flex;
+  border: 0.0625rem solid var(--border1);
+  border-radius: 0.25rem;
+  padding: 0.3125rem 0.8125rem;
+
+  input {
+    position: relative;
+    border: none;
+    outline: none;
+    background-color: var(--bg-page2);
+    padding: 0;
+    width: 100%;
+  }
+}
+
+.headerPostSearch:focus {
+  outline: 0.125rem solid var(--border1);
+}
+
+.searchIcon {
+  margin-right: 0.75rem;
+  display: flex;
+  color: var(--text2);
+}

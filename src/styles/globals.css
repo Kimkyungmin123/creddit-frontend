@@ -12,6 +12,10 @@ body {
   font-family: 'Noto Sans KR';
 }
 
+body.intent-mouse button:focus {
+  outline: none;
+}
+
 img {
   display: block;
 }

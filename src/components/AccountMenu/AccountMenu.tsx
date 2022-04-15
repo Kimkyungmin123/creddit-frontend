@@ -1,21 +1,36 @@
-import useUser from 'hooks/useUser';
+import AccoutMenuDetail from 'components/AccountMenuDetail';
 import { CaretDown } from 'icons';
 import cat from 'images/cat.jpg';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './AccountMenu.module.scss';
 
 function AccountMenu() {
-  const { logout } = useUser();
   const [expanded, setExpanded] = useState(false);
 
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => {
+      if (expanded && event.key === 'Escape') {
+        setExpanded(false);
+      }
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [expanded]);
+
+  useEffect(() => {
+    const close = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (expanded && !target.closest(`.${styles.accountMenu}`)) {
+        setExpanded(false);
+      }
+    };
+    window.addEventListener('click', close);
+    return () => window.removeEventListener('click', close);
+  }, [expanded]);
+
   return (
-    <div
-      data-testid="account-menu"
-      className={styles.accountMenu}
-      onBlur={() => setExpanded(false)}
-    >
+    <div data-testid="account-menu" className={styles.accountMenu}>
       <button
         className={styles.accountMenuButton}
         aria-expanded={expanded ? 'true' : 'false'}
@@ -27,28 +42,7 @@ function AccountMenu() {
         </div>
         <CaretDown />
       </button>
-      {expanded && (
-        <ul className={styles.detail} data-testid="detail">
-          <li>
-            <Link href="/profile">
-              <a>프로필</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/create-post">
-              <a>새 글 작성</a>
-            </Link>
-          </li>
-          <li>
-            <Link href="/chat-list">
-              <a>대화 목록</a>
-            </Link>
-          </li>
-          <li>
-            <button onClick={logout}>로그아웃</button>
-          </li>
-        </ul>
-      )}
+      {expanded && <AccoutMenuDetail />}
     </div>
   );
 }

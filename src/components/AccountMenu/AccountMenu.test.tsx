@@ -20,19 +20,27 @@ describe('AccountMenu', () => {
   it('shows detail when expanded', () => {
     const { button } = setup();
     fireEvent.click(button);
-    expect(screen.getByText('프로필')).toHaveAttribute('href', '/profile');
-    expect(screen.getByText('새 글 작성')).toHaveAttribute(
-      'href',
-      '/create-post'
-    );
-    expect(screen.getByText('대화 목록')).toHaveAttribute('href', '/chat-list');
-    expect(screen.getByText('로그아웃')).toBeInTheDocument();
+    expect(screen.getByTestId('account-menu-detail')).toBeInTheDocument();
   });
 
   it('hides detail when closed', () => {
     const { button } = setup();
     fireEvent.click(button);
     fireEvent.click(button);
-    expect(screen.queryByTestId('detail')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
+  });
+
+  it('closes detail when click outside', () => {
+    const { button } = setup();
+    fireEvent.click(button);
+    fireEvent.click(document.body);
+    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
+  });
+
+  it('closes detail when press esc key', () => {
+    const { button } = setup();
+    fireEvent.click(button);
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
   });
 });

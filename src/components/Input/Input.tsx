@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import {
   ChangeEventHandler,
   FocusEventHandler,
@@ -31,7 +31,7 @@ function Input({
   return (
     <div className={styles.inputBox}>
       <label
-        className={classnames(
+        className={classNames(
           styles.label,
           (focused || value) && styles.filling
         )}

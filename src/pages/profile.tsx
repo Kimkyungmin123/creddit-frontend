@@ -1,12 +1,12 @@
-import type { NextPage } from 'next';
-import ProfileBox from 'components/ProfileBox';
-import Layout from 'components/Layout';
-import styles from 'styles/Profile.module.scss';
 import ClassifyingPosts from 'components/ClassifyingPosts';
+import Layout from 'components/Layout';
+import ProfileBox from 'components/ProfileBox';
+import type { NextPage } from 'next';
+import styles from 'styles/Profile.module.scss';
 
 const Profile: NextPage = () => {
   return (
-    <Layout type="post" title="creddit: 프로필 설정">
+    <Layout title="creddit: 프로필">
       <div className={styles.ProfileContainer}>
         <div className={styles.userPostList}>
           <ClassifyingPosts />

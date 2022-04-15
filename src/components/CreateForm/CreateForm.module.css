@@ -1,5 +1,4 @@
 .createFormContainer {
-  background-color: var(--bg-page1);
   display: flex;
 }
 
@@ -38,10 +37,8 @@
   padding: 0.625rem 1.5rem;
   margin-top: 0.625rem;
   border-radius: 0.25rem;
-  border: none;
   background-color: var(--btn);
   color: var(--text4);
-  cursor: pointer;
 }
 
 .createFormContainer button:active {

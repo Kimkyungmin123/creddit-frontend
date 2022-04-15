@@ -1,6 +1,8 @@
 import Comment from 'components/Comment';
 import { Close, HeartFill, Sort } from 'icons';
+import { useRouter } from 'next/router';
 import styles from './PostModal.module.scss';
+import dummy from '../../data/posts.json';
 
 export type modalProps = {
   postTitle: string;
@@ -9,8 +11,6 @@ export type modalProps = {
   commentsCount: number;
   likeCount: number;
   date: string;
-  state: boolean;
-  onCloseClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const PostModal = ({
@@ -20,10 +20,13 @@ const PostModal = ({
   commentsCount,
   likeCount,
   date,
-  state,
-  onCloseClick,
 }: modalProps) => {
-  return state ? (
+  const router = useRouter();
+  const { id } = router.query;
+  const numID = Number(id) - 1;
+  const postData = dummy[numID].comments;
+
+  return (
     <div className={styles.postModalContainer}>
       <div className={styles.postModalBox}>
         <div className={styles.topBar}>
@@ -35,7 +38,7 @@ const PostModal = ({
               </div>
               {postTitle}
             </div>
-            <button ria-label="게시물 닫기" onClick={onCloseClick}>
+            <button ria-label="게시물 닫기" onClick={() => router.back()}>
               <Close />
             </button>
           </div>
@@ -64,20 +67,23 @@ const PostModal = ({
               </form>
             </div>
             <div className={styles.commentBoxBottom}>
-              <Comment
-                nickName="woochul"
-                content="글 잘 읽었습니다~ ^^"
-                likeCount={1}
-                date="2022년 2월 7일 18:00"
-              />
+              {postData.map((data, i) => {
+                return (
+                  <Comment
+                    key={i}
+                    commnetNickName={data.member}
+                    commnetContent={data.content}
+                    commnetLikeCount={data.likeCount}
+                    commnetDate={data.createdDate}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
-      <div className={styles.overlay} onClick={() => console.log('hi')}></div>
+      <div className={styles.overlay} onClick={() => router.back()}></div>
     </div>
-  ) : (
-    <></>
   );
 };
 

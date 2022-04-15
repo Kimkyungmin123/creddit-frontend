@@ -1,4 +1,3 @@
-import PostModal from 'components/PostModal';
 import { HeartFill, HeartOutline } from 'icons';
 import { useState } from 'react';
 import styles from './PostBox.module.scss';
@@ -10,6 +9,7 @@ export type PostBoxProps = {
   commentsCount: number;
   likeCount: number;
   date: string;
+  onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const PostBox = ({
@@ -19,25 +19,18 @@ const PostBox = ({
   commentsCount,
   likeCount,
   date,
+  onClick,
 }: PostBoxProps) => {
   const [clickLike, setClickLike] = useState(false);
   const handleLikebtn = () => {
     setClickLike(() => !clickLike);
-  };
-  const [clickModal, setClickModal] = useState(false);
-  const openModal = () => {
-    setClickModal(true);
-  };
-  const closeModal = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    setClickModal(false);
   };
 
   return (
     <>
       <div className={styles.postBox}>
         <section>
-          <div onClick={openModal}>
+          <div onClick={onClick}>
             <h2>{postTitle}</h2>
             <p>
               {postContent.length > 60
@@ -80,16 +73,6 @@ const PostBox = ({
           </div>
         </section>
       </div>
-      <PostModal
-        postTitle={postTitle}
-        postContent={postContent}
-        nickName={nickName}
-        commentsCount={commentsCount}
-        likeCount={likeCount}
-        date={date}
-        state={clickModal}
-        onCloseClick={closeModal}
-      />
     </>
   );
 };

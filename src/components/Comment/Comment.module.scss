@@ -21,12 +21,14 @@
   display: flex;
   font-size: 0.75rem;
   font-family: roboto;
+  align-items: center;
   color: var(--text2);
 
   span:first-child {
     color: var(--text1);
     font-weight: 700;
   }
+
   span:nth-child(2) {
     padding: 0 0.1875rem;
   }
@@ -36,6 +38,7 @@
   padding-left: 0.75rem;
   display: flex;
   gap: 0.75rem;
+
   button {
     @include btn;
   }
@@ -51,6 +54,7 @@
     display: flex;
     gap: 0.25rem;
     align-items: center;
+
     @include btn;
   }
 
@@ -60,5 +64,5 @@
 }
 
 .HeartFillIcon {
-  height: 0.75rem;
+  height: 1rem;
 }

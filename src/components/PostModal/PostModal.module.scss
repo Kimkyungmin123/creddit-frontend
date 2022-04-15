@@ -25,19 +25,20 @@
 }
 
 .postModalBox {
-  position: fixed;
+  // position: fixed;
+  // overflow: hidden;
   display: flex;
   align-items: center;
   flex-direction: column;
   margin: 0 12.75rem 11rem 12.75rem;
   background-color: var(--bg-page4);
-  height: 100%;
+  // height: 100%;
 }
 
 .topBar {
   display: flex;
   width: 100%;
-  background-color: var(--bg-element7);
+  background-color: var(--bg-element8);
   justify-content: center;
 }
 
@@ -49,7 +50,7 @@
   font-size: 1rem;
   font-weight: 700;
   justify-content: space-between;
-  color: var(--text9);
+  color: var(--text10);
   background-color: transparent;
   height: 100%;
 
@@ -78,7 +79,7 @@
 }
 
 .heartFillIcon {
-  color: var(--text8);
+  color: var(--text9);
 }
 
 .postModalContent {
@@ -146,6 +147,7 @@
     }
 
     button {
+      display: flex;
       padding: 0.5rem 1.25rem;
       background-color: var(--btn);
       color: var(--text4);
@@ -177,6 +179,14 @@
   z-index: -1;
   height: 100%;
   width: 100%;
-  background-color: #383838;
+  background-color: var(--bg-element9);
+  cursor: pointer;
   @include animation;
+}
+
+.commentBoxBottom {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 36.75rem;
+  margin-bottom: 2.125rem;
 }

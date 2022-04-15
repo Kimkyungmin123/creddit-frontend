@@ -4,7 +4,6 @@
 const CaretDown = () => <>테스트용입니다.</>;
 const ChevronLeft = () => <>테스트용입니다.</>;
 const Close = () => <>테스트용입니다.</>;
-const Edit = () => <>테스트용입니다.</>;
 const EditOutline = () => <>테스트용입니다.</>;
 const Github = () => <>테스트용입니다.</>;
 const Google = () => <>테스트용입니다.</>;
@@ -13,12 +12,10 @@ const HeartOutline = () => <>테스트용입니다.</>;
 const LoadingSpin = () => <>테스트용입니다.</>;
 const LoadingSpokes = () => <>테스트용입니다.</>;
 const Menu = () => <>테스트용입니다.</>;
-const MoonFill = () => <>테스트용입니다.</>;
 const MoonOutline = () => <>테스트용입니다.</>;
 const Rising = () => <>테스트용입니다.</>;
 const Search = () => <>테스트용입니다.</>;
 const Sort = () => <>테스트용입니다.</>;
-const SunFill = () => <>테스트용입니다.</>;
 const SunOutline = () => <>테스트용입니다.</>;
 const Time = () => <>테스트용입니다.</>;
 
@@ -26,7 +23,6 @@ export {
   CaretDown,
   ChevronLeft,
   Close,
-  Edit,
   EditOutline,
   Github,
   Google,
@@ -35,12 +31,10 @@ export {
   LoadingSpin,
   LoadingSpokes,
   Menu,
-  MoonFill,
   MoonOutline,
   Rising,
   Search,
   Sort,
-  SunFill,
   SunOutline,
   Time,
 };

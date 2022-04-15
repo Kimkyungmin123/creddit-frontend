@@ -9,7 +9,7 @@ import { object, string } from 'yup';
 
 const ResetPassword: NextPage = () => {
   return (
-    <Layout type="account" title="creddit: 비밀번호 재설정">
+    <Layout title="creddit: 비밀번호 재설정" backgroundColor="clean">
       <div className={styles.resetPasswordContainer}>
         <h1>비밀번호 재설정</h1>
         <ResetPasswordForm

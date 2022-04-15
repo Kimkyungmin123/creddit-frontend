@@ -1,5 +1,14 @@
 import '@testing-library/jest-dom/extend-expect';
-import { server } from './src/mocks/server.ts';
+import { server } from './src/mocks/server';
+
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      push: jest.fn(),
+      replace: jest.fn(),
+    };
+  },
+}));
 
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());

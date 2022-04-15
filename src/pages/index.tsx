@@ -13,8 +13,9 @@ const Home: NextPage = () => {
     router.push(`/posts/${id}`);
   };
   return (
-    <Layout type="post" title="creddit">
+    <Layout title="creddit">
       <div className={styles.container}>
+        홈
         <div className={styles.ClassifyingPostsBox}>
           <ClassifyingPosts />
         </div>

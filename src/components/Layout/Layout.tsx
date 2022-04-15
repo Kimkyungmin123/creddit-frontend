@@ -1,21 +1,34 @@
+import classNames from 'classnames';
 import Header from 'components/Header';
 import Head from 'next/head';
-import type { ReactNode } from 'react';
-import styles from './Layout.module.css';
+import { ReactNode } from 'react';
+import styles from './Layout.module.scss';
 
-type Props = {
-  children?: ReactNode;
-  title?: string;
-  type: 'post' | 'account';
+export type LayoutProps = {
+  children: ReactNode;
+  title: string;
+  hideSearchBar?: boolean;
+  backgroundColor?: 'base' | 'clean';
 };
 
-const Layout = ({ children, title, type }: Props) => {
+const Layout = ({
+  children,
+  title,
+  hideSearchBar,
+  backgroundColor = 'base',
+}: LayoutProps) => {
   return (
-    <div className={styles.container} data-testid="layout">
+    <div
+      className={classNames(
+        styles.container,
+        backgroundColor === 'clean' && styles.clean
+      )}
+      data-testid="layout"
+    >
       <Head>
         <title>{title}</title>
       </Head>
-      <Header type={type} />
+      <Header hideSearchBar={hideSearchBar} />
       {children}
     </div>
   );

@@ -5,7 +5,7 @@ import styles from 'styles/CreatePost.module.css';
 
 const CreatePost: NextPage = () => {
   return (
-    <Layout type="post" title="creddit: 글 작성">
+    <Layout title="creddit: 글 작성">
       <div className={styles.createPostContainer}>
         <h1>글 작성</h1>
         <CreateForm />

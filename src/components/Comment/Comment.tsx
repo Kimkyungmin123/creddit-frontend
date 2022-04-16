@@ -1,4 +1,5 @@
-import { HeartFill } from 'icons';
+import { HeartFill, HeartOutline } from 'icons';
+import { useState } from 'react';
 import styles from './Comment.module.scss';
 
 export type commentProps = {
@@ -9,6 +10,10 @@ export type commentProps = {
 };
 
 const Comment = ({ nickName, content, likeCount, date }: commentProps) => {
+  const [clickLike, setClickLike] = useState(false);
+  const handleLikebtn = () => {
+    setClickLike(() => !clickLike);
+  };
   return (
     <div className={styles.commentContainer}>
       <div className={styles.commentBoxTop}>
@@ -24,10 +29,25 @@ const Comment = ({ nickName, content, likeCount, date }: commentProps) => {
         <span>{content}</span>
       </div>
       <div className={styles.commentBoxBottom}>
-        <button aria-label="좋아요">
-          <HeartFill className={styles.HeartFillIcon} />
-          <span>{likeCount}</span>
-        </button>
+        {!clickLike ? (
+          <button
+            className={styles.likeCountBtn}
+            onClick={handleLikebtn}
+            aria-label="좋아요"
+          >
+            <HeartOutline className={styles.heartOutlineIcon} />
+            {!clickLike ? likeCount : likeCount + 1}
+          </button>
+        ) : (
+          <button
+            className={styles.likeCountBtn}
+            onClick={handleLikebtn}
+            aria-label="좋아요 취소"
+          >
+            <HeartFill className={styles.heartFillIcon} />
+            {!clickLike ? likeCount : likeCount + 1}
+          </button>
+        )}
         <button aria-label="답글 달기">답글</button>
       </div>
     </div>

@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const clickedPost = (id: number) => {
-    router.push(`/posts/${id}`);
+    router.push({ pathname: `/posts/${id}` });
   };
   return (
     <Layout title="creddit">

@@ -25,19 +25,20 @@ const PostBox = ({
   const handleLikebtn = () => {
     setClickLike(() => !clickLike);
   };
+  const nonClickArea = (event: any) => {
+    event.stopPropagation();
+  };
 
   return (
     <>
-      <div className={styles.postBox}>
+      <div className={styles.postBox} onClick={clickedPost}>
         <section>
-          <div onClick={clickedPost}>
-            <h2>{postTitle}</h2>
-            <p>
-              {postContent.length > 60
-                ? `${postContent.slice(0, 60)}...`
-                : postContent}
-            </p>
-          </div>
+          <h2>{postTitle}</h2>
+          <p>
+            {postContent.length > 60
+              ? `${postContent.slice(0, 60)}...`
+              : postContent}
+          </p>
 
           <div className={styles.postDetails}>
             <div className={styles.postDetailsLeft}>
@@ -46,26 +47,27 @@ const PostBox = ({
                 {nickName}
               </div>
               <div className={styles.comments}>댓글 {commentsCount}개</div>
-
-              {!clickLike ? (
-                <button
-                  className={styles.likeCountBtn}
-                  onClick={handleLikebtn}
-                  aria-label="좋아요"
-                >
-                  <HeartOutline className={styles.heartOutlineIcon} />
-                  {!clickLike ? likeCount : likeCount + 1}
-                </button>
-              ) : (
-                <button
-                  className={styles.likeCountBtn}
-                  onClick={handleLikebtn}
-                  aria-label="좋아요 취소"
-                >
-                  <HeartFill className={styles.heartFillIcon} />
-                  {!clickLike ? likeCount : likeCount + 1}
-                </button>
-              )}
+              <div onClick={nonClickArea}>
+                {!clickLike ? (
+                  <button
+                    className={styles.likeCountBtn}
+                    onClick={handleLikebtn}
+                    aria-label="좋아요"
+                  >
+                    <HeartOutline className={styles.heartOutlineIcon} />
+                    {!clickLike ? likeCount : likeCount + 1}
+                  </button>
+                ) : (
+                  <button
+                    className={styles.likeCountBtn}
+                    onClick={handleLikebtn}
+                    aria-label="좋아요 취소"
+                  >
+                    <HeartFill className={styles.heartFillIcon} />
+                    {!clickLike ? likeCount : likeCount + 1}
+                  </button>
+                )}
+              </div>
             </div>
             <div className={styles.postDetailsRight}>
               <div className={styles.postDate}>{date}</div>

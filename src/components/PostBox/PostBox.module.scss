@@ -1,0 +1,74 @@
+.postBox {
+  display: flex;
+  border: solid 0.0625rem var(--border1);
+  border-radius: 0.25rem;
+  background-color: var(--bg-element5);
+  padding: 0 0.0625rem;
+  transition: 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--text2);
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.25rem 0.875rem 1.25rem;
+    gap: 1.25rem;
+    width: 100%;
+    color: var(--text1);
+
+    p {
+      overflow: hidden;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.postDetails {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 0.875rem;
+  font-family: roboto;
+}
+
+.postDetailsLeft {
+  gap: 1rem;
+}
+
+.userID {
+  span {
+    color: var(--text2);
+  }
+}
+
+.likeCountBtn {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.heartOutlineIcon {
+  height: 100%;
+  padding-right: 0.25rem;
+}
+
+.heartFillIcon {
+  height: 100%;
+  padding-right: 0.25rem;
+  color: var(--text9);
+}
+
+.postDetailsLeft {
+  display: flex;
+  align-items: center;
+}
+
+.postDetailsRight {
+  display: flex;
+}

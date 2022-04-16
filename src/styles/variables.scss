@@ -2,6 +2,8 @@ body,
 body[data-theme='light'] {
   --bg-page1: #f9fafe;
   --bg-page2: #fff;
+  --bg-page3: #fff;
+  --bg-page4: #eeecf3;
   --bg-element1: #fff;
   --bg-element2: #f5f5f5;
   --bg-element3: #501eba;
@@ -9,6 +11,8 @@ body[data-theme='light'] {
   --bg-element5: #fff;
   --bg-element6: #f9f8fc;
   --bg-element7: #f0f0f0;
+  --bg-element8: #000000;
+  --bg-element9: #383838;
   --text1: #262626;
   --text2: #737373;
   --text3: #7c3ffd;
@@ -17,6 +21,8 @@ body[data-theme='light'] {
   --text6: #4d4d4d;
   --text7: #501eba;
   --text8: #737373;
+  --text9: #ff5544;
+  --text10: #dbdbdb;
   --btn: #7c3ffd;
   --btn-hover: #733ee3;
   --btn-active: #6331ce;
@@ -30,6 +36,8 @@ body[data-theme='light'] {
 @mixin dark {
   --bg-page1: #0f0f0f;
   --bg-page2: #0f0f0f;
+  --bg-page3: #1f1f1f;
+  --bg-page4: #000000;
   --bg-element1: #262626;
   --bg-element2: #262626;
   --bg-element3: #574a73;
@@ -37,6 +45,8 @@ body[data-theme='light'] {
   --bg-element5: #4d4d4d;
   --bg-element6: #383838;
   --bg-element7: #2f2f2f;
+  --bg-element8: #000000;
+  --bg-element9: #2f2f2f;
   --text1: #dbdbdb;
   --text2: #999999;
   --text3: #7c3ffd;
@@ -45,6 +55,8 @@ body[data-theme='light'] {
   --text6: #999999;
   --text7: #dbdbdb;
   --text8: #999999;
+  --text9: #ff5544;
+  --text10: #dbdbdb;
   --btn: #4d4d4d;
   --btn-hover: #383838;
   --btn-active: #2f2f2f;

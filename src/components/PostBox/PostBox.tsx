@@ -9,7 +9,7 @@ export type PostBoxProps = {
   commentsCount: number;
   likeCount: number;
   date: string;
-  onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
+  clickedPost?: (id: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const PostBox = ({
@@ -19,7 +19,7 @@ const PostBox = ({
   commentsCount,
   likeCount,
   date,
-  onClick,
+  clickedPost,
 }: PostBoxProps) => {
   const [clickLike, setClickLike] = useState(false);
   const handleLikebtn = () => {
@@ -30,7 +30,7 @@ const PostBox = ({
     <>
       <div className={styles.postBox}>
         <section>
-          <div onClick={onClick}>
+          <div onClick={clickedPost}>
             <h2>{postTitle}</h2>
             <p>
               {postContent.length > 60

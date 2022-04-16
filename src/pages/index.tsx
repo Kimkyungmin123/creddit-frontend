@@ -9,13 +9,12 @@ import dummy from '../data/posts.json';
 const Home: NextPage = () => {
   const router = useRouter();
 
-  const onClick = (id: number) => {
+  const clickedPost = (id: number) => {
     router.push(`/posts/${id}`);
   };
   return (
     <Layout title="creddit">
       <div className={styles.container}>
-        홈
         <div className={styles.ClassifyingPostsBox}>
           <ClassifyingPosts />
         </div>
@@ -29,7 +28,7 @@ const Home: NextPage = () => {
               commentsCount={data.commentCount}
               likeCount={data.likeCount}
               date={data.createdDate}
-              onClick={() => onClick(data.id)}
+              clickedPost={() => clickedPost(data.id)}
             />
           ))}
         </div>

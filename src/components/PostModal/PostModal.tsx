@@ -71,10 +71,10 @@ const PostModal = ({
                 return (
                   <Comment
                     key={i}
-                    commnetNickName={data.member}
-                    commnetContent={data.content}
-                    commnetLikeCount={data.likeCount}
-                    commnetDate={data.createdDate}
+                    nickName={data.member}
+                    content={data.content}
+                    likeCount={data.likeCount}
+                    date={data.createdDate}
                   />
                 );
               })}

@@ -3,6 +3,7 @@ import { server } from 'mocks/server';
 import { rest } from 'msw';
 import { SWRConfig } from 'swr';
 import Header, { HeaderProps } from './Header';
+import '../../mocks/matchMedia.mock';
 
 describe('Header', () => {
   const setup = (props: Partial<HeaderProps> = {}) => {
@@ -23,7 +24,7 @@ describe('Header', () => {
       expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
     expect(
-      screen.getByLabelText('색상 모드 변경(현재 밝은 모드)')
+      screen.getByLabelText('색상 모드 변경(현재 어두운 모드)')
     ).toBeInTheDocument();
     expect(screen.getByLabelText('깃허브 저장소')).toHaveAttribute(
       'href',

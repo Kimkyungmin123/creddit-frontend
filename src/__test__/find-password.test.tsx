@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
 import FindPassword, { FindPasswordForm } from 'pages/find-password';
+import '../mocks/matchMedia.mock';
 
 describe('FindPassword', () => {
   const setupElements = () => {

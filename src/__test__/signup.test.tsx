@@ -3,7 +3,7 @@ import ERRORS from 'constants/errors';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
 import Signup, { SignupForm } from 'pages/signup';
-import '../mocks/matchMedia.mock';
+import '../mocks/matchMedia.ts';
 
 server.use(
   rest.get('/api/me', (_, res, ctx) => {

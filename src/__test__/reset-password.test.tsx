@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
 import ResetPassword, { ResetPasswordForm } from 'pages/reset-password';
-import '../mocks/matchMedia.mock';
+import '../mocks/matchMedia.ts';
 
 describe('ResetPassword', () => {
   const setupElements = () => {

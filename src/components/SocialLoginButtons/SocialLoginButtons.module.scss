@@ -1,0 +1,54 @@
+.socialLoginButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  button {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 0.8125rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+
+    span {
+      flex-grow: 1;
+    }
+  }
+}
+
+.naver {
+  background-color: #03c75a;
+  color: #fff;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &:hover {
+    background-color: #03b553;
+  }
+
+  &:active {
+    background-color: #02a14a;
+  }
+}
+
+.kakao {
+  background-color: #fee500;
+  color: rgba(0, 0, 0, 0.85);
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  &:hover {
+    background-color: #f2db0d;
+  }
+
+  &:active {
+    background-color: #e9d30c;
+  }
+}

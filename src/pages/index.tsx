@@ -10,7 +10,7 @@ const Home: NextPage = () => {
   const router = useRouter();
 
   const clickedPost = (id: number) => {
-    router.push(`/posts/${id}`);
+    router.push({ pathname: `/posts/${id}` });
   };
   return (
     <Layout title="creddit">
@@ -28,7 +28,7 @@ const Home: NextPage = () => {
               commentsCount={data.commentCount}
               likeCount={data.likeCount}
               date={data.createdDate}
-              clickedPost={() => clickedPost(data.id)}
+              onClick={() => clickedPost(data.id)}
             />
           ))}
         </div>

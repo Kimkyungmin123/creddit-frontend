@@ -1,4 +1,3 @@
-import React from 'react';
 import { useRouter } from 'next/router';
 import PostModal from 'components/PostModal';
 import Layout from 'components/Layout';
@@ -11,7 +10,7 @@ const Post = () => {
   const postData = dummy[numID];
 
   return (
-    <Layout type="post" title="creddit: post">
+    <Layout title="creddit: post">
       <div>
         {[postData].map((data) => (
           <PostModal

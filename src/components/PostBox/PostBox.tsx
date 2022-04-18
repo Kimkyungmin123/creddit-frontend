@@ -9,7 +9,7 @@ export type PostBoxProps = {
   commentsCount: number;
   likeCount: number;
   date: string;
-  clickedPost?: (id: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
 };
 
 const PostBox = ({
@@ -19,34 +19,34 @@ const PostBox = ({
   commentsCount,
   likeCount,
   date,
-  clickedPost,
+  onClick,
 }: PostBoxProps) => {
   const [clickLike, setClickLike] = useState(false);
   const handleLikebtn = () => {
     setClickLike(() => !clickLike);
   };
 
+  const nonClickArea = (event: MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+  };
+
   return (
-    <>
-      <div className={styles.postBox}>
-        <section>
-          <div onClick={clickedPost}>
-            <h2>{postTitle}</h2>
-            <p>
-              {postContent.length > 60
-                ? `${postContent.slice(0, 60)}...`
-                : postContent}
-            </p>
-          </div>
-
-          <div className={styles.postDetails}>
-            <div className={styles.postDetailsLeft}>
-              <div className={styles.userID}>
-                <span>by </span>
-                {nickName}
-              </div>
-              <div className={styles.comments}>댓글 {commentsCount}개</div>
-
+    <div className={styles.postBox} onClick={onClick}>
+      <section>
+        <h2>{postTitle}</h2>
+        <p>
+          {postContent.length > 60
+            ? `${postContent.slice(0, 60)}...`
+            : postContent}
+        </p>
+        <div className={styles.postDetails}>
+          <div className={styles.postDetailsLeft}>
+            <div className={styles.userID}>
+              <span>by </span>
+              {nickName}
+            </div>
+            <div className={styles.comments}>댓글 {commentsCount}개</div>
+            <div onClick={nonClickArea}>
               {!clickLike ? (
                 <button
                   className={styles.likeCountBtn}
@@ -67,13 +67,13 @@ const PostBox = ({
                 </button>
               )}
             </div>
-            <div className={styles.postDetailsRight}>
-              <div className={styles.postDate}>{date}</div>
-            </div>
           </div>
-        </section>
-      </div>
-    </>
+          <div className={styles.postDetailsRight}>
+            <div className={styles.postDate}>{date}</div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 

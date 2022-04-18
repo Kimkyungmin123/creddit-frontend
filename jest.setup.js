@@ -17,3 +17,4 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 // Clean up after the tests are finished.
 afterAll(() => server.close());
+window.matchMedia = () => ({ matches: false });

@@ -17,13 +17,26 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
     const stringLocalTheme = JSON.stringify(localTheme);
+    const userSetTheme = window.matchMedia(
+      '(prefers-color-scheme: light)'
+    ).matches;
 
     if (document.body.dataset.theme === undefined) {
       document.body.dataset.theme = JSON.parse(stringLocalTheme);
+      userSetTheme ? setScreenTheme(true) : setScreenTheme(false);
+    }
+    if (window.localStorage.getItem('theme') === null) {
+      userSetTheme
+        ? window.localStorage.setItem('theme', 'light')
+        : window.localStorage.setItem('theme', 'dark');
     }
 
     if (document.body.dataset.theme === 'dark') {
       setScreenTheme(false);
+    }
+
+    if (document.body.dataset.theme === 'light') {
+      setScreenTheme(true);
     }
   }, []);
 

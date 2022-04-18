@@ -5,9 +5,11 @@ import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
 import { Formik, FormikErrors } from 'formik';
 import useLogin from 'hooks/useLogin';
+import useSocialLogin from 'hooks/useSocialLogin';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
@@ -15,34 +17,34 @@ import { object, string } from 'yup';
 const Login: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
+  const { status } = useSession();
+  useSocialLogin();
 
   return (
     <Layout title="creddit: 로그인" backgroundColor="clean">
-      {!isLoading && !user && (
-        <>
-          <div className={styles.loginContainer}>
-            <h1>로그인</h1>
-            <LoginForm
-              onSubmit={async (values) => {
-                await login(values);
-              }}
-            />
-            <SocialLoginButtons />
-            <div className={styles.bottomPanel}>
-              <Link href="/find-password">
-                <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
-                  비밀번호를 잊으셨습니까?
-                </a>
+      {!isLoading && !user && status === 'unauthenticated' && (
+        <div className={styles.loginContainer}>
+          <h1>로그인</h1>
+          <LoginForm
+            onSubmit={async (values) => {
+              await login(values);
+            }}
+          />
+          <SocialLoginButtons />
+          <div className={styles.bottomPanel}>
+            <Link href="/find-password">
+              <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
+                비밀번호를 잊으셨습니까?
+              </a>
+            </Link>
+            <div className={styles.signupSuggestion}>
+              <span>아직 회원이 아니신가요?</span>
+              <Link href="/signup">
+                <a>회원가입</a>
               </Link>
-              <div className={styles.signupSuggestion}>
-                <span>아직 회원이 아니신가요?</span>
-                <Link href="/signup">
-                  <a>회원가입</a>
-                </Link>
-              </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </Layout>
   );

@@ -6,9 +6,11 @@ import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import useDebounce from 'hooks/useDebounce';
 import useLogin from 'hooks/useLogin';
+import useSocialLogin from 'hooks/useSocialLogin';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import styles from 'styles/Signup.module.scss';
@@ -18,48 +20,48 @@ import { object, string } from 'yup';
 const Signup: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
+  const { status } = useSession();
+  useSocialLogin();
 
   return (
     <Layout title="creddit: 회원가입" backgroundColor="clean">
-      {!isLoading && !user && (
-        <>
-          <div className={styles.signupContainer}>
-            <h1>회원가입</h1>
-            <SignupForm
-              onSubmit={async (values) => {
-                const error: { [key: string]: boolean } = {};
-                const checkEmailDuplicate = async () => {
-                  const duplicate = await isEmailDuplicate(values.email);
-                  if (duplicate) error.emailDuplicate = true;
-                };
+      {!isLoading && !user && status === 'unauthenticated' && (
+        <div className={styles.signupContainer}>
+          <h1>회원가입</h1>
+          <SignupForm
+            onSubmit={async (values) => {
+              const error: { [key: string]: boolean } = {};
+              const checkEmailDuplicate = async () => {
+                const duplicate = await isEmailDuplicate(values.email);
+                if (duplicate) error.emailDuplicate = true;
+              };
 
-                const checkNicknameDuplicate = async () => {
-                  const duplicate = await isNicknameDuplicate(values.nickname);
-                  if (duplicate) error.nicknameDuplicate = true;
-                };
+              const checkNicknameDuplicate = async () => {
+                const duplicate = await isNicknameDuplicate(values.nickname);
+                if (duplicate) error.nicknameDuplicate = true;
+              };
 
-                await Promise.all([
-                  checkEmailDuplicate(),
-                  checkNicknameDuplicate(),
-                ]);
+              await Promise.all([
+                checkEmailDuplicate(),
+                checkNicknameDuplicate(),
+              ]);
 
-                if (Object.keys(error).length > 0) {
-                  throw error;
-                }
+              if (Object.keys(error).length > 0) {
+                throw error;
+              }
 
-                await api.post('/auth/signup', values);
-                await login(values);
-              }}
-            />
-            <SocialLoginButtons />
-            <div className={styles.loginSuggestion}>
-              <span>이미 회원이신가요?</span>
-              <Link href="/login">
-                <a>로그인</a>
-              </Link>
-            </div>
+              await api.post('/auth/signup', values);
+              await login(values);
+            }}
+          />
+          <SocialLoginButtons />
+          <div className={styles.loginSuggestion}>
+            <span>이미 회원이신가요?</span>
+            <Link href="/login">
+              <a>로그인</a>
+            </Link>
           </div>
-        </>
+        </div>
       )}
     </Layout>
   );

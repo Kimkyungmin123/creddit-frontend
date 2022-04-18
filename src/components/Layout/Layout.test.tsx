@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import Layout, { LayoutProps } from './Layout';
-import '../../mocks/matchMedia.ts';
 
 describe('Layout', () => {
   const setup = (props: Partial<LayoutProps> = {}) => {

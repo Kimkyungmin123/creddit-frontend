@@ -3,7 +3,6 @@ import { server } from 'mocks/server';
 import { rest } from 'msw';
 import { SWRConfig } from 'swr';
 import Header, { HeaderProps } from './Header';
-import '../../mocks/matchMedia.ts';
 
 describe('Header', () => {
   const setup = (props: Partial<HeaderProps> = {}) => {

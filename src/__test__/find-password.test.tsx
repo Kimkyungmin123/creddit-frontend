@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
 import FindPassword, { FindPasswordForm } from 'pages/find-password';
+import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('FindPassword', () => {
   const setupElements = () => {

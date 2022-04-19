@@ -1,6 +1,6 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
 import ResetPassword, { ResetPasswordForm } from 'pages/reset-password';
+import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('ResetPassword', () => {
   const setupElements = () => {

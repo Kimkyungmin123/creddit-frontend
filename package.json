@@ -2,6 +2,7 @@
   "name": "creddit",
   "version": "0.1.0",
   "private": true,
+  "repository": "https://github.com/project-creddit/creddit-frontend",
   "scripts": {
     "postinstall": "husky install",
     "dev": "next dev",
@@ -16,6 +17,7 @@
     "formik": "^2.2.9",
     "js-cookie": "^3.0.1",
     "next": "^12.1.4",
+    "next-auth": "^4.3.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "swr": "^1.2.2",

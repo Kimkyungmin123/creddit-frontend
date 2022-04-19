@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
@@ -31,6 +32,7 @@ function useUser(options?: { redirectTo: string }) {
   const { data, error } = useSWR<{ user: UserType }>('/api/me', fetcher);
   const router = useRouter();
   const { mutate } = useSWRConfig();
+  const { data: sessionData } = useSession();
 
   useEffect(() => {
     if (data?.user && options?.redirectTo) {
@@ -38,11 +40,12 @@ function useUser(options?: { redirectTo: string }) {
     }
   }, [options, router, data]);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    if (sessionData) await signOut();
     mutate('/api/me');
-  }, [mutate]);
+  }, [sessionData, mutate]);
 
   return {
     user: data?.user,

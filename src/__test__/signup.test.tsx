@@ -1,14 +1,8 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import ERRORS from 'constants/errors';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
 import Signup, { SignupForm } from 'pages/signup';
-
-server.use(
-  rest.get('/api/me', (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json({}));
-  })
-);
+import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('Signup', () => {
   const setupElements = async () => {
@@ -28,6 +22,14 @@ describe('Signup', () => {
       submitButton,
     };
   };
+
+  beforeEach(() => {
+    server.use(
+      rest.get('/api/me', (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json({}));
+      })
+    );
+  });
 
   it('renders properly', async () => {
     render(<Signup />);

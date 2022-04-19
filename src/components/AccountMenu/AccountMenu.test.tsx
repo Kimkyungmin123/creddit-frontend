@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from 'utils/test-utils';
 import AccountMenu from './AccountMenu';
 
 describe('AccountMenu', () => {

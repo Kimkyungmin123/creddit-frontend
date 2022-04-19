@@ -2,6 +2,7 @@ import AccountMenu from 'components/AccountMenu';
 import SearchBar from 'components/SearchBar';
 import useUser from 'hooks/useUser';
 import { EditOutline, Github, MoonOutline, SunOutline } from 'icons';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useLayoutEffect, useState } from 'react';
 import styles from './Header.module.scss';
@@ -13,6 +14,7 @@ export type HeaderProps = {
 const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
+  const { data, status } = useSession();
 
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
@@ -59,7 +61,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             creddit
           </a>
         </Link>
-        {!isLoading && (
+        {!isLoading && status !== 'loading' && (
           <>
             {!hideSearchBar && <SearchBar />}
             <button
@@ -73,7 +75,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               {screenTheme ? <SunOutline /> : <MoonOutline />}
             </button>
-            {user && (
+            {(data || user) && (
               <Link href="/create-post">
                 <a className={styles.hoverElement} aria-label="글 작성">
                   <EditOutline />
@@ -87,7 +89,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               <Github />
             </a>
-            {user ? (
+            {data || user ? (
               <AccountMenu />
             ) : (
               <>

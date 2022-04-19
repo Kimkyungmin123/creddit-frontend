@@ -1,16 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
-import { SWRConfig } from 'swr';
+import { render, screen, waitFor } from 'utils/test-utils';
 import Header, { HeaderProps } from './Header';
 
 describe('Header', () => {
   const setup = (props: Partial<HeaderProps> = {}) => {
-    const utils = render(
-      <SWRConfig value={{ provider: () => new Map() }}>
-        <Header {...props} />
-      </SWRConfig>
-    );
+    const utils = render(<Header {...props} />);
     return {
       ...utils,
     };

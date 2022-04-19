@@ -1,8 +1,8 @@
 .button {
   padding: 0.625rem 1.5rem;
-  background-color: var(--btn);
+  background-color: var(--btn-bg);
   border-radius: 0.25rem;
-  color: var(--text4);
+  color: var(--btn-text);
 
   svg {
     width: 1.125rem;
@@ -10,15 +10,15 @@
   }
 
   &:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--btn-hover-bg);
   }
 
   &:active {
-    background-color: var(--btn-active);
+    background-color: var(--btn-active-bg);
   }
 
   &:disabled {
     cursor: default;
-    background-color: var(--btn-disabled);
+    background-color: var(--btn-disabled-bg);
   }
 }

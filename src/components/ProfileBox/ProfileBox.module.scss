@@ -1,22 +1,22 @@
 @mixin btn {
-  background-color: var(--btn);
+  background-color: var(--btn-bg);
   border-radius: 0.9375rem;
   padding: 0.25rem 1.5rem;
   font-size: 1rem;
-  color: var(--text4);
+  color: var(--btn-text);
 
   &:hover {
-    background-color: var(--btn-hover);
+    background-color: var(--btn-hover-bg);
   }
 
   &:active {
-    background-color: var(--btn-active);
+    background-color: var(--btn-active-bg);
   }
 }
 
 .profileBoxTop {
   height: 4.5rem;
-  background-color: var(--bg-element3);
+  background-color: var(--profile-top-bg);
   border-radius: 0.25rem 0.25rem 0 0;
 }
 
@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   padding: 1.875rem 1.25rem 1rem;
-  border: solid 0.0625rem var(--border1);
+  border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
 }
 
@@ -37,7 +37,7 @@
 }
 
 .profileImg {
-  border: solid 0.125rem var(--border2);
+  border: solid 0.125rem var(--border);
   border-radius: 0.25rem;
   width: 6rem;
   height: 6rem;
@@ -52,24 +52,24 @@
 .nickName {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text1);
+  color: var(--text-primary);
   padding-left: 0.344rem;
 }
 
 .statusMessage {
   font-size: 0.875rem;
-  color: var(--text1);
+  color: var(--text-primary);
 }
 
 .signUpDate {
   padding-top: 1.25rem;
-  color: var(--text1);
+  color: var(--text-primary);
 }
 
 .signUpDateText {
   font-size: 0.75rem;
   padding-right: 0.875rem;
-  color: var(--text1);
+  color: var(--text-primary);
   font-weight: 700;
 }
 
@@ -99,7 +99,7 @@
   margin-top: 1.25rem;
   padding: 0;
   font-size: 0.75rem;
-  color: var(--text6);
+  color: var(--text-secondary);
 
   &:hover {
     text-decoration: underline;

@@ -17,7 +17,7 @@
     transform: translateY(-50%);
     transform-origin: left;
     transition: transform 200ms;
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 
   &:hover,
@@ -32,18 +32,18 @@
 .input {
   width: 100%;
   padding: 1.5rem 0.625rem 0.5rem;
-  border: solid 0.0625rem var(--border1);
+  border: solid 0.0625rem var(--border);
   outline: none;
   border-radius: 0.25rem;
-  background-color: var(--bg-element1);
-  color: var(--text1);
+  background-color: var(--element-bg-primary);
+  color: var(--text-primary);
 
   &:focus {
-    border: solid 0.0625rem var(--border3);
+    border: solid 0.0625rem var(--border-focus);
   }
 }
 
 .error {
   font-size: 0.875rem;
-  color: var(--text5);
+  color: var(--text-error);
 }

@@ -1,9 +1,9 @@
 .container {
   min-height: 100vh;
-  background-color: var(--bg-page1);
-  color: var(--text1);
+  background-color: var(--page-bg-primary);
+  color: var(--text-primary);
 
   &.clean {
-    background: var(--bg-page2);
+    background: var(--page-bg-secondary);
   }
 }

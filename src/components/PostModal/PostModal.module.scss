@@ -29,13 +29,13 @@
   align-items: center;
   flex-direction: column;
   margin: 0 12.75rem 11rem 12.75rem;
-  background-color: var(--bg-page4);
+  background-color: var(--post-container-bg);
 }
 
 .topBar {
   display: flex;
   width: 100%;
-  background-color: var(--bg-element8);
+  background-color: var(--post-top-bg);
   justify-content: center;
 }
 
@@ -47,7 +47,7 @@
   font-size: 1rem;
   font-weight: 700;
   justify-content: space-between;
-  color: var(--text10);
+  color: var(--post-top-text);
   background-color: transparent;
   height: 100%;
 
@@ -76,14 +76,14 @@
 }
 
 .heartFillIcon {
-  color: var(--text9);
+  color: var(--heart-fill);
 }
 
 .postModalContent {
   display: flex;
   max-width: 49.5rem;
   flex-direction: column;
-  background-color: var(--bg-page3);
+  background-color: var(--post-content-bg);
   margin: 1.25rem 12.75rem 11rem 12.75rem;
   padding: 1.5rem 2.25rem 1.875rem 2.25rem;
   gap: 1.75rem;
@@ -104,7 +104,7 @@
   align-items: center;
 
   span:nth-child(2) {
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 
   button {
@@ -112,7 +112,7 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 }
 
@@ -136,18 +136,19 @@
       width: 100%;
       padding: 0.75rem 0.875rem;
       height: 9.0625rem;
-      border: solid var(--border1) 0.0625rem;
+      border: solid var(--border) 0.0625rem;
       border-radius: 0.25rem;
+      background-color: var(--post-content-bg);
       &:focus {
-        outline: solid 0.125rem var(--border1);
+        outline: solid 0.125rem var(--border);
       }
     }
 
     button {
       display: flex;
       padding: 0.5rem 1.25rem;
-      background-color: var(--btn);
-      color: var(--text4);
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
       border-radius: 0.25rem;
       border: none;
       font-size: 0.875rem;
@@ -176,7 +177,7 @@
   z-index: -1;
   height: 100%;
   width: 100%;
-  background-color: var(--bg-element9);
+  background-color: var(--post-outside-bg);
   cursor: pointer;
   @include animation;
 }

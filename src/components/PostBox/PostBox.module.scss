@@ -1,14 +1,14 @@
 .postBox {
   display: flex;
-  border: solid 0.0625rem var(--border1);
+  border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
-  background-color: var(--bg-element5);
+  background-color: var(--element-bg-primary);
   padding: 0 0.0625rem;
   transition: 0.3s;
   cursor: pointer;
 
   &:hover {
-    border-color: var(--text2);
+    border-color: var(--border);
   }
 
   section {
@@ -41,7 +41,7 @@
 
 .userID {
   span {
-    color: var(--text2);
+    color: var(--text-secondary);
   }
 }
 
@@ -61,7 +61,7 @@
 .heartFillIcon {
   height: 100%;
   padding-right: 0.25rem;
-  color: var(--text9);
+  color: var(--heart-fill);
 }
 
 .postDetailsLeft {

@@ -22,7 +22,7 @@
   font-size: 0.75rem;
   font-family: roboto;
   align-items: center;
-  color: var(--text2);
+  color: var(--text-secondary);
 
   span:first-child {
     color: var(--text1);
@@ -69,5 +69,5 @@
 
 .heartFillIcon {
   height: 1rem;
-  color: var(--text9);
+  color: var(--heart-fill);
 }

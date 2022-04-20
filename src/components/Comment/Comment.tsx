@@ -19,14 +19,14 @@ const Comment = ({ nickName, content, likeCount, date }: commentProps) => {
       <div className={styles.commentBoxTop}>
         <div className={styles.commentInfo}>
           <span>{nickName}</span>
-          <span>·</span>
+          <span>•</span>
           <span>{date}</span>
           <div className={styles.commentBtn}>
             <button aria-label="댓글 수정">수정</button>
             <button aria-label="댓글 삭제">삭제</button>
           </div>
         </div>
-        <span>{content}</span>
+        <p>{content}</p>
       </div>
       <div className={styles.commentBoxBottom}>
         {!clickLike ? (

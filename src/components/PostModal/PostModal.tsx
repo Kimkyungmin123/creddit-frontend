@@ -1,8 +1,9 @@
 import Comment from 'components/Comment';
-import { Close, HeartFill, Sort } from 'icons';
+import { CaretDown, Close, HeartFill, Sort } from 'icons';
 import { useRouter } from 'next/router';
 import styles from './PostModal.module.scss';
 import dummy from '../../data/posts.json';
+import Button from 'components/Button';
 
 export type modalProps = {
   postTitle: string;
@@ -57,13 +58,16 @@ const PostModal = ({
           <div className={styles.commentBox}>
             <div className={styles.commentBoxTop}>
               <div className={styles.commentInfo}>
-                <span>댓글 {commentsCount}개</span>
+                <span className={styles.commentCount}>
+                  댓글 {commentsCount}개
+                </span>
                 <Sort className={styles.sortIcon} />
-                <span>정렬 기준 : 좋아요순</span> {/*수정전*/}
+                <span>정렬 기준: 좋아요순</span> {/*수정전*/}
+                <CaretDown className={styles.caretIcon} />
               </div>
               <form>
                 <input />
-                <button aria-label="댓글 삭제">작성</button>
+                <Button>작성</Button>
               </form>
             </div>
             <div className={styles.commentBoxBottom}>

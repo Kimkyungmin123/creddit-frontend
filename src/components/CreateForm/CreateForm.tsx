@@ -1,5 +1,5 @@
 import Button from 'components/Button';
-import styles from './CreateForm.module.css';
+import styles from './CreateForm.module.scss';
 
 const CreateForm = () => {
   return (

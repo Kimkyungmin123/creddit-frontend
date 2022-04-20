@@ -15,6 +15,10 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+
+  p {
+    font-size: 0.875rem;
+  }
 }
 
 .commentInfo {
@@ -24,7 +28,7 @@
   color: var(--text-secondary);
 
   span:first-child {
-    color: var(--text1);
+    color: var(--text-primary);
     font-weight: 700;
   }
 
@@ -63,10 +67,12 @@
 }
 
 .heartOutlineIcon {
+  width: 1rem;
   height: 1rem;
 }
 
 .heartFillIcon {
+  width: 1rem;
   height: 1rem;
   color: var(--heart-fill);
 }

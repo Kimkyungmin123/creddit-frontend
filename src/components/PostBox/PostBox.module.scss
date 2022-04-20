@@ -1,27 +1,26 @@
 .postBox {
+  cursor: pointer;
   display: flex;
+  flex-direction: column;
+  padding: 0.875rem 1.25rem 0.625rem;
+  gap: 1rem;
+  width: 100%;
   border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
   background-color: var(--element-bg-primary);
-  padding: 0 0.0625rem;
-  cursor: pointer;
+  color: var(--text1);
 
   &:hover {
     border-color: var(--border-focus);
   }
 
-  section {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem 1.25rem 0.875rem 1.25rem;
-    gap: 1.25rem;
-    width: 100%;
-    color: var(--text1);
+  h2 {
+    font-size: 1.25rem;
+  }
 
-    p {
-      overflow: hidden;
-      font-size: 1.125rem;
-    }
+  p {
+    overflow: hidden;
+    font-size: 1rem;
   }
 }
 
@@ -30,7 +29,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .postDetailsLeft {
@@ -46,19 +45,19 @@
 .likeCountBtn {
   display: flex;
   align-items: center;
+  gap: 0.25rem;
   background-color: transparent;
   border: none;
   cursor: pointer;
-}
+  padding: 0;
 
-.heartOutlineIcon {
-  height: 100%;
-  padding-right: 0.25rem;
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
 }
 
 .heartFillIcon {
-  height: 100%;
-  padding-right: 0.25rem;
   color: var(--heart-fill);
 }
 
@@ -69,4 +68,5 @@
 
 .postDetailsRight {
   display: flex;
+  color: var(--text-secondary);
 }

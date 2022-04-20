@@ -4,11 +4,10 @@
   border-radius: 0.25rem;
   background-color: var(--element-bg-primary);
   padding: 0 0.0625rem;
-  transition: 0.3s;
   cursor: pointer;
 
   &:hover {
-    border-color: var(--border);
+    border-color: var(--border-focus);
   }
 
   section {
@@ -32,7 +31,6 @@
   justify-content: space-between;
   width: 100%;
   font-size: 0.875rem;
-  font-family: roboto;
 }
 
 .postDetailsLeft {

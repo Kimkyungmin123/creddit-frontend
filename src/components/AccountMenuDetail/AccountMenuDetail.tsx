@@ -8,8 +8,13 @@ function AccoutMenuDetail() {
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown') moveDown();
-      else if (event.key === 'ArrowUp') moveUp();
+      if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        moveDown();
+      } else if (event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveUp();
+      }
     };
     window.addEventListener('keydown', moveFocus);
     return () => window.removeEventListener('keydown', moveFocus);

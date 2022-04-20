@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import styles from './CreateForm.module.css';
 
 const CreateForm = () => {
@@ -6,7 +7,7 @@ const CreateForm = () => {
       <form>
         <input type="text" placeholder="제목" />
         <textarea placeholder="내용"></textarea>
-        <button>제출</button>
+        <Button>제출</Button>
       </form>
     </div>
   );

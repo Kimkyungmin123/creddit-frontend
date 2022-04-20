@@ -1,10 +1,10 @@
 import useIntentMouse from 'hooks/useIntentMouse';
+import { SessionProvider } from 'next-auth/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'styles/app.scss';
+import 'styles/colors.scss';
 import 'styles/globals.css';
-import 'styles/variables.scss';
-import { SessionProvider } from 'next-auth/react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useIntentMouse();

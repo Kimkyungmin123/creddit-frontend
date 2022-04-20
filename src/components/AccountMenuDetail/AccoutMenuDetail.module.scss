@@ -5,8 +5,8 @@
   padding: 0;
   list-style: none;
   white-space: nowrap;
-  background-color: var(--bg-element1);
-  border: 0.0625rem solid var(--border1);
+  background-color: var(--element-bg-primary);
+  border: 0.0625rem solid var(--border);
   box-shadow: 0 0.0625rem 0.125rem var(--box-shadow);
 
   & > li > a,
@@ -15,12 +15,12 @@
     align-items: center;
     padding: 0.75rem 3rem 0.75rem 1rem;
     width: 100%;
-    color: var(--text1);
+    color: var(--text-primary);
     outline: none;
 
     &:hover,
     &:focus {
-      background-color: var(--bg-element4);
+      background-color: var(--dropdown-hover-bg);
     }
   }
 }

@@ -20,6 +20,7 @@ const PostBox = ({
   likeCount,
   date,
   onClick,
+  ...restProps
 }: PostBoxProps) => {
   const [clickLike, setClickLike] = useState(false);
   const handleLikebtn = () => {
@@ -31,7 +32,7 @@ const PostBox = ({
   };
 
   return (
-    <section className={styles.postBox} onClick={onClick}>
+    <section className={styles.postBox} onClick={onClick} {...restProps}>
       <h2>{postTitle}</h2>
       <p>
         {postContent.length > 60

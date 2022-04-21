@@ -1,0 +1,52 @@
+@import 'styles/app';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 36.75rem;
+  margin: 1rem auto;
+
+  @media (max-width: $breakpoints-sm) {
+    margin: 0.75rem auto;
+    gap: 0.75rem;
+  }
+}
+
+.sortContainer {
+  display: flex;
+  gap: 0.75rem;
+  border: solid 0.0625rem var(--border);
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.375rem;
+  background-color: var(--element-bg-primary);
+  font-size: 0.875rem;
+
+  button {
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.25rem;
+
+    &.selected {
+      background-color: var(--sort-selected-bg);
+      color: var(--sort-selected-text);
+      border-radius: 0.25rem;
+    }
+  }
+}
+
+.postsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 0.625rem;
+  }
+}

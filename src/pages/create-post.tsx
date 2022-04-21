@@ -1,15 +1,24 @@
-import CreateForm from 'components/CreateForm';
 import Layout from 'components/Layout';
+import PostForm from 'components/PostForm';
+import useUser from 'hooks/useUser';
 import type { NextPage } from 'next';
-import styles from 'styles/CreatePost.module.css';
 
 const CreatePost: NextPage = () => {
+  const { isLoading, user } = useUser({
+    redirectTo: '/',
+    redirectWhen: 'unauthorized',
+  });
+
   return (
     <Layout title="creddit: 글 작성">
-      <div className={styles.createPostContainer}>
-        <h1>글 작성</h1>
-        <CreateForm />
-      </div>
+      {!isLoading && user && (
+        <PostForm
+          title="글 작성"
+          onSubmit={async ({ title, content }) => {
+            console.log(JSON.stringify({ title, content }));
+          }}
+        />
+      )}
     </Layout>
   );
 };

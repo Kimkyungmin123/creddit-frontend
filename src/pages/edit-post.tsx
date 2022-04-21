@@ -1,15 +1,24 @@
-import CreateForm from 'components/CreateForm';
 import Layout from 'components/Layout';
+import PostForm from 'components/PostForm';
+import useUser from 'hooks/useUser';
 import type { NextPage } from 'next';
-import styles from 'styles/EditPost.module.css';
 
 const EditPost: NextPage = () => {
+  const { isLoading, user } = useUser({
+    redirectTo: '/',
+    redirectWhen: 'unauthorized',
+  });
+
   return (
     <Layout title="creddit: 글 수정">
-      <div className={styles.editPostContainer}>
-        <h1>글 수정</h1>
-        <CreateForm />
-      </div>
+      {!isLoading && user && (
+        <PostForm
+          title="글 수정"
+          onSubmit={async ({ title, content }) => {
+            console.log(JSON.stringify({ title, content }));
+          }}
+        />
+      )}
     </Layout>
   );
 };

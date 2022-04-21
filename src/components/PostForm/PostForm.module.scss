@@ -1,0 +1,10 @@
+@import 'styles/app';
+
+.PostFormContainer {
+  @include formContainer;
+  max-width: 37.25rem;
+
+  form {
+    gap: 0.625rem;
+  }
+}

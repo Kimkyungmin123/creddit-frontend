@@ -23,7 +23,7 @@ describe('PostList', () => {
     expect(sortByLikeButton).toBeInTheDocument();
     expect(sortByRecentButton).toBeInTheDocument();
     postsDummy.forEach(({ id }) => {
-      expect(screen.getByTestId(id)).toBeInTheDocument();
+      expect(screen.getByTestId(`post-card-${id}`)).toBeInTheDocument();
     });
   });
 });

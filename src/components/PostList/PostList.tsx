@@ -1,14 +1,12 @@
 import classNames from 'classnames';
-import PostBox from 'components/PostBox';
+import PostCard from 'components/PostCard';
 import postsDummy from 'data/posts.json';
 import { Rising, Time } from 'icons';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styles from './PostList.module.scss';
 
 // TODO: userID가 존재하면 해당 유저의 글만 받아오기
 function PostList() {
-  const router = useRouter();
   const [sortBy, setSortBy] = useState<'like' | 'recent'>('like');
 
   return (
@@ -33,17 +31,7 @@ function PostList() {
       </div>
       <div className={styles.postsContainer}>
         {postsDummy.map((post) => (
-          <PostBox
-            key={post.id}
-            postTitle={post.title}
-            postContent={post.content}
-            nickName={post.member}
-            commentsCount={post.commentCount}
-            likeCount={post.likeCount}
-            date={post.createdDate}
-            onClick={() => router.push({ pathname: `/posts/${post.id}` })}
-            data-testid={post.id}
-          />
+          <PostCard key={post.id} post={post} />
         ))}
       </div>
     </div>

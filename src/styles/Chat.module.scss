@@ -1,0 +1,39 @@
+.chatContainer {
+  display: flex;
+  background-color: var(--page-bg-secondary);
+}
+
+.chatBox {
+  flex-grow: 1;
+  background-color: var(--page-bg-secondary);
+  height: 100%;
+}
+
+.messageform {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 2.84;
+  max-width: 88.75rem;
+  background-color: var(--chat-container-bg);
+  padding: 1.875rem 9.375rem 3.75rem 9.375rem;
+  gap: 3.125rem;
+}
+
+.messageBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.875rem;
+  max-height: 43.75rem; // 임시로 정한 규격
+  overflow-y: auto;
+}
+
+// 스크롤 숨길 시
+// .messageBox::-webkit-scrollbar {
+//   display: none;
+// }
+
+.beginChatDate {
+  display: flex;
+  justify-content: center;
+  color: var(--text-secondary);
+}

@@ -40,6 +40,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/js-cookie", "npm:3.0.1"],\
             ["@types/node", "npm:17.0.22"],\
             ["@types/react", "npm:17.0.41"],\
+            ["@types/sockjs-client", "npm:1.5.1"],\
+            ["@types/stompjs", "npm:2.3.5"],\
             ["@types/testing-library__jest-dom", "npm:5.14.3"],\
             ["@types/yup", "npm:0.29.13"],\
             ["@typescript-eslint/eslint-plugin", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:5.18.0"],\
@@ -3861,11 +3863,30 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/sockjs-client", [\
+        ["npm:1.5.1", {\
+          "packageLocation": "./.yarn/cache/@types-sockjs-client-npm-1.5.1-c20bc4c18e-4daa30aa5a.zip/node_modules/@types/sockjs-client/",\
+          "packageDependencies": [\
+            ["@types/sockjs-client", "npm:1.5.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/stack-utils", [\
         ["npm:2.0.1", {\
           "packageLocation": "./.yarn/cache/@types-stack-utils-npm-2.0.1-867718ab70-205fdbe332.zip/node_modules/@types/stack-utils/",\
           "packageDependencies": [\
             ["@types/stack-utils", "npm:2.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/stompjs", [\
+        ["npm:2.3.5", {\
+          "packageLocation": "./.yarn/cache/@types-stompjs-npm-2.3.5-0426a1cdaf-46656e4fd5.zip/node_modules/@types/stompjs/",\
+          "packageDependencies": [\
+            ["@types/stompjs", "npm:2.3.5"],\
+            ["@types/node", "npm:17.0.23"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5360,6 +5381,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/js-cookie", "npm:3.0.1"],\
             ["@types/node", "npm:17.0.22"],\
             ["@types/react", "npm:17.0.41"],\
+            ["@types/sockjs-client", "npm:1.5.1"],\
+            ["@types/stompjs", "npm:2.3.5"],\
             ["@types/testing-library__jest-dom", "npm:5.14.3"],\
             ["@types/yup", "npm:0.29.13"],\
             ["@typescript-eslint/eslint-plugin", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:5.18.0"],\

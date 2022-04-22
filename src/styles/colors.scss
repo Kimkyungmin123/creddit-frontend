@@ -29,6 +29,10 @@ body[data-theme='light'] {
   --post-content-bg: #fff;
   --heart-fill: #ff5544;
   --profile-top-bg: #501eba;
+  --chat-box-border: #dbdbdb;
+  --chat-container-bg: #eeecf3;
+  --chat-element-bg: #ffffff;
+  --message-box: #8954fd;
 }
 
 @mixin dark {
@@ -62,6 +66,10 @@ body[data-theme='light'] {
   --post-content-bg: #1f1f1f;
   --heart-fill: #ff5544;
   --profile-top-bg: #574a73;
+  --chat-box-border: #4d4d4d;
+  --chat-container-bg: #1f1f1f;
+  --chat-element-bg: #383838;
+  --message-box: #705e97;
 }
 
 @media (prefers-color-scheme: dark) {

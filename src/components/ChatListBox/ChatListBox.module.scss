@@ -1,0 +1,28 @@
+.ChatBox {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  gap: 1.625rem;
+  border: solid 0.0625rem var(--chat-box-border);
+  cursor: pointer;
+
+  img {
+    border-radius: 100%;
+  }
+}
+
+.chatContent {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.lastMessage {
+  color: var(--text-secondary);
+}
+
+.sentDate {
+  display: flex;
+  color: var(--text-secondary);
+}

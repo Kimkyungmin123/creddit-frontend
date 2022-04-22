@@ -1,10 +1,9 @@
 import { rest } from 'msw';
-
-const API_ENDPOINT = 'http://localhost:8080';
+import { API_ENDPOINT } from 'utils/api';
 
 export function handlers() {
   return [
-    rest.get('/api/me', getMe),
+    rest.get(`${API_ENDPOINT}/profile/show`, getMe),
     rest.get(
       `${API_ENDPOINT}/member/checkDuplicateByEmail/:email`,
       getEmailDuplicate
@@ -20,12 +19,13 @@ const getMe: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
-      user: {
-        id: 'id',
-        createdDate: '2020-12-29 13:10:40',
-        nickname: '이름',
-        introduce: '소개 글',
+      nickname: '닉네임',
+      introduction: '소개',
+      image: {
+        imgName: null,
+        imgUrl: null,
       },
+      createdDate: '2022-04-22T14:01:34.930Z',
     })
   );
 };

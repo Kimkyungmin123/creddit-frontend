@@ -4,6 +4,11 @@
   @include formContainer;
 }
 
+.fieldError {
+  font-size: 0.875rem;
+  color: var(--text-error);
+}
+
 .bottomPanel {
   display: flex;
   flex-direction: column;

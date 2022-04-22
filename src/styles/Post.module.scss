@@ -1,0 +1,36 @@
+@import 'styles/app';
+
+.postContainer {
+  min-height: inherit;
+  background-color: var(--post-outside-bg);
+}
+
+.postBox {
+  max-width: 75rem;
+  min-height: inherit;
+  margin: 0 auto;
+  padding-bottom: 1.25rem;
+  background-color: var(--post-container-bg);
+}
+
+.postContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 49.5rem;
+  margin: 1.25rem auto 0;
+  padding: 1.5rem 2.25rem 1.875rem;
+  border-radius: 0.25rem;
+  background-color: var(--post-content-bg);
+
+  @media (max-width: $breakpoints-md) {
+    padding: 1.5rem 1.5rem 1.875rem;
+  }
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 1.125rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 1.875rem;
+    border-radius: 0;
+  }
+}

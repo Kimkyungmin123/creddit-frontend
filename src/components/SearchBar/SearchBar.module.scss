@@ -46,7 +46,7 @@
   align-items: center;
   height: calc(100% - 0.125rem);
   padding-right: 0.625rem;
-  background-color: var(--page-bg-secondary);
+  background-color: var(--element-bg-primary);
   border-radius: 0.25rem;
 
   svg {
@@ -67,5 +67,5 @@
   padding: 0.125rem 0.5rem;
   font-size: 0.875rem;
   border-radius: 0.25rem;
-  background-color: var(--header-element-bg);
+  background-color: var(--search-bar-slash-bg);
 }

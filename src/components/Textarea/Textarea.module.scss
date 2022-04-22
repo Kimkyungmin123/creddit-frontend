@@ -1,0 +1,21 @@
+.Textarea {
+  padding: 0.625rem 0.75rem;
+  border: 0.0625rem solid var(--border);
+  border-radius: 0.25rem;
+  background-color: var(--element-bg-primary);
+  resize: vertical;
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:hover,
+  &:focus {
+    border: solid 0.0625rem var(--border-focus);
+  }
+
+  &.notResizable {
+    resize: none;
+  }
+}

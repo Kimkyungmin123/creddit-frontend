@@ -1,0 +1,70 @@
+@import 'styles/app';
+
+.postCard {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  padding: 0.875rem 1.25rem 0.625rem;
+  gap: 1rem;
+  border: solid 0.0625rem var(--border);
+  border-radius: 0.25rem;
+  background-color: var(--element-bg-primary);
+
+  &:hover {
+    border-color: var(--border-focus);
+  }
+
+  a {
+    color: var(--text-primary);
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  p {
+    word-break: break-all;
+    font-size: 1rem;
+  }
+
+  @media (max-width: $breakpoints-sm) {
+    padding: 0.75rem 0.75rem 0.625rem;
+  }
+}
+
+.postDetail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.75rem;
+}
+
+.postDetailLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 0.75rem;
+  }
+}
+
+.creator span {
+  color: var(--text-secondary);
+}
+
+.likeCountBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+
+  svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+}
+
+.heartFillIcon {
+  color: var(--heart-fill);
+}

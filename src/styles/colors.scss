@@ -16,8 +16,9 @@ body[data-theme='light'] {
   --btn-active-bg: #6331ce;
   --btn-disabled-bg: #a495fe;
   --header-border: #dbdbdb;
-  --header-element-bg: #f0f0f0;
+  --header-element-hover-bg: #f0f0f0;
   --header-element-hover-text: #737373;
+  --search-bar-slash-bg: #f0f0f0;
   --dropdown-hover-bg: #e8e5f6;
   --sort-selected-bg: #f2f0fa;
   --sort-selected-text: #501eba;
@@ -47,11 +48,13 @@ body[data-theme='light'] {
   --btn-active-bg: #2f2f2f;
   --btn-disabled-bg: #737373;
   --header-border: #383838;
-  --header-element-bg: #2f2f2f;
+  --header-element-hover-bg: #2f2f2f;
   --header-element-hover-text: #999999;
+  --search-bar-slash-bg: #424242;
   --dropdown-hover-bg: #3e364f;
   --sort-selected-bg: #424242;
   --sort-selected-text: #dbdbdb;
+  --sort-selected-text: #fff;
   --post-outside-bg: #2f2f2f;
   --post-container-bg: #000000;
   --post-top-bg: #000000;

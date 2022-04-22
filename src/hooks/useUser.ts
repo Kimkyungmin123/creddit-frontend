@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 
 type UserType = {
@@ -27,18 +27,29 @@ const fetcher = (url: string) => {
 
 // const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-function useUser(options?: { redirectTo: string }) {
+type Options = {
+  redirectTo?: string;
+  redirectWhen?: 'authorized' | 'unauthorized';
+};
+
+function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
   // TODO: 백엔드에서 현재 로그인한 유저 정보를 조회할 수 있는 API가 만들어지면 리팩토링
   const { data, error } = useSWR<{ user: UserType }>('/api/me', fetcher);
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { data: sessionData } = useSession();
+  const isLoading = useMemo(() => !error && !data, [error, data]);
 
   useEffect(() => {
-    if (data?.user && options?.redirectTo) {
-      router.replace(options.redirectTo);
+    if (!redirectTo || isLoading) return;
+
+    if (
+      (redirectWhen === 'authorized' && data?.user) ||
+      (redirectWhen === 'unauthorized' && !data?.user)
+    ) {
+      router.replace(redirectTo);
     }
-  }, [options, router, data]);
+  }, [redirectTo, redirectWhen, isLoading, router, data]);
 
   const logout = useCallback(async () => {
     Cookies.remove('access_token');
@@ -49,7 +60,7 @@ function useUser(options?: { redirectTo: string }) {
 
   return {
     user: data?.user,
-    isLoading: !error && !data,
+    isLoading,
     error,
     logout,
   };

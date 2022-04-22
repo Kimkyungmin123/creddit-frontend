@@ -9,7 +9,11 @@
 }
 
 body {
-  font-family: 'Noto Sans KR';
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR',
+    'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    sans-serif;
+  line-height: 1.5;
 }
 
 body.intent-mouse button:focus {
@@ -21,10 +25,12 @@ img {
 }
 
 button,
-input {
+input,
+textarea {
   color: inherit;
   font-size: 100%;
   font-family: inherit;
+  line-height: inherit;
 }
 
 button {

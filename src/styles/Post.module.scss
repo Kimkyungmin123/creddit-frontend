@@ -1,0 +1,172 @@
+@import 'styles/app';
+
+.postContainer {
+  min-height: inherit;
+  background-color: var(--post-outside-bg);
+}
+
+.postBox {
+  max-width: 75rem;
+  min-height: inherit;
+  margin: 0 auto;
+  padding-bottom: 1.25rem;
+  background-color: var(--post-container-bg);
+}
+
+.topBar {
+  position: sticky;
+  top: 3.0625rem;
+  background-color: var(--post-top-bg);
+}
+
+.topBarContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 49.5rem;
+  margin: 0 auto;
+  padding: 0.625rem;
+  font-weight: 700;
+  color: var(--post-top-text);
+
+  button {
+    display: flex;
+    padding: 0;
+  }
+
+  @media (max-width: $breakpoints-sm) {
+    padding: 0.375rem 0.625rem;
+
+    svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+  }
+}
+
+.topBarLeftLikeCnt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 400;
+  font-size: 0.875rem;
+
+  svg {
+    color: var(--heart-fill);
+  }
+}
+
+.topBarTitle {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.postContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  max-width: 49.5rem;
+  margin: 1.25rem auto 0;
+  padding: 1.5rem 2.25rem 1.875rem;
+  border-radius: 0.25rem;
+  background-color: var(--post-content-bg);
+
+  @media (max-width: $breakpoints-md) {
+    padding: 1.5rem 1.5rem 1.875rem;
+  }
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 1.125rem;
+    margin: 0 auto;
+    padding: 1rem 1rem 1.875rem;
+    border-radius: 0;
+  }
+}
+
+.postMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 0.75rem;
+  }
+}
+
+.postDetail {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+
+  button {
+    padding: 0;
+    color: var(--text-secondary);
+  }
+}
+
+.commentBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.commentBoxTop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+}
+
+.commentFormBottom {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    padding: 0.375rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+.error {
+  flex-grow: 1;
+  margin-left: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--text-error);
+}
+
+.commentInfo {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  align-items: center;
+
+  button {
+    padding: 0;
+    display: flex;
+
+    svg:first-child {
+      height: 1.25rem;
+      width: 1.25rem;
+      margin-right: 0.25rem;
+    }
+
+    svg:last-child {
+      align-self: center;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+.commentsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}

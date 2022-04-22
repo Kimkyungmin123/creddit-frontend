@@ -29,7 +29,7 @@ const Layout = ({
         <title>{title}</title>
       </Head>
       <Header hideSearchBar={hideSearchBar} />
-      {children}
+      <div className={styles.childrenContainer}>{children}</div>
     </div>
   );
 };

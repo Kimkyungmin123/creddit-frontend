@@ -1,9 +1,9 @@
+import MyDate from 'components/MyDate';
 import { HeartFill, HeartOutline } from 'icons';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Post } from 'types';
-import formatDate from 'utils/formatDate';
 import styles from './PostCard.module.scss';
 
 const CONTENT_MAX_LENGTH = 150;
@@ -24,10 +24,10 @@ const PostCard = ({ post }: PostCardProps) => {
   return (
     <section
       className={styles.postCard}
-      onClick={() => router.push({ pathname: `/posts/${post.id}` })}
+      onClick={() => router.push({ pathname: `/post/${post.id}` })}
       data-testid={`post-card-${id}`}
     >
-      <Link href={`/posts/${post.id}`}>
+      <Link href={`/post/${post.id}`}>
         <a>
           <h2>{title}</h2>
         </a>
@@ -62,10 +62,7 @@ const PostCard = ({ post }: PostCardProps) => {
             {!clickedLike ? likeCount : likeCount + 1}
           </button>
         </div>
-        <div className={styles.postDate}>
-          <span>{formatDate(createdDate)}</span>
-          <span>{formatDate(createdDate, { type: 'mobile' })}</span>
-        </div>
+        <MyDate date={createdDate} />
       </div>
     </section>
   );

@@ -6,14 +6,14 @@
  */
 function formatDate(
   dateString: string,
-  { type }: { type: 'desktop' | 'mobile' } = { type: 'desktop' }
+  { type }: { type: 'long' | 'short' } = { type: 'long' }
 ) {
   const [date, time] = dateString.split(' ');
   const [year, month, day] = date.split('-');
   const nextTime = time.split(':');
   nextTime.pop();
 
-  return type === 'desktop'
+  return type === 'long'
     ? `${year}년 ${month}월 ${day}일 ${nextTime.join(':')}`
     : `${year}.${month}.${day} ${nextTime.join(':')}`;
 }

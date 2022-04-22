@@ -5,12 +5,6 @@
   flex-direction: column;
   gap: 1rem;
   max-width: 36.75rem;
-  margin: 1rem auto;
-
-  @media (max-width: $breakpoints-sm) {
-    margin: 0.75rem auto;
-    gap: 0.75rem;
-  }
 }
 
 .sortContainer {

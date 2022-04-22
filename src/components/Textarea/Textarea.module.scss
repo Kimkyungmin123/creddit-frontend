@@ -4,6 +4,11 @@
   border-radius: 0.25rem;
   background-color: var(--element-bg-primary);
   resize: vertical;
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
 
   &:hover,
   &:focus {

@@ -1,0 +1,12 @@
+@import 'styles/app';
+
+.homeContainer {
+  display: flex;
+  justify-content: center;
+  margin: 1rem auto;
+
+  @media (max-width: $breakpoints-sm) {
+    margin: 0.75rem auto;
+    gap: 0.75rem;
+  }
+}

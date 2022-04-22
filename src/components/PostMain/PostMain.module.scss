@@ -1,0 +1,22 @@
+@import 'styles/app';
+
+.postMain {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+
+  @media (max-width: $breakpoints-sm) {
+    gap: 0.75rem;
+  }
+}
+
+.postDetail {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+
+  button {
+    padding: 0;
+    color: var(--text-secondary);
+  }
+}

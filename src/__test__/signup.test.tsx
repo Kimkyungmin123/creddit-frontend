@@ -2,6 +2,7 @@ import ERRORS from 'constants/errors';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
 import Signup, { SignupForm } from 'pages/signup';
+import { API_ENDPOINT } from 'utils/api';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('Signup', () => {
@@ -25,8 +26,8 @@ describe('Signup', () => {
 
   beforeEach(() => {
     server.use(
-      rest.get('/api/me', (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json({}));
+      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json(null));
       })
     );
   });

@@ -1,8 +1,12 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+export const API_ENDPOINT = 'http://localhost:8080';
+
+// TODO: refresh token 유효 기간이 3일 이하면 refresh token 재발급 받기
+
 const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: API_ENDPOINT,
 });
 
 api.interceptors.request.use(

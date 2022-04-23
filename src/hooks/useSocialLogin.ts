@@ -16,7 +16,7 @@ function useSocialLogin() {
       // FIXME: 서버 소셜 로그인 API가 만들어지면 수정
       Cookies.set('access_token', 'FIXME', { expires: 1 });
       Cookies.set('refresh_token', 'FIXME', { expires: 7 });
-      mutate('/api/me');
+      mutate('/profile/show');
     }
   }, [data, mutate]);
 }

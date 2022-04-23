@@ -1,3 +1,15 @@
+export type UserImage = {
+  imgName: 'string';
+  imgUrl: 'string';
+};
+
+export type User = {
+  createdDate: 'string';
+  image: UserImage;
+  introduction: 'string';
+  nickname: 'string';
+};
+
 export type Comment = {
   member: string;
   content: string;

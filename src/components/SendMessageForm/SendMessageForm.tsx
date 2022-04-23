@@ -2,7 +2,11 @@ import { useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import styles from './SendMessageForm.module.scss';
 
-const SendMessageForm = () => {
+export type SendMessageFormProps = {
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+const SendMessageForm = ({ onClick }: SendMessageFormProps) => {
   const [typingMsg, setTypingMsg] = useState<string>('');
 
   const handleSendMessage = () => {
@@ -26,6 +30,9 @@ const SendMessageForm = () => {
       onSubmit={(e) => {
         handleSendMessage();
         e.preventDefault();
+        {
+          onClick;
+        }
       }}
     >
       <ReactTextareaAutosize

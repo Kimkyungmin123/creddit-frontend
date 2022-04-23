@@ -32,7 +32,7 @@ body[data-theme='light'] {
   --chat-box-border: #dbdbdb;
   --chat-container-bg: #eeecf3;
   --chat-element-bg: #ffffff;
-  --message-box: #8954fd;
+  --my-message-box-bg: #8954fd;
 }
 
 @mixin dark {
@@ -69,7 +69,7 @@ body[data-theme='light'] {
   --chat-box-border: #4d4d4d;
   --chat-container-bg: #1f1f1f;
   --chat-element-bg: #383838;
-  --message-box: #705e97;
+  --my-message-box-bg: #705e97;
 }
 
 @media (prefers-color-scheme: dark) {

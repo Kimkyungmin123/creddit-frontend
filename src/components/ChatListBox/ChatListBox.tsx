@@ -17,7 +17,9 @@ const ChatListBox = ({
 }: ChatListBoxProps) => {
   return (
     <div className={styles.ChatBox} onClick={onClick}>
-      <Image src={profileImg} alt="프로필 이미지" width={60} height={60} />
+      <div className={styles.profileImg}>
+        <Image src={profileImg} alt="프로필 이미지" />
+      </div>
       <div className={styles.chatContent}>
         <div>{interlocutorName}</div>
         <div className={styles.lastMessage}>{lastMessage}</div>

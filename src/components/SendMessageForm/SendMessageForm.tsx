@@ -1,47 +1,42 @@
-import { useCallback, useRef, useState } from 'react';
+import { useState } from 'react';
+import ReactTextareaAutosize from 'react-textarea-autosize';
 import styles from './SendMessageForm.module.scss';
 
 const SendMessageForm = () => {
   const [typingMsg, setTypingMsg] = useState<string>('');
-  const handleTypingMessage = useCallback((e) => {
-    setTypingMsg(e.target.value);
-  }, []);
-  const handleSendMessage = useCallback(() => {
+
+  const handleSendMessage = () => {
     const nonContent = typingMsg.trim() === '';
     if (nonContent) {
       return;
     }
     setTypingMsg('');
-  }, [typingMsg]);
+  };
 
-  const handleKeyUp = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       handleSendMessage();
+      e.preventDefault();
     }
   };
-  const ref = useRef<HTMLTextAreaElement>(null);
-
-  const handleResizeHeight = useCallback(() => {
-    if (ref === null || ref.current === null) {
-      return;
-    }
-    ref.current.style.height = ref.current.scrollHeight + 'px';
-  }, []);
 
   return (
-    <form className={styles.sendMessageFormBox}>
-      <textarea
-        ref={ref}
+    <form
+      className={styles.sendMessageFormBox}
+      onSubmit={(e) => {
+        handleSendMessage();
+        e.preventDefault();
+      }}
+    >
+      <ReactTextareaAutosize
         value={typingMsg}
-        onChange={handleTypingMessage}
-        onKeyUp={handleKeyUp}
-        onInput={handleResizeHeight}
+        onChange={(e) => {
+          setTypingMsg(e.target.value);
+        }}
+        onKeyDown={handleKeyDown}
       />
-      <button
-        onClick={handleSendMessage}
-        aria-label="메시지 전송"
-        type="submit"
-      >
+
+      <button aria-label="메시지 전송" type="submit">
         전송
       </button>
     </form>

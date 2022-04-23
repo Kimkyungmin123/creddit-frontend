@@ -11,6 +11,7 @@
     border-radius: 100%;
   }
 }
+
 .MessageContent {
   display: flex;
   width: 100%;
@@ -58,7 +59,7 @@
   max-width: 28.5625rem;
 
   div {
-    background-color: var(--message-box);
+    background-color: var(--my-message-box-bg);
     width: 100%;
     float: right;
     color: var(--btn-text);

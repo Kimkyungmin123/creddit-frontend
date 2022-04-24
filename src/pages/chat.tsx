@@ -20,7 +20,7 @@ const Chat: NextPage = () => {
 
   // const connect = () => {
   //   const client = new StompJS.Client({
-  //     // brokerURL: " ", // endpoint
+  //     brokerURL: 'ws:http://localhost:8080/chat', // endpoint
   //     connectHeaders: {},
   //     debug: function (str) {
   //       console.log(str);
@@ -114,10 +114,10 @@ ZZzz"
             />
           </div>
           <SendMessageForm
-            onClick={() => {
+            onSubmit={() => {
               console.log('ok');
+              // publish()
             }}
-            // {() => publish()}
           />
         </div>
       </div>

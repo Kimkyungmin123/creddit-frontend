@@ -15,14 +15,14 @@ import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
 
 const Login: NextPage = () => {
-  const { isLoading, user } = useUser({ redirectTo: '/' });
+  const { isLoading, user, error } = useUser({ redirectTo: '/' });
   const login = useLogin();
   const { status } = useSession();
   useSocialLogin();
 
   return (
     <Layout title="creddit: 로그인" backgroundColor="clean">
-      {!isLoading && !user && status === 'unauthenticated' && (
+      {!isLoading && !user && !error && status === 'unauthenticated' && (
         <div className={styles.loginContainer}>
           <h1>로그인</h1>
           <LoginForm

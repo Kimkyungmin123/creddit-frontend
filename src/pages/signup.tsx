@@ -18,14 +18,14 @@ import api from 'utils/api';
 import { object, string } from 'yup';
 
 const Signup: NextPage = () => {
-  const { isLoading, user } = useUser({ redirectTo: '/' });
+  const { isLoading, user, error } = useUser({ redirectTo: '/' });
   const login = useLogin();
   const { status } = useSession();
   useSocialLogin();
 
   return (
     <Layout title="creddit: 회원가입" backgroundColor="clean">
-      {!isLoading && !user && status === 'unauthenticated' && (
+      {!isLoading && !user && !error && status === 'unauthenticated' && (
         <div className={styles.signupContainer}>
           <h1>회원가입</h1>
           <SignupForm

@@ -41,6 +41,7 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
   const logout = useCallback(async () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    Cookies.remove('auth_exp_date');
     if (sessionData) await signOut();
     mutate('/profile/show');
   }, [sessionData, mutate]);

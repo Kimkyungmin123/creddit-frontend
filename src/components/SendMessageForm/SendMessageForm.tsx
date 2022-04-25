@@ -1,25 +1,19 @@
-import { useState } from 'react';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import styles from './SendMessageForm.module.scss';
 
 export type SendMessageFormProps = {
   onSubmit: () => void;
+  onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
+  value?: string;
 };
 
-const SendMessageForm = ({ onSubmit }: SendMessageFormProps) => {
-  const [typingMsg, setTypingMsg] = useState<string>('');
-
-  const handleSendMessage = () => {
-    const nonContent = typingMsg.trim() === '';
-    if (nonContent) {
-      return;
-    }
-    setTypingMsg('');
-  };
-
+const SendMessageForm = ({
+  onSubmit,
+  onChange,
+  value,
+}: SendMessageFormProps) => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      handleSendMessage();
       e.preventDefault();
     }
   };
@@ -28,16 +22,13 @@ const SendMessageForm = ({ onSubmit }: SendMessageFormProps) => {
     <form
       className={styles.sendMessageFormBox}
       onSubmit={(e) => {
-        handleSendMessage();
         e.preventDefault();
         onSubmit();
       }}
     >
       <ReactTextareaAutosize
-        value={typingMsg}
-        onChange={(e) => {
-          setTypingMsg(e.target.value);
-        }}
+        value={value}
+        onChange={onChange}
         onKeyDown={handleKeyDown}
       />
 

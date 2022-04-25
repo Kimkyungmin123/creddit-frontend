@@ -5,68 +5,60 @@ import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 // import SockJS from 'sockjs-client';
-// import * as StompJS from '@stomp/stompjs';
+// import { over } from 'stompjs';
 // import { useEffect, useState } from 'react';
 
 const Chat: NextPage = () => {
-  // const [chatMessages, setChatMessages] = useState([]);
-  // const [message, setMessage] = useState('');
-  // const client = new StompJS.Client();
+  // let client: any = null;
+  // const [privateChats, setPrivateChats] = useState(new Map());
+  // const [chatData, setChatData] = useState({
+  //   username: '',
+  //   receivername: '',
+  //   connected: false,
+  //   message: '',
+  // });
 
   // useEffect(() => {
   //   connect();
-  //   return () => disconnect();
+  //   return () => client.deactivate();
   // }, []);
 
   // const connect = () => {
-  //   const client = new StompJS.Client({
-  //     brokerURL: 'ws:http://localhost:8080/chat', // endpoint
-  //     connectHeaders: {},
-  //     debug: function (str) {
-  //       console.log(str);
-  //     },
-  //     reconnectDelay: 5000,
-  //     heartbeatIncoming: 4000,
-  //     heartbeatOutgoing: 4000,
-  //   });
-
-  //   client.onConnect = () => {
-  //     // Do something, all subscribes must be done is this callback
-  //     // This is needed because this will be executed after a (re)connect
-  //   };
-
-  //   client.onStompError = (frame) => {
-  //     // Will be invoked in case of error encountered at Broker
-  //     // Bad login/passcode typically will cause an error
-  //     // Complaint brokers will set `message` header with a brief message. Body may contain details.
-  //     // Compliant brokers will terminate the connection after any error
-  //     console.error(frame);
-  //   };
-
-  //   client.activate();
+  //   const socket = new SockJS('ws:http://localhost:8080/ws');
+  //   client = over(socket);
+  //   client.connect({}, onConnected, onError);
   // };
 
-  // const disconnect = () => {
-  //   client.deactivate();
+  // const onConnected = () => {
+  //   setChatData({ ...chatData, connected: true });
+  //   client.subscribe('//' + chatData.username + '/', onPrivateMessage);
   // };
 
-  // // const subscribe = () => {
-  // //   client.subscribe(` `, ({ body }) => {
+  // const onError = (err: Error) => {
+  //   console.log(err);
+  // };
 
-  // //   });
-  // // };
+  // const onPrivateMessage = (payload: any) => {
+  //   console.log(payload);
+  //   const payloadData = JSON.parse(payload.body);
+  // };
 
-  // const publish = () => {
-  //   if (!client.connected) {
-  //     return;
+  // const handleMessage = (event: any) => {
+  //   const { value } = event.target;
+  //   setChatData({ ...chatData, message: value });
+  // };
+
+  // const sendPrivateValue = () => {
+  //   if (client) {
+  //     const chatMessage = {
+  //       senderName: chatData.username,
+  //       receiverName: chatData.receivername,
+  //       message: chatData.message,
+  //     };
+
+  //     client.send('/', {}, JSON.stringify(chatMessage));
+  //     setChatData({ ...chatData, message: '' });
   //   }
-
-  //   client.publish({
-  //     destination: ' ',
-  //     body: '',
-  //   });
-
-  //   setMessage('');
   // };
 
   return (
@@ -82,28 +74,14 @@ const Chat: NextPage = () => {
         <div className={styles.messageform}>
           <div className={styles.messageBox}>
             <div className={styles.beginChatDate}>2022년 4월 5일 화요일</div>
+
             <MessageBox
               interlocutorName="김개발"
-              // content={message}
-              content="안녕하세요요요요요요요요요요요
-              대화중입니다....ZZzzZZzz대화중입니다....ZZzzZZzz대화중입니
-              다....ZZzzZZzz대화중입니다....ZZzzZZzz대화중입니다....ZZzz
-              ZZzz
-              12:05"
+              content="Zzz대화중입니다....ZZzz"
               time="12:05"
               isMe={true}
             />
-            <MessageBox
-              interlocutorName="김개발"
-              // content={message}
-              content="안녕하세요요요요요요요요요요요
-              대화중입니다....ZZzzZZzz대화중입니다....ZZzzZZzz대화중입니
-              다....ZZzzZZzz대화중입니다....ZZzzZZzz대화중입니다....ZZzz
-              ZZzz
-              12:05"
-              time="12:05"
-              isMe={true}
-            />
+
             <div className={styles.beginChatDate}>2022년 4월 5일 화요일</div>
             <MessageBox
               interlocutorName="김개발"
@@ -116,8 +94,10 @@ ZZzz"
           <SendMessageForm
             onSubmit={() => {
               console.log('ok');
-              // publish()
+              // sendPrivateValue();
             }}
+            // onChange={handleMessage}
+            // value={chatData.message}
           />
         </div>
       </div>

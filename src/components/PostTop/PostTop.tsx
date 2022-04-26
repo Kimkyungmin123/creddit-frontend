@@ -9,7 +9,7 @@ export type PostTopProps = {
 
 function PostTop({ post }: PostTopProps) {
   const router = useRouter();
-  const { likeCount, title } = post;
+  const { likes, title } = post;
 
   return (
     <div className={styles.container} data-testid="post-top">
@@ -20,7 +20,7 @@ function PostTop({ post }: PostTopProps) {
           aria-label="좋아요"
         >
           <HeartFill />
-          {likeCount}
+          {likes}
         </button>
         <span className={styles.title}>{title}</span>
         <button aria-label="게시물 닫기" onClick={() => router.back()}>

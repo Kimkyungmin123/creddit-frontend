@@ -9,13 +9,13 @@ export type PostCommentBoxProps = {
 };
 
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { commentCount, comments } = post;
+  const { comments } = post;
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
       <div className={styles.commentBoxTop}>
         <div className={styles.commentInfo}>
-          <span>댓글 {commentCount}개</span>
+          <span>댓글 {comments.length}개</span>
           <button
             // TODO: 현재 정렬 기준에 따라 aria-label 변경
             aria-label={'댓글 정렬 기준 변경'}
@@ -36,9 +36,9 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
           return (
             <Comment
               key={i}
-              nickName={comment.member}
+              nickName={comment.member.nickname}
               content={comment.content}
-              likeCount={comment.likeCount}
+              likeCount={comment.likes}
               date={comment.createdDate}
             />
           );

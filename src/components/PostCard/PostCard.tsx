@@ -16,18 +16,17 @@ export type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { id, title, content, member, createdDate, likeCount, commentCount } =
-    post;
+  const { id, title, content, member, createdDate, likes, comments } = post;
   const [clickedLike, setClickedLike] = useState(false);
   const router = useRouter();
 
   return (
     <section
       className={styles.postCard}
-      onClick={() => router.push({ pathname: `/post/${post.id}` })}
-      data-testid={`post-card-${id}`}
+      onClick={() => router.push({ pathname: `/post/${id}` })}
+      data-testid="post-card"
     >
-      <Link href={`/post/${post.id}`}>
+      <Link href={`/post/${id}`}>
         <a>
           <h2>{title}</h2>
         </a>
@@ -39,9 +38,9 @@ const PostCard = ({ post }: PostCardProps) => {
         <div className={styles.postDetailLeft}>
           <div className={styles.creator} data-testid="creator">
             <span>by </span>
-            {member}
+            {member.nickname}
           </div>
-          <div className={styles.comments}>댓글 {commentCount}개</div>
+          <div className={styles.comments}>댓글 {comments.length}개</div>
           <button
             className={styles.likeCountBtn}
             onClick={(event) => {
@@ -59,7 +58,7 @@ const PostCard = ({ post }: PostCardProps) => {
                 )}
               </>
             }
-            {!clickedLike ? likeCount : likeCount + 1}
+            {!clickedLike ? likes : likes + 1}
           </button>
         </div>
         <MyDate date={createdDate} />

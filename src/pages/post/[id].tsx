@@ -2,15 +2,15 @@ import Layout from 'components/Layout';
 import PostCommentBox from 'components/PostCommentBox';
 import PostMain from 'components/PostMain';
 import PostTop from 'components/PostTop';
+import postDummy from 'data/post.json';
 import { useRouter } from 'next/router';
 import styles from 'styles/Post.module.scss';
-import postsDummy from '../../data/posts.json';
 
 const Post = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const numID = Number(id) - 1;
-  const post = postsDummy[numID];
+  // const { id } = router.query;
+  // const numID = Number(id) - 1;
+  const post = postDummy;
 
   return (
     <Layout title={post.title}>

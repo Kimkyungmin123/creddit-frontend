@@ -14,7 +14,7 @@ function PostMain({ post }: PostMainProps) {
     <div className={styles.postMain} data-testid="post-main">
       <h2>{title}</h2>
       <div className={styles.postDetail}>
-        <span>{member}</span>
+        <span>{member.nickname}</span>
         <MyDate date={createdDate} />
         <button aria-label="게시물 수정">수정</button>
         <button aria-label="게시물 삭제">삭제</button>

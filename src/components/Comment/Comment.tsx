@@ -15,11 +15,7 @@ const Comment = ({ nickName, content, likeCount, date }: commentProps) => {
     setClickLike(() => !clickLike);
   };
   return (
-    <div
-      className={styles.commentContainer}
-      // TODO: id에 따라 data-testid 변경
-      data-testid={'comment'}
-    >
+    <div className={styles.commentContainer} data-testid={'comment'}>
       <div className={styles.commentBoxTop}>
         <div className={styles.commentInfo}>
           <span>{nickName}</span>

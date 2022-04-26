@@ -1,5 +1,4 @@
-import postsDummy from 'data/posts.json';
-import { render, screen } from 'utils/test-utils';
+import { render, screen, waitFor } from 'utils/test-utils';
 import PostList from './PostList';
 
 describe('PostList', () => {
@@ -18,12 +17,12 @@ describe('PostList', () => {
     };
   };
 
-  it('renders properly', () => {
+  it('renders properly', async () => {
     const { sortByLikeButton, sortByRecentButton } = setup();
     expect(sortByLikeButton).toBeInTheDocument();
     expect(sortByRecentButton).toBeInTheDocument();
-    postsDummy.forEach(({ id }) => {
-      expect(screen.getByTestId(`post-card-${id}`)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('post-card')).toBeInTheDocument();
     });
   });
 });

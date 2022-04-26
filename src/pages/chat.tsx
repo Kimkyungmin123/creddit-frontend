@@ -5,7 +5,7 @@ import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 // import SockJS from 'sockjs-client';
-// import { over } from 'stompjs';
+// import { Stomp } from '@stomp/stompjs';
 // import { useEffect, useState } from 'react';
 
 const Chat: NextPage = () => {
@@ -20,18 +20,19 @@ const Chat: NextPage = () => {
 
   // useEffect(() => {
   //   connect();
-  //   return () => client.deactivate();
+  //   return () => client.disconnet();
   // }, []);
 
   // const connect = () => {
   //   const socket = new SockJS('ws:http://localhost:8080/ws');
-  //   client = over(socket);
+  //   client = Stomp.over(socket);
   //   client.connect({}, onConnected, onError);
   // };
 
   // const onConnected = () => {
   //   setChatData({ ...chatData, connected: true });
-  //   client.subscribe('//' + chatData.username + '/', onPrivateMessage);
+  //   client.send('/app', {}, JSON.stringify(chatData.username));
+  //   client.subscribe('/queue/' + chatData.username + '/', onPrivateMessage);
   // };
 
   // const onError = (err: Error) => {
@@ -41,9 +42,10 @@ const Chat: NextPage = () => {
   // const onPrivateMessage = (payload: any) => {
   //   console.log(payload);
   //   const payloadData = JSON.parse(payload.body);
+  //   // TODO: 사용자이름 받아와서 privateChats에 payloadData 넣기
   // };
 
-  // const handleMessage = (event: any) => {
+  // const handleMessage = (event) => {
   //   const { value } = event.target;
   //   setChatData({ ...chatData, message: value });
   // };
@@ -56,7 +58,7 @@ const Chat: NextPage = () => {
   //       message: chatData.message,
   //     };
 
-  //     client.send('/', {}, JSON.stringify(chatMessage));
+  //     client.send('/queue', {}, JSON.stringify(chatMessage));
   //     setChatData({ ...chatData, message: '' });
   //   }
   // };

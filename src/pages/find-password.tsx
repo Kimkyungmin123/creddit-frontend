@@ -9,7 +9,11 @@ import { object, string } from 'yup';
 
 const FindPassword: NextPage = () => {
   return (
-    <Layout title="creddit: 비밀번호 찾기" backgroundColor="clean">
+    <Layout
+      title="creddit: 비밀번호 찾기"
+      backgroundColor="clean"
+      hideSearchBar={true}
+    >
       <div className={styles.findPasswordContainer}>
         <h1>비밀번호 찾기</h1>
         <p className={styles.description}>

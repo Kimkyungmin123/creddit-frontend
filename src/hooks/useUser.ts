@@ -24,7 +24,13 @@ type Options = {
 function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
   const { data, error } = useSWRImmutable<UserResponse>(
     '/profile/show',
-    fetcher
+    fetcher,
+    {
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (retryCount >= 2) return;
+        revalidate({ retryCount });
+      },
+    }
   );
   const router = useRouter();
   const { mutate } = useSWRConfig();

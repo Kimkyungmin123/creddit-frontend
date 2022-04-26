@@ -1,13 +1,16 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import reIssueAuthToken from './reIssueAuthToken';
 
 export const API_ENDPOINT = 'http://localhost:8080';
+export const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 const api = axios.create({ baseURL: API_ENDPOINT });
 
 api.interceptors.request.use(
-  (config) => {
+  (config: RequestConfig) => {
+    if (config.retryCount && config.retryCount > 1) return;
+
     if (config.headers) {
       const accessToken = Cookies.get('access_token');
       if (accessToken) {
@@ -25,11 +28,30 @@ api.interceptors.response.use(
   (response) => {
     return response;
   },
-  async (error: AxiosError) => {
+  async (error: ResponseError) => {
+    const { method, url } = error.config;
     await reIssueAuthToken();
-    api(error.config);
+
+    if (
+      method === 'get' ||
+      url === '/auth/reissueAccessRefreshToken' ||
+      url === '/auth/reissueAccessToken'
+    ) {
+      return Promise.reject(error);
+    }
+
+    error.config.retryCount = (error.config.retryCount || 0) + 1;
+    await api(error.config);
     return Promise.reject(error);
   }
 );
+
+interface RequestConfig extends AxiosRequestConfig {
+  retryCount?: number;
+}
+
+interface ResponseError extends AxiosError {
+  config: RequestConfig;
+}
 
 export default api;

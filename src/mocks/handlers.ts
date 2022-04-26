@@ -14,6 +14,7 @@ export function handlers() {
       getNicknameDuplicate
     ),
     rest.get(`${API_ENDPOINT}/post`, getPosts),
+    rest.get(`${API_ENDPOINT}/post/1`, getPost),
   ];
 }
 
@@ -54,4 +55,8 @@ const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
 
 const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
   return res(ctx.status(200), ctx.json([postDummy]));
+};
+
+const getPost: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json(postDummy));
 };

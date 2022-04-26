@@ -24,7 +24,11 @@ const Signup: NextPage = () => {
   useSocialLogin();
 
   return (
-    <Layout title="creddit: 회원가입" backgroundColor="clean">
+    <Layout
+      title="creddit: 회원가입"
+      backgroundColor="clean"
+      hideSearchBar={true}
+    >
       {!isLoading && !user && !error && status === 'unauthenticated' && (
         <div className={styles.signupContainer}>
           <h1>회원가입</h1>

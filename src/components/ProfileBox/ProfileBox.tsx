@@ -1,39 +1,39 @@
+import ButtonLink from 'components/ButtonLink';
+import MyDate from 'components/MyDate';
+import profile from 'images/profileImg.png';
 import Image from 'next/image';
+import { User } from 'types';
 import styles from './ProfileBox.module.scss';
-import cat from 'images/cat.jpg';
-import Link from 'next/link';
 
-export type ProfileProps = {
-  nickName: string;
-  statusMessage: string;
-  signUpDateNum: string;
+export type ProfileBoxProps = {
+  user: User;
 };
 
-function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
+function ProfileBox({ user }: ProfileBoxProps) {
+  const { nickname, introduction, createdDate } = user;
+
   return (
-    <div className={styles.profileBoxTop}>
-      <div className={styles.profileContent}>
-        <div className={styles.userInfo}>
-          <div className={styles.profileImg}>
-            <Image src={cat} alt="프로필 이미지" />
-          </div>
-          <span className={styles.nickName}>{nickName}</span>
-        </div>
-        <span className={styles.statusMessage}>{statusMessage}</span>
-        <div className={styles.signUpDate}>
-          <span className={styles.signUpDateText}>가입일</span>
-          <span className={styles.signUpDateNum}>{signUpDateNum}</span>
-        </div>
-        <div className={styles.profileBoxBtns}>
-          <Link href="/create-post">
-            <a className={styles.createNewPostBtn} aria-label="새 글 작성">
-              새 글 작성
-            </a>
-          </Link>
-          <button className={styles.chatListBtn}>대화 목록</button>
-        </div>
-        <button className={styles.modifyProfile}>프로필 수정</button>
+    <div className={styles.profileBox}>
+      <div className={styles.profileImage}>
+        <Image src={profile} alt="프로필 이미지" />
       </div>
+      <p className={styles.nickName}>{nickname}</p>
+      {introduction && (
+        <span className={styles.introduction}>{introduction}</span>
+      )}
+      <div className={styles.signUpDate}>
+        <span>가입일</span>
+        <MyDate date={createdDate} />
+      </div>
+      <div className={styles.buttons}>
+        <ButtonLink href="/create-post" round={true}>
+          새 글 작성
+        </ButtonLink>
+        <ButtonLink href="/chat" round={true}>
+          대화 목록
+        </ButtonLink>
+      </div>
+      <button className={styles.editButton}>프로필 수정</button>
     </div>
   );
 }

@@ -22,7 +22,7 @@ const Login: NextPage = () => {
 
   return (
     <Layout
-      title="creddit: 로그인"
+      title="로그인 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >

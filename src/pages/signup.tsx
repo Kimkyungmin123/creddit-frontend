@@ -25,7 +25,7 @@ const Signup: NextPage = () => {
 
   return (
     <Layout
-      title="creddit: 회원가입"
+      title="회원가입 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >

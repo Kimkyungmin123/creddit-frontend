@@ -3,6 +3,7 @@
   border-radius: 0.25rem;
   background-color: var(--btn-primary-bg);
   color: var(--btn-primary-text);
+  text-align: center;
 
   svg {
     width: 1.125rem;
@@ -20,5 +21,9 @@
   &:disabled {
     cursor: default;
     background-color: var(--btn-primary-disabled-bg);
+  }
+
+  &.round {
+    border-radius: 1rem;
   }
 }

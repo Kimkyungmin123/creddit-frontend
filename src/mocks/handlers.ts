@@ -1,4 +1,5 @@
 import postDummy from 'data/post.json';
+import userDummy from 'data/user.json';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
 
@@ -19,18 +20,7 @@ export function handlers() {
 }
 
 const getMe: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
-  return res(
-    ctx.status(200),
-    ctx.json({
-      nickname: '닉네임',
-      introduction: '소개',
-      image: {
-        imgName: null,
-        imgUrl: null,
-      },
-      createdDate: '2022-04-22T14:01:34.930Z',
-    })
-  );
+  return res(ctx.status(200), ctx.json(userDummy));
 };
 
 const getEmailDuplicate: Parameters<typeof rest.get>[1] = (req, res, ctx) => {

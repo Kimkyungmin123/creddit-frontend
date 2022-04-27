@@ -14,7 +14,7 @@ const CreatePost: NextPage = () => {
   const router = useRouter();
 
   return (
-    <Layout title="creddit: 글 작성">
+    <Layout title="글 작성 - creddit">
       {!isLoading && user && (
         <PostForm
           title="작성"

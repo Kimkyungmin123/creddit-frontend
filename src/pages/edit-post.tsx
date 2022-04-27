@@ -25,7 +25,7 @@ const EditPost: NextPage = () => {
   }, [user, data]);
 
   return (
-    <Layout title="creddit: 글 수정">
+    <Layout title="글 수정 - creddit">
       {(error || !isAuthor()) && <NotFound />}
       {!isLoading && user && data && id !== undefined && (
         <PostForm

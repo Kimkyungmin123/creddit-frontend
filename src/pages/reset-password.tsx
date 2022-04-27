@@ -10,7 +10,7 @@ import { object, string } from 'yup';
 const ResetPassword: NextPage = () => {
   return (
     <Layout
-      title="creddit: 비밀번호 재설정"
+      title="비밀번호 재설정 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >

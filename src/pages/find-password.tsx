@@ -10,7 +10,7 @@ import { object, string } from 'yup';
 const FindPassword: NextPage = () => {
   return (
     <Layout
-      title="creddit: 비밀번호 찾기"
+      title="비밀번호 찾기 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >

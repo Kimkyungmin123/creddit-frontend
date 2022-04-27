@@ -34,6 +34,7 @@ function PostForm({
                 placeholder="제목"
                 name="title"
                 resizable={false}
+                maxLength={255}
               />
               <Textarea
                 value={values.content}

@@ -9,6 +9,7 @@
   border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
   background-color: var(--element-bg-primary);
+  word-break: break-all;
 
   &:hover {
     border-color: var(--border-focus);
@@ -23,7 +24,6 @@
   }
 
   p {
-    word-break: break-all;
     font-size: 1rem;
   }
 

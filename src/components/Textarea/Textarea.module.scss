@@ -1,4 +1,10 @@
-.Textarea {
+.container {
+  position: relative;
+  display: flex;
+}
+
+.textarea {
+  width: 100%;
   padding: 0.625rem 0.75rem;
   border: 0.0625rem solid var(--border);
   border-radius: 0.25rem;
@@ -18,4 +24,16 @@
   &.notResizable {
     resize: none;
   }
+
+  &.hasMaxLength {
+    padding-right: 3.25rem;
+  }
+}
+
+.length {
+  position: absolute;
+  bottom: 0.875rem;
+  right: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
 }

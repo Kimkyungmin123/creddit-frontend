@@ -9,7 +9,7 @@ const api = axios.create({ baseURL: API_ENDPOINT });
 
 api.interceptors.request.use(
   (config: RequestConfig) => {
-    if (config.retryCount && config.retryCount > 1) return;
+    if ((config.retryCount || 0) > 1) return;
 
     if (config.headers) {
       const accessToken = Cookies.get('access_token');
@@ -30,15 +30,15 @@ api.interceptors.response.use(
   },
   async (error: ResponseError) => {
     const { method, url } = error.config;
-    await reIssueAuthToken();
-
     if (
-      method === 'get' ||
       url === '/auth/reissueAccessRefreshToken' ||
       url === '/auth/reissueAccessToken'
     ) {
       return Promise.reject(error);
     }
+
+    await reIssueAuthToken();
+    if (method === 'get') return Promise.reject(error);
 
     error.config.retryCount = (error.config.retryCount || 0) + 1;
     await api(error.config);

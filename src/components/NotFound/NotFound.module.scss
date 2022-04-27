@@ -1,0 +1,47 @@
+@import 'styles/app';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  min-height: inherit;
+  padding: 0 2rem 8rem;
+  text-align: center;
+
+  h2 {
+    font-weight: normal;
+    font-size: 2rem;
+    word-break: keep-all;
+
+    @media (max-width: $breakpoints-sm) {
+      font-size: 1.75rem;
+    }
+  }
+
+  a {
+    padding: 0.5rem 1.5rem;
+    background-color: var(--btn-primary-bg);
+    border-radius: 0.25rem;
+    color: var(--btn-primary-text);
+
+    svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    &:hover {
+      background-color: var(--btn-primary-hover-bg);
+    }
+
+    &:active {
+      background-color: var(--btn-primary-active-bg);
+    }
+
+    &:disabled {
+      cursor: default;
+      background-color: var(--btn-primary-disabled-bg);
+    }
+  }
+}

@@ -32,4 +32,11 @@ describe('Textarea', () => {
     fireEvent.change(textarea, { target: { value: '안녕하세요' } });
     expect(onChange).toHaveBeenCalled();
   });
+
+  it('shows maxLength when maxLength exist', () => {
+    const maxLength = 255;
+    const { initialProps } = setup({ maxLength });
+    const { value } = initialProps;
+    expect(screen.getByText(`${value.length}/${maxLength}`));
+  });
 });

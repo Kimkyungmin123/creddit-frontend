@@ -1,13 +1,20 @@
 import classNames from 'classnames';
 import PostCard from 'components/PostCard';
-import postsDummy from 'data/posts.json';
 import { Rising, Time } from 'icons';
 import { useState } from 'react';
+import useSWR from 'swr';
+import { Post } from 'types';
+import { fetcher } from 'utils/api';
 import styles from './PostList.module.scss';
 
 // TODO: userID가 존재하면 해당 유저의 글만 받아오기
 function PostList() {
   const [sortBy, setSortBy] = useState<'like' | 'recent'>('like');
+  // TODO: 무한 스크롤
+  const { data } = useSWR<Post[]>(
+    `/post?lastPostId=${Number.MAX_SAFE_INTEGER}&size=9999`,
+    fetcher
+  );
 
   return (
     <div className={styles.container}>
@@ -29,11 +36,13 @@ function PostList() {
           <span>최신</span>
         </button>
       </div>
-      <div className={styles.postsContainer}>
-        {postsDummy.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
+      {data && (
+        <div className={styles.postsContainer}>
+          {data.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

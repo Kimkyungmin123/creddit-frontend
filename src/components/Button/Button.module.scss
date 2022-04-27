@@ -1,24 +1,23 @@
-.button {
-  padding: 0.5rem 1.5rem;
-  background-color: var(--btn-bg);
-  border-radius: 0.25rem;
-  color: var(--btn-text);
+@import 'styles/app';
 
-  svg {
-    width: 1.125rem;
-    height: 1.125rem;
-  }
+.button {
+  @include button;
+}
+
+.error {
+  background-color: var(--btn-error-bg);
 
   &:hover {
-    background-color: var(--btn-hover-bg);
+    background-color: var(--btn-error-hover-bg);
   }
+}
 
-  &:active {
-    background-color: var(--btn-active-bg);
-  }
+.plain {
+  background: none;
+  color: var(--text-primary);
 
-  &:disabled {
-    cursor: default;
-    background-color: var(--btn-disabled-bg);
+  &:hover {
+    background: none;
+    color: var(--text-secondary);
   }
 }

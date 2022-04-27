@@ -21,7 +21,11 @@ const Login: NextPage = () => {
   useSocialLogin();
 
   return (
-    <Layout title="creddit: 로그인" backgroundColor="clean">
+    <Layout
+      title="creddit: 로그인"
+      backgroundColor="clean"
+      hideSearchBar={true}
+    >
       {!isLoading && !user && status === 'unauthenticated' && (
         <div className={styles.loginContainer}>
           <h1>로그인</h1>

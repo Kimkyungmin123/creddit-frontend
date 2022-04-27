@@ -1,30 +1,42 @@
-export type UserImage = {
-  imgName: 'string';
-  imgUrl: 'string';
+export type MyImage = {
+  imgName: string | null;
+  imgUrl: string | null;
 };
 
 export type User = {
-  createdDate: 'string';
-  image: UserImage;
-  introduction: 'string';
-  nickname: 'string';
+  createdDate: string;
+  image: MyImage;
+  introduction: string;
+  nickname: string;
+};
+
+export type Member = {
+  email: string;
+  /** @mockType {name.findName} */
+  nickname: string;
 };
 
 export type Comment = {
-  member: string;
+  commentId: number;
   content: string;
-  likeCount: number;
   createdDate: string;
+  liked: boolean;
+  likes: number;
+  member: Member;
+  modifiedDate: string;
+  parentCommentId: number;
+  postId: number;
 };
 
 export type Post = {
-  id: number;
-  title: string;
-  content: string;
-  member: string;
-  createdDate: string;
-  likeCount: number;
-  score: number;
-  commentCount: number;
   comments: Comment[];
+  content: string;
+  createdDate: string;
+  id: number;
+  image: MyImage;
+  liked: boolean;
+  likes: number;
+  member: Member;
+  modifiedDate: string;
+  title: string;
 };

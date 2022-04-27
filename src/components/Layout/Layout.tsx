@@ -6,7 +6,7 @@ import styles from './Layout.module.scss';
 
 export type LayoutProps = {
   children: ReactNode;
-  title: string;
+  title?: string;
   hideSearchBar?: boolean;
   backgroundColor?: 'base' | 'clean';
 };
@@ -26,7 +26,7 @@ const Layout = ({
       data-testid="layout"
     >
       <Head>
-        <title>{title}</title>
+        <title>{title || 'creddit'}</title>
       </Head>
       <Header hideSearchBar={hideSearchBar} />
       <div className={styles.childrenContainer}>{children}</div>

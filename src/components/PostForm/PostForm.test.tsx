@@ -36,6 +36,16 @@ describe('PostForm', () => {
     expect(submitButton).toBeDisabled();
   });
 
+  it('renders properly when initialValues exist', async () => {
+    const initialValues = { title: '제목', content: '내용' };
+    const { titleTextarea, contentTextarea, submitButton } = setup({
+      initialValues,
+    });
+    expect(titleTextarea.value).toBe(initialValues.title);
+    expect(contentTextarea.value).toBe(initialValues.content);
+    expect(submitButton).not.toBeDisabled();
+  });
+
   it('submit the values if the all values are filled', async () => {
     const { initialProps, titleTextarea, contentTextarea, submitButton } =
       setup();

@@ -1,3 +1,4 @@
+import postDummy from 'data/post.json';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
 
@@ -12,6 +13,8 @@ export function handlers() {
       `${API_ENDPOINT}/member/checkDuplicateByNickname/:nickname`,
       getNicknameDuplicate
     ),
+    rest.get(`${API_ENDPOINT}/post`, getPosts),
+    rest.get(`${API_ENDPOINT}/post/1`, getPost),
   ];
 }
 
@@ -48,4 +51,12 @@ const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
     return res(ctx.status(200), ctx.json({ data: true }));
   }
   return res(ctx.status(200), ctx.json({ data: false }));
+};
+
+const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json([postDummy]));
+};
+
+const getPost: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json(postDummy));
 };

@@ -1,16 +1,16 @@
 @mixin btn {
-  background-color: var(--btn-bg);
+  background-color: var(--btn-primary-bg);
   border-radius: 0.9375rem;
   padding: 0.25rem 1.5rem;
   font-size: 1rem;
-  color: var(--btn-text);
+  color: var(--btn-primary-text);
 
   &:hover {
-    background-color: var(--btn-hover-bg);
+    background-color: var(--btn-primary-hover-bg);
   }
 
   &:active {
-    background-color: var(--btn-active-bg);
+    background-color: var(--btn-primary-active-bg);
   }
 }
 

@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint --max-warnings=0",
-    "test": "jest"
+    "test": "jest",
+    "mock": "intermock --files ./src/types.ts --outputFormat string> ./src/data/tmp.json"
   },
   "dependencies": {
     "@stomp/stompjs": "^6.1.2",
@@ -45,6 +46,7 @@
     "eslint-config-next": "12.1.0",
     "eslint-plugin-testing-library": "^5.2.0",
     "husky": "^7.0.0",
+    "intermock": "^0.2.5",
     "jest": "^27.5.1",
     "msw": "^0.39.2",
     "sass": "^1.49.9",

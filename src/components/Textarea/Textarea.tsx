@@ -10,6 +10,7 @@ export type TextareaProps = {
   name?: string;
   resizable?: boolean;
   minRows?: number;
+  maxLength?: number;
 };
 
 function Textarea({
@@ -19,19 +20,29 @@ function Textarea({
   name,
   resizable,
   minRows,
+  maxLength,
 }: TextareaProps) {
   return (
-    <TextareaAutosize
-      className={classNames(
-        styles.Textarea,
-        resizable === false && styles.notResizable
+    <div className={styles.container}>
+      <TextareaAutosize
+        className={classNames(
+          styles.textarea,
+          resizable === false && styles.notResizable,
+          maxLength && styles.hasMaxLength
+        )}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        name={name}
+        minRows={minRows}
+        maxLength={maxLength}
+      />
+      {maxLength && (
+        <p className={styles.length}>
+          {value.length}/{maxLength}
+        </p>
       )}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      name={name}
-      minRows={minRows}
-    />
+    </div>
   );
 }
 

@@ -63,7 +63,11 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
         </Link>
         {!isLoading && status !== 'loading' && (
           <>
-            {!hideSearchBar && <SearchBar />}
+            {hideSearchBar ? (
+              <div style={{ flexGrow: 1 }}></div>
+            ) : (
+              <SearchBar />
+            )}
             <button
               className={styles.hoverElement}
               onClick={themeHandle}

@@ -2,7 +2,8 @@ import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
+import { useSWRConfig } from 'swr';
+import useSWRImmutable from 'swr/immutable';
 import { User } from 'types';
 import api from 'utils/api';
 
@@ -21,14 +22,23 @@ type Options = {
 };
 
 function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
-  const { data, error } = useSWR<UserResponse>('/profile/show', fetcher);
+  const { data, error } = useSWRImmutable<UserResponse>(
+    '/profile/show',
+    fetcher,
+    {
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (retryCount >= 2) return;
+        revalidate({ retryCount });
+      },
+    }
+  );
   const router = useRouter();
   const { mutate } = useSWRConfig();
   const { data: sessionData } = useSession();
   const isLoading = useMemo(() => !error && !data, [error, data]);
 
   useEffect(() => {
-    if (!redirectTo || isLoading) return;
+    if (!redirectTo || isLoading || error) return;
 
     if (
       (redirectWhen === 'authorized' && data?.user) ||
@@ -36,11 +46,12 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     ) {
       router.replace(redirectTo);
     }
-  }, [redirectTo, redirectWhen, isLoading, router, data]);
+  }, [redirectTo, redirectWhen, isLoading, router, data, error]);
 
   const logout = useCallback(async () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    Cookies.remove('auth_exp_date');
     if (sessionData) await signOut();
     mutate('/profile/show');
   }, [sessionData, mutate]);

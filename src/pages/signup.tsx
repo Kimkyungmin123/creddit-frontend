@@ -18,7 +18,7 @@ import api from 'utils/api';
 import { object, string } from 'yup';
 
 const Signup: NextPage = () => {
-  const { isLoading, user, error } = useUser({ redirectTo: '/' });
+  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
   const { status } = useSession();
   useSocialLogin();
@@ -29,7 +29,7 @@ const Signup: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && !error && status === 'unauthenticated' && (
+      {!isLoading && !user && status === 'unauthenticated' && (
         <div className={styles.signupContainer}>
           <h1>회원가입</h1>
           <SignupForm

@@ -15,7 +15,7 @@ import styles from 'styles/Login.module.scss';
 import { object, string } from 'yup';
 
 const Login: NextPage = () => {
-  const { isLoading, user, error } = useUser({ redirectTo: '/' });
+  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
   const { status } = useSession();
   useSocialLogin();
@@ -26,7 +26,7 @@ const Login: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && !error && status === 'unauthenticated' && (
+      {!isLoading && !user && status === 'unauthenticated' && (
         <div className={styles.loginContainer}>
           <h1>로그인</h1>
           <LoginForm

@@ -16,4 +16,9 @@
   &:active {
     background-color: var(--btn-primary-active-bg);
   }
+
+  &:disabled {
+    cursor: default;
+    background-color: var(--btn-primary-disabled-bg);
+  }
 }

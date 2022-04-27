@@ -7,14 +7,19 @@ import styles from './PostForm.module.scss';
 export type PostFormProps = {
   title: string;
   onSubmit: (values: { title: string; content: string }) => Promise<void>;
+  initialValues?: { title: string; content: string };
 };
 
-function PostForm({ title, onSubmit }: PostFormProps) {
+function PostForm({
+  title,
+  onSubmit,
+  initialValues = { title: '', content: '' },
+}: PostFormProps) {
   return (
     <div className={styles.PostFormContainer}>
-      <h1>{title}</h1>
+      <h1>글 {title}</h1>
       <Formik
-        initialValues={{ title: '', content: '' }}
+        initialValues={initialValues}
         onSubmit={async (values, { setSubmitting }) => {
           await onSubmit(values);
           setSubmitting(false);
@@ -42,7 +47,7 @@ function PostForm({ title, onSubmit }: PostFormProps) {
                 disabled={!values.title || !values.content || isSubmitting}
                 data-testid="submitButton"
               >
-                {isSubmitting ? <LoadingSpokes /> : '제출'}
+                {isSubmitting ? <LoadingSpokes /> : <>{title}</>}
               </Button>
             </form>
           );

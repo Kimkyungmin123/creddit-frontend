@@ -22,9 +22,9 @@
 
   a {
     padding: 0.5rem 1.5rem;
-    background-color: var(--btn-bg);
+    background-color: var(--btn-primary-bg);
     border-radius: 0.25rem;
-    color: var(--btn-text);
+    color: var(--btn-primary-text);
 
     svg {
       width: 1.125rem;
@@ -32,16 +32,16 @@
     }
 
     &:hover {
-      background-color: var(--btn-hover-bg);
+      background-color: var(--btn-primary-hover-bg);
     }
 
     &:active {
-      background-color: var(--btn-active-bg);
+      background-color: var(--btn-primary-active-bg);
     }
 
     &:disabled {
       cursor: default;
-      background-color: var(--btn-disabled-bg);
+      background-color: var(--btn-primary-disabled-bg);
     }
   }
 }

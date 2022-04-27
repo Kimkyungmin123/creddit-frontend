@@ -3,3 +3,21 @@
 .button {
   @include button;
 }
+
+.error {
+  background-color: var(--btn-error-bg);
+
+  &:hover {
+    background-color: var(--btn-error-hover-bg);
+  }
+}
+
+.plain {
+  background: none;
+  color: var(--text-primary);
+
+  &:hover {
+    background: none;
+    color: var(--text-secondary);
+  }
+}

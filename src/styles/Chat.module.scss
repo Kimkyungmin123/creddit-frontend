@@ -42,15 +42,15 @@
   padding: 0 9.375rem 0 9.375rem;
 
   @media (max-width: $breakpoints-xxl) {
-    padding: 3.125rem 3.2rem;
+    padding: 3.125rem 3.2rem 0 3.2rem;
   }
 
   @media (max-width: $breakpoints-xl) {
-    padding: 3.125rem 2rem;
+    padding: 3.125rem 2rem 0 2rem;
   }
 
   @media (max-width: $breakpoints-lg) {
-    padding: 3.125rem 1.5rem;
+    padding: 3.125rem 1.5rem 0 1.5rem;
   }
 }
 

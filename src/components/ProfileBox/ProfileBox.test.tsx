@@ -19,6 +19,7 @@ describe('ProfileBox', () => {
   it('renders properly', () => {
     const { initialProps, editButton } = setup();
     const { nickname, introduction } = initialProps.user;
+    expect(screen.getByTestId('image-box')).toBeInTheDocument();
     expect(screen.getByText(nickname)).toBeInTheDocument();
     expect(screen.getByText(introduction)).toBeInTheDocument();
     expect(screen.getByText('가입일')).toBeInTheDocument();

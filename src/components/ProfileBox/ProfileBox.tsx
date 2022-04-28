@@ -1,11 +1,11 @@
 import ButtonLink from 'components/ButtonLink';
+import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
-import profile from 'images/profileImg.png';
-import Image from 'next/image';
 import { useState } from 'react';
 import { User } from 'types';
 import api from 'utils/api';
+import editProfile from 'utils/editProfile';
 import isDuplicate from 'utils/isDuplicate';
 import styles from './ProfileBox.module.scss';
 
@@ -14,14 +14,12 @@ export type ProfileBoxProps = {
 };
 
 function ProfileBox({ user }: ProfileBoxProps) {
-  const { nickname, introduction, createdDate } = user;
+  const { nickname, introduction, createdDate, image } = user;
   const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className={styles.profileBox}>
-      <div className={styles.profileImage}>
-        <Image src={profile} alt="프로필 이미지" />
-      </div>
+      <ImageBox image={image} introduction={introduction} />
       {isEditing ? (
         <ProfileEditForm
           user={user}
@@ -48,15 +46,7 @@ function ProfileBox({ user }: ProfileBoxProps) {
 
             const changeIntroduction = async () => {
               if (introduction !== user.introduction) {
-                const formData = new FormData();
-                formData.append(
-                  'profileRequestDto',
-                  new Blob([JSON.stringify({ introduction })], {
-                    type: 'application/json',
-                  })
-                );
-                formData.append('image', new Blob());
-                await api.post('/profile/create', formData);
+                await editProfile({ introduction });
               }
             };
 

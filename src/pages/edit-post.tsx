@@ -32,12 +32,9 @@ const EditPost: NextPage = () => {
           title="수정"
           initialValues={{ title: data.title, content: data.content }}
           onSubmit={async (values) => {
-            try {
-              const formData = getPostFormData(values);
-              await api.post(`/post/${id}/edit`, formData);
-            } finally {
-              router.back();
-            }
+            const formData = getPostFormData(values);
+            await api.post(`/post/${id}/edit`, formData);
+            router.back();
           }}
         />
       )}

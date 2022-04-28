@@ -86,6 +86,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
               placeholder="소개"
               name="introduction"
               maxLength={50}
+              autoFocus
             />
             <div className={styles.buttons}>
               <Button type="submit" disabled={isSubmitting}>

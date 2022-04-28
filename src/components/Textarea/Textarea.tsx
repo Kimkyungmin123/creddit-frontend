@@ -12,6 +12,7 @@ export type TextareaProps = {
   minRows?: number;
   maxLength?: number;
   onBlur?: FocusEventHandler<HTMLTextAreaElement>;
+  autoFocus?: boolean;
 };
 
 function Textarea({
@@ -23,6 +24,7 @@ function Textarea({
   minRows,
   maxLength,
   onBlur,
+  autoFocus,
 }: TextareaProps) {
   return (
     <div className={styles.container}>
@@ -39,6 +41,10 @@ function Textarea({
         minRows={minRows}
         maxLength={maxLength}
         onBlur={onBlur}
+        autoFocus={autoFocus}
+        onFocus={(event) => {
+          event.target.setSelectionRange(value.length, value.length);
+        }}
       />
       {maxLength && (
         <p className={styles.length}>

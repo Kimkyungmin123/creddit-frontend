@@ -16,7 +16,10 @@
   width: 100%;
 
   @media (max-width: $breakpoints-xxl) {
-    max-width: 21.875rem;
+    max-width: 26.25rem;
+  }
+  @media (max-width: $breakpoints-lg) {
+    max-width: 23.75rem;
   }
 }
 

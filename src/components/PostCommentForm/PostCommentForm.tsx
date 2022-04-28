@@ -1,10 +1,10 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
-import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import { LoadingSpokes } from 'icons';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 import styles from './PostCommentForm.module.scss';
-import { object, string } from 'yup';
 
 export type PostCommentFormProps = {
   onSubmit: (values: { comment: string }) => Promise<void>;
@@ -17,7 +17,7 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
     <Formik
       initialValues={{ comment: '' }}
       validationSchema={object({
-        comment: string().required(ERRORS.commentRequired),
+        comment: getValidationSchema('comment'),
       })}
       onSubmit={async (values, { setSubmitting }) => {
         await onSubmit(values);

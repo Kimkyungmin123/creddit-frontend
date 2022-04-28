@@ -21,9 +21,7 @@ const CreatePost: NextPage = () => {
           onSubmit={async (values) => {
             try {
               const formData = getPostFormData(values);
-              await api.post('/post/create', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-              });
+              await api.post('/post/create', formData);
             } finally {
               router.push('/');
             }

@@ -34,9 +34,7 @@ const EditPost: NextPage = () => {
           onSubmit={async (values) => {
             try {
               const formData = getPostFormData(values);
-              await api.post(`/post/${id}/edit`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-              });
+              await api.post(`/post/${id}/edit`, formData);
             } finally {
               router.back();
             }

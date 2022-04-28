@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, FocusEventHandler } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './Textarea.module.scss';
 
@@ -11,6 +11,7 @@ export type TextareaProps = {
   resizable?: boolean;
   minRows?: number;
   maxLength?: number;
+  onBlur?: FocusEventHandler<HTMLTextAreaElement>;
 };
 
 function Textarea({
@@ -21,6 +22,7 @@ function Textarea({
   resizable,
   minRows,
   maxLength,
+  onBlur,
 }: TextareaProps) {
   return (
     <div className={styles.container}>
@@ -36,6 +38,7 @@ function Textarea({
         name={name}
         minRows={minRows}
         maxLength={maxLength}
+        onBlur={onBlur}
       />
       {maxLength && (
         <p className={styles.length}>

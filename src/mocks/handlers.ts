@@ -26,9 +26,9 @@ const getMe: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
 const getEmailDuplicate: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { email } = req.params;
   if (email === 'duplicate@a.com') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
 };
 
 const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
@@ -38,9 +38,9 @@ const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
 ) => {
   const { nickname } = req.params;
   if (nickname === 'duplicate') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
 };
 
 const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {

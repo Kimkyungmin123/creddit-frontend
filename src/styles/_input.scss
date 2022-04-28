@@ -1,0 +1,17 @@
+@mixin input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  outline: none;
+  border: 0.0625rem solid var(--border);
+  border-radius: 0.25rem;
+  background-color: var(--element-bg-primary);
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  &:hover,
+  &:focus {
+    border: 0.0625rem solid var(--border-focus);
+  }
+}

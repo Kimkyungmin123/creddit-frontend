@@ -12,7 +12,8 @@ import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Login.module.scss';
-import { object, string } from 'yup';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 
 const Login: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
@@ -63,10 +64,8 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     <Formik
       initialValues={{ email: '', password: '' }}
       validationSchema={object({
-        email: string()
-          .email(ERRORS.emailInvalid)
-          .required(ERRORS.emailRequired),
-        password: string().required(ERRORS.passwordRequired),
+        email: getValidationSchema('email'),
+        password: getValidationSchema('passwordLax'),
       })}
       onSubmit={async (values, { setSubmitting, setFieldError }) => {
         try {
@@ -115,7 +114,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
               error={touched.password && errors.password}
             />
             {errors.emailOrPassword && (
-              <p className={styles.fieldError}>{errors.emailOrPassword}</p>
+              <p className={styles.error}>{errors.emailOrPassword}</p>
             )}
             <Button
               type="submit"

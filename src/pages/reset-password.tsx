@@ -1,11 +1,11 @@
 import Button from 'components/Button';
 import Input from 'components/Input';
 import Layout from 'components/Layout';
-import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
 import styles from 'styles/ResetPassword.module.scss';
-import { object, string } from 'yup';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 
 const ResetPassword: NextPage = () => {
   return (
@@ -38,10 +38,8 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
     <Formik
       initialValues={{ newPassword: '', newPasswordConfirm: '' }}
       validationSchema={object({
-        newPassword: string().required(ERRORS.newPasswordRequired),
-        newPasswordConfirm: string().required(
-          ERRORS.newPasswordConfirmRequired
-        ),
+        newPassword: getValidationSchema('newPassword'),
+        newPasswordConfirm: getValidationSchema('newPasswordConfirm'),
       })}
       onSubmit={(values, { setSubmitting }) => {
         onSubmit(values);

@@ -1,6 +1,7 @@
-import ChatBox from 'components/ChatListBox';
+import ChatListBox from 'components/ChatListBox';
 import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
+import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
@@ -67,16 +68,30 @@ const Chat: NextPage = () => {
     <Layout title="creddit: Chat">
       <div className={styles.chatContainer}>
         <div className={styles.chatBox}>
-          <ChatBox
+          <ChatListBox
             interlocutorName="김개발"
-            lastMessage="뭐해 ??"
+            lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
+            뭐해 ?? 뭐해 ?? 뭐해 ??
+            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
+            "
+            sentDate="21:20"
+          />
+          <ChatListBox
+            interlocutorName="abc"
+            lastMessage="ㅎㅎ 
+            "
+            sentDate="21:20"
+          />
+          <ChatListBox
+            interlocutorName="ㅋㅋ"
+            lastMessage="하하 
+            "
             sentDate="21:20"
           />
         </div>
         <div className={styles.messageform}>
           <div className={styles.messageBox}>
-            <div className={styles.beginChatDate}>2022년 4월 5일 화요일</div>
-
+            <SendMessageDate date="2022년 4월 5일 화요일" />
             <MessageBox
               interlocutorName="김개발"
               content="Zzz대화중입니다....ZZzz"
@@ -84,7 +99,7 @@ const Chat: NextPage = () => {
               isMe={true}
             />
 
-            <div className={styles.beginChatDate}>2022년 4월 5일 화요일</div>
+            <SendMessageDate date="2022년 4월 5일 화요일" />
             <MessageBox
               interlocutorName="김개발"
               content="안zzZZzz대화중입니다....ZZzz
@@ -92,15 +107,65 @@ ZZzz"
               time="12:05"
               isMe={false}
             />
+            <MessageBox
+              interlocutorName="김개발"
+              content="안zzZZzz대화중입니다....ZZzz
+ZZzz"
+              time="12:05"
+              isMe={false}
+            />
+            <MessageBox
+              interlocutorName="김개발"
+              content="안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz"
+              time="12:05"
+              isMe={true}
+            />
+
+            <MessageBox
+              interlocutorName="김개발"
+              content="안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz"
+              time="12:05"
+              isMe={true}
+            />
+            <MessageBox
+              interlocutorName="김개발"
+              content="안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz"
+              time="12:05"
+              isMe={true}
+            />
+            <MessageBox
+              interlocutorName="김개발"
+              content="안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz안zzZZzz대화중입니다....ZZzz
+              ZZzz"
+              time="12:05"
+              isMe={true}
+            />
           </div>
-          <SendMessageForm
-            onSubmit={() => {
-              console.log('ok');
-              // sendPrivateValue();
-            }}
-            // onChange={handleMessage}
-            // value={chatData.message}
-          />
+          <div className={styles.SendMessageBox}>
+            <SendMessageForm
+              onSubmit={() => {
+                console.log('ok');
+                // sendPrivateValue();
+              }}
+              // onChange={handleMessage}
+              // value={chatData.message}
+            />
+          </div>
         </div>
       </div>
     </Layout>

@@ -1,9 +1,10 @@
+@import 'styles/app';
+
 .sendMessageFormBox {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-
   vertical-align: middle;
 
   textarea {
@@ -45,6 +46,11 @@
     &:disabled {
       cursor: default;
       background-color: var(--btn-primary-disabled-bg);
+    }
+
+    @media (max-width: $breakpoints-lg) {
+      font-size: 0.875rem;
+      max-width: 3.34rem;
     }
   }
 }

@@ -1,9 +1,15 @@
+@import 'styles/app';
+
 .ChatBox {
   display: flex;
   align-items: center;
   padding: 1rem 1.25rem;
-  border: solid 0.0625rem var(--chat-box-border);
+  border-bottom: solid 0.03125rem var(--chat-box-border);
   cursor: pointer;
+
+  @media (max-width: $breakpoints-xxl) {
+    font-size: 0.875rem;
+  }
 }
 
 .profileImg {

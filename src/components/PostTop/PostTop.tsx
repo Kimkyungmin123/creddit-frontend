@@ -1,4 +1,4 @@
-import { Close, HeartFill } from 'icons';
+import { Close, HeartOutline } from 'icons';
 import { useRouter } from 'next/router';
 import { Post } from 'types';
 import styles from './PostTop.module.scss';
@@ -19,11 +19,15 @@ function PostTop({ post }: PostTopProps) {
           // TODO: 좋아요 누른 상태면 "좋아요 취소"로 변경
           aria-label="좋아요"
         >
-          <HeartFill />
+          <HeartOutline />
           {likes}
         </button>
         <span className={styles.title}>{title}</span>
-        <button aria-label="게시물 닫기" onClick={() => router.back()}>
+        <button
+          aria-label="게시물 닫기"
+          onClick={() => router.back()}
+          className={styles.closeButton}
+        >
           <Close />
         </button>
       </div>

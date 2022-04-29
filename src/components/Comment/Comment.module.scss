@@ -35,6 +35,12 @@
 
   button {
     padding-left: 0.75rem;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
@@ -53,5 +59,21 @@
   svg {
     width: 1rem;
     height: 1rem;
+  }
+
+  button:first-child {
+    @media (hover: hover) {
+      &:hover {
+        color: var(--heart-fill);
+      }
+    }
+  }
+
+  button:last-child {
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

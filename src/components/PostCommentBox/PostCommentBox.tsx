@@ -21,7 +21,8 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
             aria-label={'댓글 정렬 기준 변경'}
           >
             <Sort />
-            <span>정렬 기준: 좋아요순</span>
+            <span>정렬 기준:&nbsp;</span>
+            <span>좋아요순</span>
             <CaretDown />
           </button>
         </div>

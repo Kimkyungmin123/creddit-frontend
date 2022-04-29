@@ -28,6 +28,12 @@ describe('CommentForm', () => {
     expect(submitButton).toBeInTheDocument();
   });
 
+  it('renders properly when initialValues exist', async () => {
+    const initialValues = { comment: '안녕하세요' };
+    const { textarea } = setup({ initialValues });
+    expect(textarea.value).toBe(initialValues.comment);
+  });
+
   it('shows an error message if the comment is invalid', async () => {
     const { textarea, submitButton } = setup();
     fireEvent.click(submitButton);
@@ -50,5 +56,13 @@ describe('CommentForm', () => {
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith(values);
     });
+  });
+
+  it('calls onCancel when the cancelButton is clicked', () => {
+    const onCancel = jest.fn();
+    setup({ onCancel });
+    const cancelButton = screen.getByText('취소');
+    fireEvent.click(cancelButton);
+    expect(onCancel).toHaveBeenCalled();
   });
 });

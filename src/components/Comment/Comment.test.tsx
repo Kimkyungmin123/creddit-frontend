@@ -91,4 +91,15 @@ describe('Comment', () => {
     expect(screen.queryByLabelText('댓글 수정')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('댓글 삭제')).not.toBeInTheDocument();
   });
+
+  it('shows CommentForm when click editButton', async () => {
+    setup();
+    const { editButton } = await setupButtons();
+    fireEvent.click(editButton);
+    expect(screen.getByTestId('comment-form')).toBeInTheDocument();
+    const cancelButton = screen.getByText('취소');
+    expect(cancelButton).toBeInTheDocument();
+    fireEvent.click(cancelButton);
+    expect(screen.queryByTestId('comment-form')).not.toBeInTheDocument();
+  });
 });

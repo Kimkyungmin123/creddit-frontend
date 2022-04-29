@@ -1,8 +1,10 @@
+import CommentForm from 'components/CommentForm';
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import { HeartOutline } from 'icons';
+import { useState } from 'react';
 import { mutate } from 'swr';
 import { Comment } from 'types';
 import api from 'utils/api';
@@ -16,6 +18,7 @@ const Comment = ({ comment }: commentProps) => {
   const { member, createdDate, content, likes, commentId, postId } = comment;
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -24,9 +27,11 @@ const Comment = ({ comment }: commentProps) => {
           <span>{member.nickname}</span>
           <span>•</span>
           <MyDate date={createdDate} />
-          {user?.nickname === member.nickname && (
+          {user?.nickname === member.nickname && !isEditing && (
             <>
-              <button aria-label="댓글 수정">수정</button>
+              <button aria-label="댓글 수정" onClick={() => setIsEditing(true)}>
+                수정
+              </button>
               <button aria-label="댓글 삭제" onClick={openModal}>
                 삭제
               </button>
@@ -45,15 +50,35 @@ const Comment = ({ comment }: commentProps) => {
             </>
           )}
         </div>
-        <p>{content}</p>
+        {isEditing ? (
+          <CommentForm
+            type="edit"
+            initialValues={{ comment: content }}
+            onSubmit={async ({ comment }) => {
+              if (comment !== content) {
+                const formData = new FormData();
+                formData.append('content', comment);
+                formData.append('id', `${commentId}`);
+                await api.post(`/comment/${commentId}`, formData);
+                await mutate(`/post/${postId}`);
+              }
+              setIsEditing(false);
+            }}
+            onCancel={() => setIsEditing(false)}
+          />
+        ) : (
+          <p>{content}</p>
+        )}
       </div>
-      <div className={styles.bottom}>
-        <button aria-label="좋아요">
-          <HeartOutline />
-          {likes}
-        </button>
-        <button aria-label="답글 달기">답글</button>
-      </div>
+      {!isEditing && (
+        <div className={styles.bottom}>
+          <button aria-label="좋아요">
+            <HeartOutline />
+            {likes}
+          </button>
+          <button aria-label="답글 달기">답글</button>
+        </div>
+      )}
     </div>
   );
 };

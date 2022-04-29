@@ -7,7 +7,8 @@ type Type =
   | 'passwordLax'
   | 'passwordStrict'
   | 'content'
-  | 'comment';
+  | 'comment'
+  | 'commentEdit';
 
 function getValidationSchema(type: Type) {
   switch (type) {
@@ -36,6 +37,8 @@ function getValidationSchema(type: Type) {
       return string()
         .max(2000, ERRORS.commentLong)
         .required(ERRORS.commentRequired);
+    case 'commentEdit':
+      return string().max(2000, ERRORS.commentLong);
   }
 }
 

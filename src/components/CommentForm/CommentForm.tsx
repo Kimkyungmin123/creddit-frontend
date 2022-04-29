@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
 import { ConnectedFocusError } from 'focus-formik-error';
@@ -10,19 +11,34 @@ import styles from './CommentForm.module.scss';
 
 export type CommentFormProps = {
   onSubmit: (values: { comment: string }) => Promise<void>;
+  initialValues?: { comment: string };
+  onCancel?: () => void;
+  type?: 'create' | 'edit';
 };
 
-function CommentForm({ onSubmit }: CommentFormProps) {
+function CommentForm({
+  onSubmit,
+  initialValues,
+  onCancel,
+  type = 'create',
+}: CommentFormProps) {
   const { isLoading, user } = useUser();
   const router = useRouter();
 
   return (
     <Formik
-      initialValues={{ comment: '' }}
+      initialValues={initialValues || { comment: '' }}
       validationSchema={object({
-        comment: getValidationSchema('comment'),
+        comment:
+          type === 'create'
+            ? getValidationSchema('comment')
+            : getValidationSchema('commentEdit'),
       })}
       onSubmit={async (values, { setFieldValue }) => {
+        if (!values.comment && onCancel) {
+          onCancel();
+          return;
+        }
         await onSubmit(values);
         setFieldValue('comment', '');
       }}
@@ -44,8 +60,8 @@ function CommentForm({ onSubmit }: CommentFormProps) {
               if (!isLoading && !user) router.push('/login');
               else handleSubmit(event);
             }}
-            className={styles.form}
-            data-testid="post-comment-form"
+            className={classNames(styles.form, styles[type])}
+            data-testid="comment-form"
           >
             <ConnectedFocusError focusDelay={0} />
             <Textarea
@@ -54,9 +70,9 @@ function CommentForm({ onSubmit }: CommentFormProps) {
                 setErrors({ comment: undefined });
                 handleChange(event);
               }}
-              placeholder="댓글을 남겨보세요"
+              placeholder={type === 'create' ? '댓글을 남겨보세요' : ''}
               name="comment"
-              minRows={3}
+              minRows={type === 'create' ? 3 : undefined}
             />
             <div className={styles.formBottom}>
               {touched.comment && errors.comment && (
@@ -67,8 +83,19 @@ function CommentForm({ onSubmit }: CommentFormProps) {
                 disabled={isSubmitting}
                 data-testid="submitButton"
               >
-                작성
+                {type === 'edit' ? '수정' : '작성'}
               </Button>
+              {onCancel && (
+                <Button
+                  variant="plain"
+                  onClick={(event) => {
+                    event.preventDefault();
+                    onCancel();
+                  }}
+                >
+                  취소
+                </Button>
+              )}
             </div>
           </form>
         );

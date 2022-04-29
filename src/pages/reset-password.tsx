@@ -1,26 +1,51 @@
+import classNames from 'classnames';
 import Button from 'components/Button';
+import ButtonLink from 'components/ButtonLink';
 import Input from 'components/Input';
 import Layout from 'components/Layout';
+import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
+import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
+import { useState } from 'react';
 import styles from 'styles/ResetPassword.module.scss';
+import api from 'utils/api';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
 
 const ResetPassword: NextPage = () => {
+  const [submitted, setSubmitted] = useState(false);
+
   return (
     <Layout
-      title="비밀번호 재설정 - creddit"
+      title="비밀번호 변경 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      <div className={styles.resetPasswordContainer}>
-        <h1>비밀번호 재설정</h1>
-        <ResetPasswordForm
-          onSubmit={(values) => {
-            console.log(values);
-          }}
-        />
+      <div
+        className={classNames(
+          styles.resetPasswordContainer,
+          submitted && styles.submitted
+        )}
+      >
+        <h1>비밀번호 변경</h1>
+        {submitted ? (
+          <>
+            <p className={styles.description}>
+              비밀번호를 성공적으로 변경했습니다.
+            </p>
+            <ButtonLink href="/">홈으로</ButtonLink>
+          </>
+        ) : (
+          <ResetPasswordForm
+            onSubmit={async ({ newPassword }) => {
+              await api.post('/member/changePassword', {
+                password: newPassword,
+              });
+              setSubmitted(true);
+            }}
+          />
+        )}
       </div>
     </Layout>
   );
@@ -30,19 +55,23 @@ type ResetPasswordFormProps = {
   onSubmit: (values: {
     newPassword: string;
     newPasswordConfirm: string;
-  }) => void;
+  }) => Promise<void>;
 };
 
-export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
+function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
   return (
     <Formik
       initialValues={{ newPassword: '', newPasswordConfirm: '' }}
       validationSchema={object({
-        newPassword: getValidationSchema('newPassword'),
-        newPasswordConfirm: getValidationSchema('newPasswordConfirm'),
+        newPassword: getValidationSchema('passwordStrict'),
       })}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
+      validate={({ newPassword, newPasswordConfirm }) => {
+        if (newPassword !== newPasswordConfirm) {
+          return { newPasswordConfirm: ERRORS.newPasswordConfirmInvalid };
+        }
+      }}
+      onSubmit={async (values, { setSubmitting }) => {
+        await onSubmit(values);
         setSubmitting(false);
       }}
     >
@@ -79,7 +108,7 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
             disabled={isSubmitting}
             data-testid="submitButton"
           >
-            확인
+            {isSubmitting ? <LoadingSpokes /> : '확인'}
           </Button>
         </form>
       )}

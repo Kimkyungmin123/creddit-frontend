@@ -6,8 +6,6 @@ type Type =
   | 'nickname'
   | 'passwordLax'
   | 'passwordStrict'
-  | 'newPassword'
-  | 'newPasswordConfirm'
   | 'content'
   | 'comment';
 
@@ -32,10 +30,6 @@ function getValidationSchema(type: Type) {
         .min(8, ERRORS.passwordShort)
         .max(20, ERRORS.passwordLong)
         .required(ERRORS.passwordRequired);
-    case 'newPassword':
-      return string().required(ERRORS.newPasswordRequired);
-    case 'newPasswordConfirm':
-      return string().required(ERRORS.newPasswordConfirmRequired);
     case 'content':
       return string().max(2000, ERRORS.contentLong);
     case 'comment':

@@ -1,9 +1,10 @@
 import ERRORS from 'constants/errors';
-import FindPassword, { FindPasswordForm } from 'pages/find-password';
+import FindPassword from 'pages/find-password';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('FindPassword', () => {
-  const setupElements = () => {
+  const setup = () => {
+    render(<FindPassword />);
     const emailInput = screen.getByLabelText('이메일') as HTMLInputElement;
     const submitButton = screen.getByTestId(
       'submitButton'
@@ -15,9 +16,7 @@ describe('FindPassword', () => {
   };
 
   it('renders properly', () => {
-    render(<FindPassword />);
-    const { emailInput, submitButton } = setupElements();
-
+    const { emailInput, submitButton } = setup();
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(
       screen.getByText('비밀번호 찾기', { selector: 'h1' })
@@ -26,14 +25,13 @@ describe('FindPassword', () => {
     expect(submitButton).toBeInTheDocument();
     expect(
       screen.getByText(
-        '이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로 비밀번호 재설정 링크를 보내드립니다.'
+        '이메일을 입력하고 확인 버튼을 누르시면, 해당 이메일로 임시 비밀번호를 보내드립니다.'
       )
     ).toBeInTheDocument();
   });
 
   it('shows an email error message if the email is invalid', async () => {
-    render(<FindPassword />);
-    const { emailInput } = setupElements();
+    const { emailInput, submitButton } = setup();
     fireEvent.blur(emailInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.emailRequired)).toBeInTheDocument();
@@ -42,20 +40,22 @@ describe('FindPassword', () => {
     await waitFor(() => {
       expect(screen.getByText(ERRORS.emailInvalid)).toBeInTheDocument();
     });
-  });
-
-  it('submit the values if the values are valid', async () => {
-    const onSubmit = jest.fn();
-    render(<FindPasswordForm onSubmit={onSubmit} />);
-    const { emailInput, submitButton } = setupElements();
-
-    const values = { email: '123@a.com' };
-    fireEvent.change(emailInput, {
-      target: { value: values.email },
-    });
+    fireEvent.change(emailInput, { target: { value: '123@a.com' } });
     fireEvent.click(submitButton);
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith(values);
+      expect(screen.getByText(ERRORS.emailNotFound)).toBeInTheDocument();
     });
+  });
+
+  it('sends an temporary password if the email exists', async () => {
+    const { emailInput, submitButton } = setup();
+    fireEvent.change(emailInput, { target: { value: 'duplicate@a.com' } });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(
+        screen.getByText('해당 이메일로 임시 비밀번호를 보내드렸습니다.')
+      ).toBeInTheDocument();
+    });
+    expect(screen.getByText('홈으로')).toHaveAttribute('href', '/');
   });
 });

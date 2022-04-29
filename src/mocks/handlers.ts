@@ -16,6 +16,8 @@ export function handlers() {
     ),
     rest.get(`${API_ENDPOINT}/post`, getPosts),
     rest.get(`${API_ENDPOINT}/post/1`, getPost),
+    rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
+    rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
   ];
 }
 
@@ -49,4 +51,8 @@ const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
 
 const getPost: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
   return res(ctx.status(200), ctx.json(postDummy));
+};
+
+const postAny: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json(true));
 };

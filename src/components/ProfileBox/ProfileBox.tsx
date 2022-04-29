@@ -2,6 +2,7 @@ import ButtonLink from 'components/ButtonLink';
 import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
+import Link from 'next/link';
 import { useState } from 'react';
 import { User } from 'types';
 import api from 'utils/api';
@@ -71,12 +72,12 @@ function ProfileBox({ user }: ProfileBoxProps) {
               대화 목록
             </ButtonLink>
           </div>
-          <button
-            className={styles.editButton}
-            onClick={() => setIsEditing(true)}
-          >
-            프로필 수정
-          </button>
+          <div className={styles.bottomButtons}>
+            <button onClick={() => setIsEditing(true)}>프로필 수정</button>
+            <Link href="/reset-password">
+              <a>비밀번호 변경</a>
+            </Link>
+          </div>
         </>
       )}
     </div>

@@ -11,4 +11,10 @@ describe('formatDate', () => {
   it('converts date correctly when type is short', () => {
     expect(formatDate(date, { type: 'short' })).toBe('2022.4.26 15:23');
   });
+
+  it('hides time when hideTime exists', () => {
+    expect(formatDate(date, { type: 'short', hideTime: true })).toBe(
+      '2022.4.26'
+    );
+  });
 });

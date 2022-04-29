@@ -6,10 +6,12 @@ export type MyDateProps = {
 };
 
 function MyDate({ date }: MyDateProps) {
+  const isToday = new Date(date).toDateString() === new Date().toDateString();
+
   return (
     <div className={styles.date} data-testid="my-date">
-      <span>{formatDate(date)}</span>
-      <span>{formatDate(date, { type: 'short' })}</span>
+      <span>{formatDate(date, { hideTime: !isToday })}</span>
+      <span>{formatDate(date, { type: 'short', hideTime: !isToday })}</span>
     </div>
   );
 }

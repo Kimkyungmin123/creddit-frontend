@@ -29,4 +29,12 @@
     font-size: 0.875rem;
     color: var(--text-error);
   }
+
+  &.submitted {
+    align-items: center;
+
+    a:hover {
+      text-decoration: none;
+    }
+  }
 }

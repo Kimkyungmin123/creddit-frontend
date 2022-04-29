@@ -30,6 +30,10 @@ describe('ProfileBox', () => {
     );
     expect(screen.getByText('대화 목록')).toHaveAttribute('href', '/chat');
     expect(editButton).toBeInTheDocument();
+    expect(screen.getByText('비밀번호 변경')).toHaveAttribute(
+      'href',
+      '/reset-password'
+    );
   });
 
   it('shows ProfileEditForm when click editButton', async () => {

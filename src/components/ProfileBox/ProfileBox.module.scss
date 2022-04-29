@@ -55,13 +55,20 @@
   }
 }
 
-.editButton {
-  align-self: flex-start;
-  padding: 0;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
+.bottomButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 
-  &:hover {
-    text-decoration: underline;
+  a,
+  button {
+    align-self: flex-start;
+    padding: 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

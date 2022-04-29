@@ -1,13 +1,13 @@
 import ERRORS from 'constants/errors';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
-import PostCommentForm, { PostCommentFormProps } from './PostCommentForm';
+import CommentForm, { CommentFormProps } from './CommentForm';
 
-describe('PostCommentForm', () => {
-  const setup = (props: Partial<PostCommentFormProps> = {}) => {
-    const initialProps: PostCommentFormProps = {
+describe('CommentForm', () => {
+  const setup = (props: Partial<CommentFormProps> = {}) => {
+    const initialProps: CommentFormProps = {
       onSubmit: jest.fn(),
     };
-    const utils = render(<PostCommentForm {...initialProps} {...props} />);
+    const utils = render(<CommentForm {...initialProps} {...props} />);
     const textarea = screen.getByPlaceholderText(
       '댓글을 남겨보세요'
     ) as HTMLTextAreaElement;

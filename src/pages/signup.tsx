@@ -3,6 +3,7 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
 import useLogin from 'hooks/useLogin';
@@ -14,6 +15,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Signup.module.scss';
 import api from 'utils/api';
+import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
 import isDuplicate from 'utils/isDuplicate';
 import { object } from 'yup';
@@ -109,6 +111,11 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
             email: error.emailDuplicate ? ERRORS.emailDuplicate : '',
             nickname: error.nicknameDuplicate ? ERRORS.nicknameDuplicate : '',
           });
+          if (error.emailDuplicate) {
+            focusOnFormElement('email');
+          } else if (error.nicknameDuplicate) {
+            focusOnFormElement('nickname');
+          }
         }
       }}
     >
@@ -122,6 +129,7 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
+          <ConnectedFocusError focusDelay={0} />
           <Input
             value={values.email}
             onChange={(event) => {

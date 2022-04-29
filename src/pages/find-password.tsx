@@ -4,6 +4,7 @@ import ButtonLink from 'components/ButtonLink';
 import Input from 'components/Input';
 import Layout from 'components/Layout';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
@@ -11,6 +12,7 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import styles from 'styles/FindPassword.module.scss';
 import api from 'utils/api';
+import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
 import isDuplicate from 'utils/isDuplicate';
 import { object } from 'yup';
@@ -83,6 +85,9 @@ function FindPasswordForm({ onSubmit }: FindPasswordFormProps) {
         } catch (_err) {
           const error = _err as { notFound?: boolean };
           setErrors({ email: error.notFound ? ERRORS.emailNotFound : '' });
+          if (error.notFound) {
+            focusOnFormElement('email');
+          }
         }
       }}
     >
@@ -96,6 +101,7 @@ function FindPasswordForm({ onSubmit }: FindPasswordFormProps) {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit} className={styles.form}>
+          <ConnectedFocusError focusDelay={0} />
           <Input
             value={values.email}
             onChange={handleChange}

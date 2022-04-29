@@ -3550,6 +3550,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:3.10.2":
+  version: 3.10.2
+  resolution: "core-js@npm:3.10.2"
+  checksum: b432c827d707c694f03d142e74c144e522c1f6a8632539913bd1f3660f522693b83a474409bb0dd6ccab7878c2ed91014082ce9938664e90f62193b90ce72501
+  languageName: node
+  linkType: hard
+
 "cosmiconfig@npm:^7.0.1":
   version: 7.0.1
   resolution: "cosmiconfig@npm:7.0.1"
@@ -3586,6 +3593,7 @@ __metadata:
     eslint: 8.11.0
     eslint-config-next: 12.1.0
     eslint-plugin-testing-library: ^5.2.0
+    focus-formik-error: ^1.1.0
     formik: ^2.2.9
     husky: ^7.0.0
     intermock: ^0.2.5
@@ -4646,6 +4654,18 @@ __metadata:
   version: 3.2.5
   resolution: "flatted@npm:3.2.5"
   checksum: 3c436e9695ccca29620b4be5671dd72e5dd0a7500e0856611b7ca9bd8169f177f408c3b9abfa78dfe1493ee2d873e2c119080a8a9bee4e1a186a9e60ca6c89f1
+  languageName: node
+  linkType: hard
+
+"focus-formik-error@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "focus-formik-error@npm:1.1.0"
+  dependencies:
+    core-js: 3.10.2
+  peerDependencies:
+    formik: ">=2.0.0"
+    react: ">=16.8.0"
+  checksum: 36679c18e0365496eaa347536730ecacfb756dd0c78a4c25d8ab59d4cd219d34d2f284ac0e5e8fdb4a5458442603f73d155048eea34849240684bc6c2968bf47
   languageName: node
   linkType: hard
 

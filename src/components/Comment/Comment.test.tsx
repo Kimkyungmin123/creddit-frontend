@@ -2,7 +2,7 @@ import postDummy from 'data/post.json';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
-import { render, screen, waitFor } from 'utils/test-utils';
+import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 import Comment, { commentProps } from './Comment';
 
 describe('Comment', () => {
@@ -44,6 +44,41 @@ describe('Comment', () => {
     expect(screen.getByLabelText('좋아요')).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
     expect(screen.getByLabelText('답글 달기')).toBeInTheDocument();
+  });
+
+  it('renders DeleteModal when click delete button', async () => {
+    setup();
+    const { deleteButton } = await setupButtons();
+    fireEvent.click(deleteButton);
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+  });
+
+  it('closes DeleteModal when click cancel button', async () => {
+    setup();
+    const { deleteButton } = await setupButtons();
+    fireEvent.click(deleteButton);
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('삭제 취소'));
+    expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+  });
+
+  it('closes DeleteModal when click outside', async () => {
+    setup();
+    const { deleteButton } = await setupButtons();
+    fireEvent.click(deleteButton);
+    const deleteModal = screen.getByTestId('delete-modal');
+    expect(deleteModal).toBeInTheDocument();
+    fireEvent.click(deleteModal);
+    expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
+  });
+
+  it('closes DeleteModal when press esc key', async () => {
+    setup();
+    const { deleteButton } = await setupButtons();
+    fireEvent.click(deleteButton);
+    expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
   });
 
   it('hides edit and delete buttons if the current user is not the author', () => {

@@ -4,6 +4,7 @@ import ButtonLink from 'components/ButtonLink';
 import Input from 'components/Input';
 import Layout from 'components/Layout';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
@@ -91,6 +92,7 @@ function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
+          <ConnectedFocusError focusDelay={0} />
           <Input
             value={values.newPassword}
             onChange={handleChange}

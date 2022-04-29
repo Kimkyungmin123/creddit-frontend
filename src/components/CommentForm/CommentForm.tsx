@@ -1,17 +1,18 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useUser from 'hooks/useUser';
 import { useRouter } from 'next/router';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
-import styles from './PostCommentForm.module.scss';
+import styles from './CommentForm.module.scss';
 
-export type PostCommentFormProps = {
+export type CommentFormProps = {
   onSubmit: (values: { comment: string }) => Promise<void>;
 };
 
-function PostCommentForm({ onSubmit }: PostCommentFormProps) {
+function CommentForm({ onSubmit }: CommentFormProps) {
   const { isLoading, user } = useUser();
   const router = useRouter();
 
@@ -46,6 +47,7 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
             className={styles.form}
             data-testid="post-comment-form"
           >
+            <ConnectedFocusError focusDelay={0} />
             <Textarea
               value={values.comment}
               onChange={(event) => {
@@ -75,4 +77,4 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
   );
 }
 
-export default PostCommentForm;
+export default CommentForm;

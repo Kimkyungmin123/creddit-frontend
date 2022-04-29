@@ -1,5 +1,5 @@
 import Comment from 'components/Comment';
-import PostCommentForm from 'components/PostCommentForm';
+import CommentForm from 'components/CommentForm';
 import { CaretDown, Sort } from 'icons';
 import { useSWRConfig } from 'swr';
 import { Post } from 'types';
@@ -30,7 +30,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
             <CaretDown />
           </button>
         </div>
-        <PostCommentForm
+        <CommentForm
           onSubmit={async ({ comment }) => {
             await api.post('/comment', {
               content: comment,

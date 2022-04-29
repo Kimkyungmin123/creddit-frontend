@@ -32,16 +32,8 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
         />
       </div>
       <div className={styles.commentsContainer}>
-        {comments.map((comment, i) => {
-          return (
-            <Comment
-              key={i}
-              nickName={comment.member.nickname}
-              content={comment.content}
-              likeCount={comment.likes}
-              date={comment.createdDate}
-            />
-          );
+        {comments.map((comment) => {
+          return <Comment key={comment.commentId} comment={comment} />;
         })}
       </div>
     </div>

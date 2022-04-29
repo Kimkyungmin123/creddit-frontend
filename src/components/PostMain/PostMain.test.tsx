@@ -79,7 +79,7 @@ describe('PostMain', () => {
     expect(screen.queryByTestId('delete-modal')).not.toBeInTheDocument();
   });
 
-  it('hides edit and delete buttons if the current user is not the author', async () => {
+  it('hides edit and delete buttons if the current user is not the author', () => {
     server.use(
       rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
         return res(ctx.status(200), ctx.json(null));

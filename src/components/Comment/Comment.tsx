@@ -1,53 +1,38 @@
-import { HeartFill, HeartOutline } from 'icons';
-import { useState } from 'react';
+import MyDate from 'components/MyDate';
+import useUser from 'hooks/useUser';
+import { HeartOutline } from 'icons';
+import { Comment } from 'types';
 import styles from './Comment.module.scss';
 
 export type commentProps = {
-  nickName: string;
-  content: string;
-  likeCount: number;
-  date: string;
+  comment: Comment;
 };
 
-const Comment = ({ nickName, content, likeCount, date }: commentProps) => {
-  const [clickLike, setClickLike] = useState(false);
-  const handleLikebtn = () => {
-    setClickLike(() => !clickLike);
-  };
+const Comment = ({ comment }: commentProps) => {
+  const { member, createdDate, content, likes } = comment;
+  const { user } = useUser();
+
   return (
-    <div className={styles.commentContainer} data-testid={'comment'}>
-      <div className={styles.commentBoxTop}>
-        <div className={styles.commentInfo}>
-          <span>{nickName}</span>
+    <div className={styles.container} data-testid="comment">
+      <div className={styles.top}>
+        <div className={styles.info}>
+          <span>{member.nickname}</span>
           <span>•</span>
-          <span>{date}</span>
-          <div className={styles.commentBtn}>
-            <button aria-label="댓글 수정">수정</button>
-            <button aria-label="댓글 삭제">삭제</button>
-          </div>
+          <MyDate date={createdDate} />
+          {user?.nickname === member.nickname && (
+            <>
+              <button aria-label="댓글 수정">수정</button>
+              <button aria-label="댓글 삭제">삭제</button>
+            </>
+          )}
         </div>
         <p>{content}</p>
       </div>
-      <div className={styles.commentBoxBottom}>
-        {!clickLike ? (
-          <button
-            className={styles.likeCountBtn}
-            onClick={handleLikebtn}
-            aria-label="좋아요"
-          >
-            <HeartOutline className={styles.heartOutlineIcon} />
-            {!clickLike ? likeCount : likeCount + 1}
-          </button>
-        ) : (
-          <button
-            className={styles.likeCountBtn}
-            onClick={handleLikebtn}
-            aria-label="좋아요 취소"
-          >
-            <HeartFill className={styles.heartFillIcon} />
-            {!clickLike ? likeCount : likeCount + 1}
-          </button>
-        )}
+      <div className={styles.bottom}>
+        <button aria-label="좋아요">
+          <HeartOutline />
+          {likes}
+        </button>
         <button aria-label="답글 달기">답글</button>
       </div>
     </div>

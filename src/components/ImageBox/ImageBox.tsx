@@ -4,7 +4,7 @@ import useModal from 'hooks/useModal';
 import profile from 'images/profileImg.png';
 import Image from 'next/image';
 import { useRef } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import { MyImage } from 'types';
 import editProfile from 'utils/editProfile';
 import styles from './ImageBox.module.scss';
@@ -17,7 +17,6 @@ export type ImageBoxProps = {
 function ImageBox({ image, introduction }: ImageBoxProps) {
   const { imgUrl } = image;
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutate } = useSWRConfig();
   const { isModalOpen, openModal, closeModal } = useModal();
 
   return (

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import { User } from 'types';
 import api from 'utils/api';
@@ -33,7 +33,6 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     }
   );
   const router = useRouter();
-  const { mutate } = useSWRConfig();
   const { data: sessionData } = useSession();
   const isLoading = useMemo(() => !error && !data, [error, data]);
 

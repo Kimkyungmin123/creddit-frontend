@@ -3,7 +3,7 @@ import MyDate from 'components/MyDate';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import { HeartOutline } from 'icons';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import { Comment } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
@@ -16,7 +16,6 @@ const Comment = ({ comment }: commentProps) => {
   const { member, createdDate, content, likes, commentId, postId } = comment;
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { mutate } = useSWRConfig();
 
   return (
     <div className={styles.container} data-testid="comment">

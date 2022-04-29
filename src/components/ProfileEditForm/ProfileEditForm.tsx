@@ -4,7 +4,7 @@ import ERRORS from 'constants/errors';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import { User } from 'types';
 import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -21,7 +21,6 @@ export type ProfileEditFormProps = {
 };
 
 function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
-  const { mutate } = useSWRConfig();
   const { error: nicknameError, onChange: onChangeNickname } =
     useDuplicateError('nickname');
 

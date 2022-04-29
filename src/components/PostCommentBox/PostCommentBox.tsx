@@ -1,7 +1,7 @@
 import Comment from 'components/Comment';
 import CommentForm from 'components/CommentForm';
 import { CaretDown, Sort } from 'icons';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import { Post } from 'types';
 import api from 'utils/api';
 import styles from './PostCommentBox.module.scss';
@@ -13,7 +13,6 @@ export type PostCommentBoxProps = {
 // TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
   const { comments, id } = post;
-  const { mutate } = useSWRConfig();
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">

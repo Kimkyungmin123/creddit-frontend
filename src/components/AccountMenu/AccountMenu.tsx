@@ -52,7 +52,7 @@ function AccountMenu({ user }: AccountMenuProps) {
         </div>
         <CaretDown />
       </button>
-      {expanded && <AccoutMenuDetail />}
+      {expanded && <AccoutMenuDetail onClick={() => setExpanded(false)} />}
     </div>
   );
 }

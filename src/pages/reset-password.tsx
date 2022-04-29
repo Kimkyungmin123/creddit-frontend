@@ -5,6 +5,7 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
+import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import { useState } from 'react';
@@ -15,6 +16,10 @@ import { object } from 'yup';
 
 const ResetPassword: NextPage = () => {
   const [submitted, setSubmitted] = useState(false);
+  const { isLoading, user } = useUser({
+    redirectTo: '/',
+    redirectWhen: 'unauthorized',
+  });
 
   return (
     <Layout
@@ -22,31 +27,33 @@ const ResetPassword: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      <div
-        className={classNames(
-          styles.resetPasswordContainer,
-          submitted && styles.submitted
-        )}
-      >
-        <h1>비밀번호 변경</h1>
-        {submitted ? (
-          <>
-            <p className={styles.description}>
-              비밀번호를 성공적으로 변경했습니다.
-            </p>
-            <ButtonLink href="/">홈으로</ButtonLink>
-          </>
-        ) : (
-          <ResetPasswordForm
-            onSubmit={async ({ newPassword }) => {
-              await api.post('/member/changePassword', {
-                password: newPassword,
-              });
-              setSubmitted(true);
-            }}
-          />
-        )}
-      </div>
+      {!isLoading && user && (
+        <div
+          className={classNames(
+            styles.resetPasswordContainer,
+            submitted && styles.submitted
+          )}
+        >
+          <h1>비밀번호 변경</h1>
+          {submitted ? (
+            <>
+              <p className={styles.description}>
+                비밀번호를 성공적으로 변경했습니다.
+              </p>
+              <ButtonLink href="/">홈으로</ButtonLink>
+            </>
+          ) : (
+            <ResetPasswordForm
+              onSubmit={async ({ newPassword }) => {
+                await api.post('/member/changePassword', {
+                  password: newPassword,
+                });
+                setSubmitted(true);
+              }}
+            />
+          )}
+        </div>
+      )}
     </Layout>
   );
 };

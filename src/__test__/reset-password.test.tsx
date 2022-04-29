@@ -3,11 +3,12 @@ import ResetPassword from 'pages/reset-password';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('ResetPassword', () => {
-  const setup = () => {
+  const setup = async () => {
     render(<ResetPassword />);
-    const newPasswordInput = screen.getByLabelText(
-      '새 비밀번호'
-    ) as HTMLInputElement;
+    let newPasswordInput!: HTMLInputElement;
+    await waitFor(() => {
+      newPasswordInput = screen.getByLabelText('새 비밀번호');
+    });
     const newPasswordConfirmInput = screen.getByLabelText(
       '새 비밀번호 확인'
     ) as HTMLInputElement;
@@ -21,8 +22,9 @@ describe('ResetPassword', () => {
     };
   };
 
-  it('renders properly', () => {
-    const { newPasswordInput, newPasswordConfirmInput, submitButton } = setup();
+  it('renders properly', async () => {
+    const { newPasswordInput, newPasswordConfirmInput, submitButton } =
+      await setup();
 
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(
@@ -34,7 +36,7 @@ describe('ResetPassword', () => {
   });
 
   it('shows an password error message if the newPassword is invalid', async () => {
-    const { newPasswordInput } = setup();
+    const { newPasswordInput } = await setup();
     fireEvent.blur(newPasswordInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.passwordRequired)).toBeInTheDocument();
@@ -58,7 +60,7 @@ describe('ResetPassword', () => {
   });
 
   it('shows an newnewPasswordConfirm error message if the newnewPasswordConfirm is invalid', async () => {
-    const { newPasswordInput, newPasswordConfirmInput } = setup();
+    const { newPasswordInput, newPasswordConfirmInput } = await setup();
 
     fireEvent.change(newPasswordInput, { target: { value: 'qqqqqqQ1!' } });
     fireEvent.change(newPasswordConfirmInput, { target: { value: '123' } });
@@ -71,7 +73,8 @@ describe('ResetPassword', () => {
   });
 
   it('changes password successfully if the values are valid', async () => {
-    const { newPasswordInput, newPasswordConfirmInput, submitButton } = setup();
+    const { newPasswordInput, newPasswordConfirmInput, submitButton } =
+      await setup();
     const values = {
       newPassword: 'qqqqqqQ1!',
       newnewPasswordConfirm: 'qqqqqqQ1!',

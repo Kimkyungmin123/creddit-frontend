@@ -1,0 +1,30 @@
+@import 'styles/app';
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+
+  input {
+    @include input;
+  }
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.buttons {
+  display: flex;
+
+  button {
+    width: 100%;
+  }
+}
+
+.error {
+  font-size: 0.875rem;
+  color: var(--text-error);
+}

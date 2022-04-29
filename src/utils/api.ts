@@ -41,8 +41,7 @@ api.interceptors.response.use(
     if (method === 'get') return Promise.reject(error);
 
     error.config.retryCount = (error.config.retryCount || 0) + 1;
-    await api(error.config);
-    return Promise.reject(error);
+    return api(error.config);
   }
 );
 

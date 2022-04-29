@@ -1,6 +1,7 @@
 @import 'styles/app';
 
 .date {
+  display: flex;
   color: var(--text-secondary);
 
   span:nth-child(2) {

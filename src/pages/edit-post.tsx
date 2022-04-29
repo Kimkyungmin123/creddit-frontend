@@ -25,21 +25,16 @@ const EditPost: NextPage = () => {
   }, [user, data]);
 
   return (
-    <Layout title="creddit: 글 수정">
+    <Layout title="글 수정 - creddit">
       {(error || !isAuthor()) && <NotFound />}
       {!isLoading && user && data && id !== undefined && (
         <PostForm
           title="수정"
           initialValues={{ title: data.title, content: data.content }}
           onSubmit={async (values) => {
-            try {
-              const formData = getPostFormData(values);
-              await api.post(`/post/${id}/edit`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-              });
-            } finally {
-              router.back();
-            }
+            const formData = getPostFormData(values);
+            await api.post(`/post/${id}/edit`, formData);
+            router.back();
           }}
         />
       )}

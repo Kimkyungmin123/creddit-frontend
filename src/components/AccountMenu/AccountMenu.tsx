@@ -3,9 +3,14 @@ import { CaretDown } from 'icons';
 import profile from 'images/profileImg.png';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { User } from 'types';
 import styles from './AccountMenu.module.scss';
 
-function AccountMenu() {
+export type AccountMenuProps = {
+  user: User;
+};
+
+function AccountMenu({ user }: AccountMenuProps) {
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
@@ -38,7 +43,12 @@ function AccountMenu() {
         onClick={() => setExpanded((prev) => !prev)}
       >
         <div className={styles.imageContainer}>
-          <Image src={profile} alt="사용자 프로필 이미지" />
+          <Image
+            src={user.image.imgUrl || profile}
+            alt="사용자 프로필 이미지"
+            layout="fill"
+            objectFit="cover"
+          />
         </div>
         <CaretDown />
       </button>

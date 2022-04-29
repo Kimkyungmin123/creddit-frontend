@@ -14,19 +14,14 @@ const CreatePost: NextPage = () => {
   const router = useRouter();
 
   return (
-    <Layout title="creddit: 글 작성">
+    <Layout title="글 작성 - creddit">
       {!isLoading && user && (
         <PostForm
           title="작성"
           onSubmit={async (values) => {
-            try {
-              const formData = getPostFormData(values);
-              await api.post('/post/create', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-              });
-            } finally {
-              router.push('/');
-            }
+            const formData = getPostFormData(values);
+            await api.post('/post/create', formData);
+            router.push('/');
           }}
         />
       )}

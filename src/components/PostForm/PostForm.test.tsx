@@ -1,3 +1,4 @@
+import ERRORS from 'constants/errors';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 import PostForm, { PostFormProps } from './PostForm';
 
@@ -44,6 +45,15 @@ describe('PostForm', () => {
     expect(titleTextarea.value).toBe(initialValues.title);
     expect(contentTextarea.value).toBe(initialValues.content);
     expect(submitButton).not.toBeDisabled();
+  });
+
+  it('shows an content error message if the content is invalid', async () => {
+    const { contentTextarea } = setup();
+    fireEvent.change(contentTextarea, { target: { value: '1'.repeat(2001) } });
+    fireEvent.blur(contentTextarea);
+    await waitFor(() => {
+      expect(screen.getByText(ERRORS.contentLong)).toBeInTheDocument();
+    });
   });
 
   it('submit the values if the all values are filled', async () => {

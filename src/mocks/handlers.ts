@@ -1,4 +1,5 @@
 import postDummy from 'data/post.json';
+import userDummy from 'data/user.json';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
 
@@ -19,26 +20,15 @@ export function handlers() {
 }
 
 const getMe: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
-  return res(
-    ctx.status(200),
-    ctx.json({
-      nickname: '닉네임',
-      introduction: '소개',
-      image: {
-        imgName: null,
-        imgUrl: null,
-      },
-      createdDate: '2022-04-22T14:01:34.930Z',
-    })
-  );
+  return res(ctx.status(200), ctx.json(userDummy));
 };
 
 const getEmailDuplicate: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { email } = req.params;
   if (email === 'duplicate@a.com') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
 };
 
 const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
@@ -48,9 +38,9 @@ const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
 ) => {
   const { nickname } = req.params;
   if (nickname === 'duplicate') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
 };
 
 const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {

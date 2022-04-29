@@ -10,20 +10,10 @@ const Profile: NextPage = () => {
   const { user } = useUser();
 
   return (
-    <Layout title="creddit: 프로필">
-      <div className={styles.ProfileContainer}>
+    <Layout title={`${user?.nickname} - creddit`}>
+      <div className={styles.profileContainer}>
         <PostList />
-        <div className={styles.ProfileInfo}>
-          <>
-            {user && (
-              <ProfileBox
-                nickName={user.nickname}
-                statusMessage={user.introduction}
-                signUpDateNum={user.createdDate}
-              />
-            )}
-          </>
-        </div>
+        {user && <ProfileBox user={user} />}
       </div>
     </Layout>
   );

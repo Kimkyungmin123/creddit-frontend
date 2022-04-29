@@ -1,0 +1,9 @@
+{
+  "nickname": "닉네임",
+  "introduction": "소개",
+  "image": {
+    "imgName": null,
+    "imgUrl": "https://a.com/b.jpg"
+  },
+  "createdDate": "2022-04-22T14:01:34.930Z"
+}

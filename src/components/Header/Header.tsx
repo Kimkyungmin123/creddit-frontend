@@ -14,7 +14,7 @@ export type HeaderProps = {
 const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
-  const { data, status } = useSession();
+  const { status } = useSession();
 
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
@@ -79,7 +79,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               {screenTheme ? <SunOutline /> : <MoonOutline />}
             </button>
-            {(data || user) && (
+            {user && (
               <Link href="/create-post">
                 <a className={styles.hoverElement} aria-label="글 작성">
                   <EditOutline />
@@ -93,8 +93,8 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               <Github />
             </a>
-            {data || user ? (
-              <AccountMenu />
+            {user ? (
+              <AccountMenu user={user} />
             ) : (
               <>
                 <Link href="/login">

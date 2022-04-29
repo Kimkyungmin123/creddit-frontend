@@ -1,16 +1,16 @@
 import Button from 'components/Button';
 import Input from 'components/Input';
 import Layout from 'components/Layout';
-import ERRORS from 'constants/errors';
 import { Formik } from 'formik';
 import type { NextPage } from 'next';
 import styles from 'styles/FindPassword.module.scss';
-import { object, string } from 'yup';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 
 const FindPassword: NextPage = () => {
   return (
     <Layout
-      title="creddit: 비밀번호 찾기"
+      title="비밀번호 찾기 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >
@@ -39,9 +39,7 @@ export function FindPasswordForm({ onSubmit }: FindPasswordFormProps) {
     <Formik
       initialValues={{ email: '' }}
       validationSchema={object({
-        email: string()
-          .email(ERRORS.emailInvalid)
-          .required(ERRORS.emailRequired),
+        email: getValidationSchema('email'),
       })}
       onSubmit={(values, { setSubmitting }) => {
         onSubmit(values);

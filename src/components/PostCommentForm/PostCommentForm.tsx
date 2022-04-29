@@ -1,7 +1,8 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
 import { Formik } from 'formik';
-import { LoadingSpokes } from 'icons';
+import useUser from 'hooks/useUser';
+import { useRouter } from 'next/router';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
 import styles from './PostCommentForm.module.scss';
@@ -11,7 +12,8 @@ export type PostCommentFormProps = {
 };
 
 function PostCommentForm({ onSubmit }: PostCommentFormProps) {
-  // TODO: 버튼 눌렀을 때 로그인 되어있지 않으면 로그인 페이지로 이동
+  const { isLoading, user } = useUser();
+  const router = useRouter();
 
   return (
     <Formik
@@ -19,9 +21,9 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
       validationSchema={object({
         comment: getValidationSchema('comment'),
       })}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values, { setFieldValue }) => {
         await onSubmit(values);
-        setSubmitting(false);
+        setFieldValue('comment', '');
       }}
       validateOnChange={false}
     >
@@ -36,7 +38,11 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
       }) => {
         return (
           <form
-            onSubmit={handleSubmit}
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (!isLoading && !user) router.push('/login');
+              else handleSubmit(event);
+            }}
             className={styles.form}
             data-testid="post-comment-form"
           >
@@ -59,7 +65,7 @@ function PostCommentForm({ onSubmit }: PostCommentFormProps) {
                 disabled={isSubmitting}
                 data-testid="submitButton"
               >
-                {isSubmitting ? <LoadingSpokes /> : '작성'}
+                작성
               </Button>
             </div>
           </form>

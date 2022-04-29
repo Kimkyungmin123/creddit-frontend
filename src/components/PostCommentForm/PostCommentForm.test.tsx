@@ -28,11 +28,16 @@ describe('PostCommentForm', () => {
     expect(submitButton).toBeInTheDocument();
   });
 
-  it('shows an error message if the comment is empty', async () => {
-    const { submitButton } = setup();
+  it('shows an error message if the comment is invalid', async () => {
+    const { textarea, submitButton } = setup();
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.commentRequired)).toBeInTheDocument();
+    });
+    fireEvent.change(textarea, { target: { value: '1'.repeat(2001) } });
+    fireEvent.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText(ERRORS.commentLong)).toBeInTheDocument();
     });
   });
 

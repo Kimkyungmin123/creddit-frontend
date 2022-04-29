@@ -97,7 +97,7 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         nickname: getValidationSchema('nickname'),
         password: getValidationSchema('passwordStrict'),
       })}
-      onSubmit={async (values, { setSubmitting, setErrors }) => {
+      onSubmit={async (values, { setErrors }) => {
         try {
           await onSubmit(values);
         } catch (_err) {
@@ -109,8 +109,6 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
             email: error.emailDuplicate ? ERRORS.emailDuplicate : '',
             nickname: error.nicknameDuplicate ? ERRORS.nicknameDuplicate : '',
           });
-        } finally {
-          setSubmitting(false);
         }
       }}
     >

@@ -25,9 +25,8 @@ function PostForm({
         validationSchema={object({
           content: getValidationSchema('content'),
         })}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values) => {
           await onSubmit(values);
-          setSubmitting(false);
         }}
       >
         {({

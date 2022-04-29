@@ -1,6 +1,7 @@
 @import 'styles/app';
 
 .container {
+  z-index: 1;
   position: sticky;
   top: 3.0625rem;
   background-color: var(--post-top-bg);

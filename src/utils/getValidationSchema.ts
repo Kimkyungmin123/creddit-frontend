@@ -33,7 +33,9 @@ function getValidationSchema(type: Type) {
     case 'content':
       return string().max(2000, ERRORS.contentLong);
     case 'comment':
-      return string().required(ERRORS.commentRequired);
+      return string()
+        .max(2000, ERRORS.commentLong)
+        .required(ERRORS.commentRequired);
   }
 }
 

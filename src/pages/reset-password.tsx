@@ -77,9 +77,8 @@ function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
           return { newPasswordConfirm: ERRORS.newPasswordConfirmInvalid };
         }
       }}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values) => {
         await onSubmit(values);
-        setSubmitting(false);
       }}
     >
       {({

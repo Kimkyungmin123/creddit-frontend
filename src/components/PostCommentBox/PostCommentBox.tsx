@@ -1,15 +1,19 @@
 import Comment from 'components/Comment';
 import PostCommentForm from 'components/PostCommentForm';
 import { CaretDown, Sort } from 'icons';
+import { useSWRConfig } from 'swr';
 import { Post } from 'types';
+import api from 'utils/api';
 import styles from './PostCommentBox.module.scss';
 
 export type PostCommentBoxProps = {
   post: Post;
 };
 
+// TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { comments } = post;
+  const { comments, id } = post;
+  const { mutate } = useSWRConfig();
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
@@ -27,13 +31,18 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
           </button>
         </div>
         <PostCommentForm
-          onSubmit={async (values) => {
-            console.log(values);
+          onSubmit={async ({ comment }) => {
+            await api.post('/comment', {
+              content: comment,
+              parentCommentId: 0,
+              postId: id,
+            });
+            mutate(`/post/${id}`);
           }}
         />
       </div>
       <div className={styles.commentsContainer}>
-        {comments.map((comment) => {
+        {[...comments].reverse().map((comment) => {
           return <Comment key={comment.commentId} comment={comment} />;
         })}
       </div>

@@ -67,13 +67,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         email: getValidationSchema('email'),
         password: getValidationSchema('passwordLax'),
       })}
-      onSubmit={async (values, { setSubmitting, setFieldError }) => {
+      onSubmit={async (values, { setFieldError }) => {
         try {
           await onSubmit(values);
         } catch (err) {
           setFieldError('emailOrPassword', ERRORS.emailOrPasswordInvalid);
-        } finally {
-          setSubmitting(false);
         }
       }}
     >

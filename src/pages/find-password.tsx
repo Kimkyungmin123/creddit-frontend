@@ -77,14 +77,12 @@ function FindPasswordForm({ onSubmit }: FindPasswordFormProps) {
       validationSchema={object({
         email: getValidationSchema('email'),
       })}
-      onSubmit={async (values, { setSubmitting, setErrors }) => {
+      onSubmit={async (values, { setErrors }) => {
         try {
           await onSubmit(values);
         } catch (_err) {
           const error = _err as { notFound?: boolean };
           setErrors({ email: error.notFound ? ERRORS.emailNotFound : '' });
-        } finally {
-          setSubmitting(false);
         }
       }}
     >

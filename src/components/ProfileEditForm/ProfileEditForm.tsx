@@ -32,7 +32,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
       validationSchema={object({
         nickname: getValidationSchema('nickname'),
       })}
-      onSubmit={async (values, { setSubmitting, setErrors }) => {
+      onSubmit={async (values, { setErrors }) => {
         try {
           await onSubmit(values);
           onCancel();
@@ -45,7 +45,6 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
           }
         } finally {
           await mutate('/profile/show');
-          setSubmitting(false);
         }
       }}
     >

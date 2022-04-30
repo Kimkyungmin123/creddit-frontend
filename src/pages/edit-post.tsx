@@ -5,7 +5,8 @@ import useUser from 'hooks/useUser';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import useSWR from 'swr';
+import { mutate } from 'swr';
+import useSWRImmutable from 'swr/immutable';
 import { Post } from 'types';
 import api, { fetcher } from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
@@ -17,7 +18,10 @@ const EditPost: NextPage = () => {
   });
   const router = useRouter();
   const { id } = router.query;
-  const { data, error } = useSWR<Post>(id ? `/post/${id}` : null, fetcher);
+  const { data, error } = useSWRImmutable<Post>(
+    id ? `/post/${id}` : null,
+    fetcher
+  );
 
   const isAuthor = useCallback(() => {
     if (!user || !data) return true;
@@ -34,6 +38,7 @@ const EditPost: NextPage = () => {
           onSubmit={async (values) => {
             const formData = getPostFormData(values);
             await api.post(`/post/${id}/edit`, formData);
+            await mutate(`/post/${id}`);
             router.back();
           }}
         />

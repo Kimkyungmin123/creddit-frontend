@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import api from 'utils/api';
 import setAuthToken from 'utils/setAuthToken';
 
 function useLogin() {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
 
   const login = useCallback(
     async (values: { email: string; password: string }) => {
@@ -15,7 +14,7 @@ function useLogin() {
       await mutate('/profile/show');
       router.replace('/');
     },
-    [mutate, router]
+    [router]
   );
 
   return login;

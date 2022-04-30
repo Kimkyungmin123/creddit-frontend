@@ -1,6 +1,6 @@
 import { useSession } from 'next-auth/react';
 import { useEffect } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import setAuthToken from 'utils/setAuthToken';
 
 /**
@@ -8,7 +8,6 @@ import setAuthToken from 'utils/setAuthToken';
  */
 function useSocialLogin() {
   const { data } = useSession();
-  const { mutate } = useSWRConfig();
 
   useEffect(() => {
     if (data) {
@@ -16,7 +15,7 @@ function useSocialLogin() {
       setAuthToken({ accessToken: 'FIXME', refreshToken: 'FIXME' });
       mutate('/profile/show');
     }
-  }, [data, mutate]);
+  }, [data]);
 }
 
 export default useSocialLogin;

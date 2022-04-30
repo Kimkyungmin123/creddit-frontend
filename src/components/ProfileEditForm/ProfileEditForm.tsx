@@ -1,10 +1,12 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import { User } from 'types';
+import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
 import styles from './ProfileEditForm.module.scss';
@@ -19,7 +21,6 @@ export type ProfileEditFormProps = {
 };
 
 function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
-  const { mutate } = useSWRConfig();
   const { error: nicknameError, onChange: onChangeNickname } =
     useDuplicateError('nickname');
 
@@ -32,7 +33,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
       validationSchema={object({
         nickname: getValidationSchema('nickname'),
       })}
-      onSubmit={async (values, { setSubmitting, setErrors }) => {
+      onSubmit={async (values, { setErrors }) => {
         try {
           await onSubmit(values);
           onCancel();
@@ -40,12 +41,12 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
           const error = _err as { nicknameDuplicate?: boolean };
           if (error.nicknameDuplicate) {
             setErrors({ nickname: ERRORS.nicknameDuplicate });
+            focusOnFormElement('nickname');
           } else {
             onCancel();
           }
         } finally {
           await mutate('/profile/show');
-          setSubmitting(false);
         }
       }}
     >
@@ -64,6 +65,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
             className={styles.form}
             data-testid="profile-edit-form"
           >
+            <ConnectedFocusError focusDelay={0} />
             <div className={styles.inputContainer}>
               <input
                 value={values.nickname}

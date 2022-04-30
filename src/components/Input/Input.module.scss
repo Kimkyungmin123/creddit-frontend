@@ -41,6 +41,10 @@
   &:focus {
     border: solid 0.0625rem var(--border-focus);
   }
+
+  &.errorBorder {
+    border: solid 0.0625rem var(--text-error);
+  }
 }
 
 .error {

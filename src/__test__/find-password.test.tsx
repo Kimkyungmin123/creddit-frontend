@@ -1,11 +1,17 @@
 import ERRORS from 'constants/errors';
+import { server } from 'mocks/server';
+import { rest } from 'msw';
 import FindPassword from 'pages/find-password';
+import { API_ENDPOINT } from 'utils/api';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('FindPassword', () => {
-  const setup = () => {
+  const setup = async () => {
     render(<FindPassword />);
-    const emailInput = screen.getByLabelText('이메일') as HTMLInputElement;
+    let emailInput!: HTMLInputElement;
+    await waitFor(() => {
+      emailInput = screen.getByLabelText('이메일');
+    });
     const submitButton = screen.getByTestId(
       'submitButton'
     ) as HTMLButtonElement;
@@ -15,8 +21,16 @@ describe('FindPassword', () => {
     };
   };
 
-  it('renders properly', () => {
-    const { emailInput, submitButton } = setup();
+  beforeEach(() => {
+    server.use(
+      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json(null));
+      })
+    );
+  });
+
+  it('renders properly', async () => {
+    const { emailInput, submitButton } = await setup();
     expect(screen.getByTestId('layout')).toBeInTheDocument();
     expect(
       screen.getByText('비밀번호 찾기', { selector: 'h1' })
@@ -31,7 +45,7 @@ describe('FindPassword', () => {
   });
 
   it('shows an email error message if the email is invalid', async () => {
-    const { emailInput, submitButton } = setup();
+    const { emailInput, submitButton } = await setup();
     fireEvent.blur(emailInput);
     await waitFor(() => {
       expect(screen.getByText(ERRORS.emailRequired)).toBeInTheDocument();
@@ -48,7 +62,7 @@ describe('FindPassword', () => {
   });
 
   it('sends an temporary password if the email exists', async () => {
-    const { emailInput, submitButton } = setup();
+    const { emailInput, submitButton } = await setup();
     fireEvent.change(emailInput, { target: { value: 'duplicate@a.com' } });
     fireEvent.click(submitButton);
     await waitFor(() => {

@@ -63,6 +63,12 @@
     width: 0.875rem;
     height: 0.875rem;
   }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--heart-fill);
+    }
+  }
 }
 
 .heartFillIcon {

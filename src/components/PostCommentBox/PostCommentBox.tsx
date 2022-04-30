@@ -1,15 +1,18 @@
 import Comment from 'components/Comment';
-import PostCommentForm from 'components/PostCommentForm';
+import CommentForm from 'components/CommentForm';
 import { CaretDown, Sort } from 'icons';
+import { mutate } from 'swr';
 import { Post } from 'types';
+import api from 'utils/api';
 import styles from './PostCommentBox.module.scss';
 
 export type PostCommentBoxProps = {
   post: Post;
 };
 
+// TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { comments } = post;
+  const { comments, id } = post;
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
@@ -21,27 +24,25 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
             aria-label={'댓글 정렬 기준 변경'}
           >
             <Sort />
-            <span>정렬 기준: 좋아요순</span>
+            <span>정렬 기준:&nbsp;</span>
+            <span>좋아요순</span>
             <CaretDown />
           </button>
         </div>
-        <PostCommentForm
-          onSubmit={async (values) => {
-            console.log(values);
+        <CommentForm
+          onSubmit={async ({ comment }) => {
+            await api.post('/comment', {
+              content: comment,
+              parentCommentId: 0,
+              postId: id,
+            });
+            mutate(`/post/${id}`);
           }}
         />
       </div>
       <div className={styles.commentsContainer}>
-        {comments.map((comment, i) => {
-          return (
-            <Comment
-              key={i}
-              nickName={comment.member.nickname}
-              content={comment.content}
-              likeCount={comment.likes}
-              date={comment.createdDate}
-            />
-          );
+        {[...comments].reverse().map((comment) => {
+          return <Comment key={comment.commentId} comment={comment} />;
         })}
       </div>
     </div>

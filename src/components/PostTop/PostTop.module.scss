@@ -1,6 +1,7 @@
 @import 'styles/app';
 
 .container {
+  z-index: 1;
   position: sticky;
   top: 3.0625rem;
   background-color: var(--post-top-bg);
@@ -38,8 +39,10 @@
   font-weight: 400;
   font-size: 0.875rem;
 
-  svg {
-    color: var(--heart-fill);
+  @media (hover: hover) {
+    &:hover {
+      color: var(--heart-fill);
+    }
   }
 }
 
@@ -48,4 +51,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.closeButton {
+  @media (hover: hover) {
+    &:hover {
+      color: var(--post-top-hover-text);
+    }
+  }
 }

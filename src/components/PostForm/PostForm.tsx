@@ -1,5 +1,6 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import { LoadingSpokes } from 'icons';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -25,9 +26,8 @@ function PostForm({
         validationSchema={object({
           content: getValidationSchema('content'),
         })}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values) => {
           await onSubmit(values);
-          setSubmitting(false);
         }}
       >
         {({
@@ -41,6 +41,7 @@ function PostForm({
         }) => {
           return (
             <form onSubmit={handleSubmit}>
+              <ConnectedFocusError focusDelay={0} />
               <Textarea
                 value={values.title}
                 onChange={handleChange}

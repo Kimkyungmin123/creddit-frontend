@@ -3,6 +3,7 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik, FormikErrors } from 'formik';
 import useLogin from 'hooks/useLogin';
 import useSocialLogin from 'hooks/useSocialLogin';
@@ -67,13 +68,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         email: getValidationSchema('email'),
         password: getValidationSchema('passwordLax'),
       })}
-      onSubmit={async (values, { setSubmitting, setFieldError }) => {
+      onSubmit={async (values, { setFieldError }) => {
         try {
           await onSubmit(values);
         } catch (err) {
           setFieldError('emailOrPassword', ERRORS.emailOrPasswordInvalid);
-        } finally {
-          setSubmitting(false);
         }
       }}
     >
@@ -94,6 +93,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
         return (
           <form onSubmit={handleSubmit}>
+            <ConnectedFocusError focusDelay={0} />
             <Input
               value={values.email}
               onChange={handleChange}

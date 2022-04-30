@@ -1,4 +1,7 @@
 @mixin button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.5rem 1.5rem;
   border-radius: 0.25rem;
   background-color: var(--btn-primary-bg);
@@ -6,8 +9,8 @@
   text-align: center;
 
   svg {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &:hover {

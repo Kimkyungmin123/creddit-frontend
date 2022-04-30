@@ -3,14 +3,14 @@ import { server } from 'mocks/server';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
-import PostMain, { PostMainProps } from './PostMain';
+import Comment, { commentProps } from './Comment';
 
-describe('PostMain', () => {
-  const setup = (props: Partial<PostMainProps> = {}) => {
-    const initialProps: PostMainProps = {
-      post: postDummy,
+describe('Comment', () => {
+  const setup = (props: Partial<commentProps> = {}) => {
+    const initialProps: commentProps = {
+      comment: postDummy.comments[0],
     };
-    const utils = render(<PostMain {...initialProps} {...props} />);
+    const utils = render(<Comment {...initialProps} {...props} />);
     return {
       initialProps,
       ...utils,
@@ -18,12 +18,12 @@ describe('PostMain', () => {
   };
 
   const setupButtons = async () => {
-    let editButton!: HTMLAnchorElement;
+    let editButton!: HTMLButtonElement;
     await waitFor(() => {
-      editButton = screen.getByLabelText('게시물 수정');
+      editButton = screen.getByLabelText('댓글 수정');
     });
     const deleteButton = screen.getByLabelText(
-      '게시물 삭제'
+      '댓글 삭제'
     ) as HTMLButtonElement;
     return {
       editButton,
@@ -34,14 +34,16 @@ describe('PostMain', () => {
   it('renders properly', async () => {
     const { initialProps } = setup();
     const { editButton, deleteButton } = await setupButtons();
-    const { post } = initialProps;
-    const { title, member, content, id } = post;
-    expect(screen.getByText(title)).toBeInTheDocument();
+    const { comment } = initialProps;
+    const { member, content, likes } = comment;
     expect(screen.getByText(member.nickname)).toBeInTheDocument();
     expect(screen.getByTestId('my-date')).toBeInTheDocument();
-    expect(editButton).toHaveAttribute('href', `/edit-post?id=${id}`);
+    expect(editButton).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
-    expect(screen.getByTestId('content').textContent).toBe(content);
+    expect(screen.getByText(content)).toBeInTheDocument();
+    expect(screen.getByLabelText('좋아요')).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
+    expect(screen.getByLabelText('답글 달기')).toBeInTheDocument();
   });
 
   it('renders DeleteModal when click delete button', async () => {
@@ -86,7 +88,18 @@ describe('PostMain', () => {
       })
     );
     setup();
-    expect(screen.queryByLabelText('게시물 수정')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('게시물 삭제')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('댓글 수정')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('댓글 삭제')).not.toBeInTheDocument();
+  });
+
+  it('shows CommentForm when click editButton', async () => {
+    setup();
+    const { editButton } = await setupButtons();
+    fireEvent.click(editButton);
+    expect(screen.getByTestId('comment-form')).toBeInTheDocument();
+    const cancelButton = screen.getByText('취소');
+    expect(cancelButton).toBeInTheDocument();
+    fireEvent.click(cancelButton);
+    expect(screen.queryByTestId('comment-form')).not.toBeInTheDocument();
   });
 });

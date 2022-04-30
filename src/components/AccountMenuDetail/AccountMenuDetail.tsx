@@ -1,9 +1,13 @@
 import useUser from 'hooks/useUser';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { MouseEventHandler, useEffect } from 'react';
 import styles from './AccoutMenuDetail.module.scss';
 
-function AccoutMenuDetail() {
+export type AccountMenuDetailProps = {
+  onClick: MouseEventHandler<HTMLUListElement>;
+};
+
+function AccoutMenuDetail({ onClick }: AccountMenuDetailProps) {
   const { logout } = useUser();
 
   useEffect(() => {
@@ -21,7 +25,11 @@ function AccoutMenuDetail() {
   }, []);
 
   return (
-    <ul className={styles.container} data-testid="account-menu-detail">
+    <ul
+      className={styles.container}
+      data-testid="account-menu-detail"
+      onClick={onClick}
+    >
       <li>
         <Link href="/profile">
           <a>프로필</a>
@@ -33,7 +41,7 @@ function AccoutMenuDetail() {
         </Link>
       </li>
       <li>
-        <Link href="/chat-list">
+        <Link href="/chat">
           <a>대화 목록</a>
         </Link>
       </li>

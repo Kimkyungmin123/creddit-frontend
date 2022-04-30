@@ -25,7 +25,9 @@ function PostTop({ post }: PostTopProps) {
         <span className={styles.title}>{title}</span>
         <button
           aria-label="게시물 닫기"
-          onClick={() => router.back()}
+          onClick={() => {
+            router.back();
+          }}
           className={styles.closeButton}
         >
           <Close />

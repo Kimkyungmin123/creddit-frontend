@@ -13,7 +13,8 @@ function PostList() {
   // TODO: 무한 스크롤
   const { data } = useSWR<Post[]>(
     `/post?lastPostId=${Number.MAX_SAFE_INTEGER}&size=9999`,
-    fetcher
+    fetcher,
+    { revalidateOnFocus: false }
   );
 
   return (

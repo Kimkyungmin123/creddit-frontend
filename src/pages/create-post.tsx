@@ -20,8 +20,8 @@ const CreatePost: NextPage = () => {
           title="작성"
           onSubmit={async (values) => {
             const formData = getPostFormData(values);
-            await api.post('/post/create', formData);
-            router.push('/');
+            const { data } = await api.post('/post/create', formData);
+            router.replace(`/post/${data}`);
           }}
         />
       )}

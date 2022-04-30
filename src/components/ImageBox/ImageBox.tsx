@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import DeleteModal from 'components/DeleteModal';
 import useModal from 'hooks/useModal';
+import useUser from 'hooks/useUser';
 import profile from 'images/profileImg.png';
 import Image from 'next/image';
 import { useRef } from 'react';
@@ -14,10 +15,12 @@ export type ImageBoxProps = {
   introduction: string;
 };
 
+// TODO: 현재 로그인한 사용자의 프로필일 때만 업로드, 삭제 버튼 출력
 function ImageBox({ image, introduction }: ImageBoxProps) {
   const { imgUrl } = image;
   const inputRef = useRef<HTMLInputElement>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { user } = useUser();
 
   return (
     <div className={styles.imageBox} data-testid="image-box">
@@ -36,12 +39,17 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
           hidden
           onChange={async (event) => {
             if (event.target.files) {
-              await editProfile({
+              const { data } = await editProfile({
                 introduction,
                 imageFile: event.target.files[0],
               });
+              const { image } = data;
+              await mutate(
+                '/profile/show',
+                { user: { ...user, image } },
+                false
+              );
             }
-            await mutate('/profile/show');
           }}
         />
         <Button
@@ -64,9 +72,14 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
             title="이미지 삭제"
             message={'정말 이미지를 삭제하시겠습니까?'}
             onConfirm={async () => {
-              await editProfile({ introduction });
+              const { data } = await editProfile({ introduction });
+              const { image } = data;
               closeModal();
-              await mutate('/profile/show');
+              await mutate(
+                '/profile/show',
+                { user: { ...user, image } },
+                false
+              );
             }}
             onCancel={closeModal}
           />

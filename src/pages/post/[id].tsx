@@ -12,7 +12,9 @@ import { fetcher } from 'utils/api';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error } = useSWR<PostType>(id ? `/post/${id}` : null, fetcher);
+  const { data, error } = useSWR<PostType>(id ? `/post/${id}` : null, fetcher, {
+    revalidateOnFocus: false,
+  });
 
   return (
     <Layout title={data?.title}>

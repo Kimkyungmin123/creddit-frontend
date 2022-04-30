@@ -36,7 +36,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               parentCommentId: 0,
               postId: id,
             });
-            mutate(`/post/${id}`);
+            await mutate(`/post/${id}`);
           }}
         />
       </div>

@@ -40,7 +40,7 @@ function PostMain({ post }: PostMainProps) {
                 }
                 onConfirm={async () => {
                   await api.delete(`/post/${id}`);
-                  router.push('/');
+                  router.replace('/profile');
                 }}
                 onCancel={closeModal}
               />

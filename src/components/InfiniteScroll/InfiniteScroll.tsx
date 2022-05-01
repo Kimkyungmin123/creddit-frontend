@@ -1,3 +1,4 @@
+import { usePostsContext } from 'context/PostsContext';
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -7,9 +8,10 @@ type Props = {
 function InfiniteScroll({ onIntersect }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const [finished, setFinished] = useState(false);
+  const { posts } = usePostsContext();
 
   useEffect(() => {
-    if (finished) return;
+    if (posts.length !== 0 && finished) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -28,7 +30,7 @@ function InfiniteScroll({ onIntersect }: Props) {
     return () => {
       if (current) observer.unobserve(current);
     };
-  }, [onIntersect, finished]);
+  }, [onIntersect, finished, posts]);
 
   return <div ref={ref}></div>;
 }

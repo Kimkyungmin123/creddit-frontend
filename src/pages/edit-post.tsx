@@ -42,9 +42,13 @@ const EditPost: NextPage = () => {
           onSubmit={async (values) => {
             const formData = getPostFormData(values);
             await api.post(`/post/${id}/edit`, formData);
-            await mutate(`/post/${id}`);
             const { title, content } = values;
-            dispatch({ type: 'CHANGE_POST', post: { title, content } });
+            const post = await mutate<Post>(
+              `/post/${id}`,
+              { ...data, title, content },
+              false
+            );
+            dispatch({ type: 'CHANGE_POST', post });
             setClickedPostCard(false);
             router.push(`/post/${id}`);
           }}

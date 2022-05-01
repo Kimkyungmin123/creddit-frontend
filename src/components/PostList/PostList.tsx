@@ -1,21 +1,17 @@
 import classNames from 'classnames';
+import InfiniteScroll from 'components/InfiniteScroll';
 import PostCard from 'components/PostCard';
+import { usePostsContext } from 'context/PostsContext';
 import { Rising, Time } from 'icons';
 import { useState } from 'react';
-import useSWR from 'swr';
 import { Post } from 'types';
-import { fetcher } from 'utils/api';
+import api from 'utils/api';
 import styles from './PostList.module.scss';
 
 // TODO: userID가 존재하면 해당 유저의 글만 받아오기
 function PostList() {
   const [sortBy, setSortBy] = useState<'like' | 'recent'>('like');
-  // TODO: 무한 스크롤
-  const { data } = useSWR<Post[]>(
-    `/post?lastPostId=${Number.MAX_SAFE_INTEGER}&size=9999`,
-    fetcher,
-    { revalidateOnFocus: false }
-  );
+  const { posts, dispatch } = usePostsContext();
 
   return (
     <div className={styles.container}>
@@ -37,13 +33,25 @@ function PostList() {
           <span>최신</span>
         </button>
       </div>
-      {data && (
-        <div className={styles.postsContainer}>
-          {data.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      )}
+      <div className={styles.postsContainer}>
+        {posts.map((post) => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </div>
+      <InfiniteScroll
+        onIntersect={async () => {
+          const id =
+            posts.length === 0
+              ? Number.MAX_SAFE_INTEGER
+              : posts[posts.length - 1].id;
+
+          const { data } = await api.get<Post[]>(
+            `/post?lastPostId=${id}&size=10`
+          );
+          dispatch({ type: 'ADD_POSTS', posts: data });
+          return data;
+        }}
+      />
     </div>
   );
 }

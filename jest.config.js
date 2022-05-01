@@ -10,7 +10,7 @@ const customJestConfig = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
-    '^(pages|components|constants|styles|utils|hooks|mocks|data)/(.*)':
+    '^(pages|components|constants|styles|utils|hooks|mocks|data|context)/(.*)':
       '<rootDir>/src/$1/$2',
     // icons: '<rootDir>/src/icons',
     icons: '<rootDir>/src/icons/test-icons',

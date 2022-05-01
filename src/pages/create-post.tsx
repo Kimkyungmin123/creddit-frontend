@@ -1,5 +1,7 @@
 import Layout from 'components/Layout';
 import PostForm from 'components/PostForm';
+import { usePostCardContext } from 'context/PostCardContext';
+import { usePostsContext } from 'context/PostsContext';
 import useUser from 'hooks/useUser';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -12,6 +14,8 @@ const CreatePost: NextPage = () => {
     redirectWhen: 'unauthorized',
   });
   const router = useRouter();
+  const { dispatch } = usePostsContext();
+  const { setClickedPostCard } = usePostCardContext();
 
   return (
     <Layout title="글 작성 - creddit">
@@ -21,7 +25,9 @@ const CreatePost: NextPage = () => {
           onSubmit={async (values) => {
             const formData = getPostFormData(values);
             const { data } = await api.post('/post/create', formData);
-            router.replace(`/post/${data}`);
+            dispatch({ type: 'RESET' });
+            setClickedPostCard(false);
+            router.push(`/post/${data}`);
           }}
         />
       )}

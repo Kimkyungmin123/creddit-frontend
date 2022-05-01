@@ -1,3 +1,4 @@
+import { usePostCardContext } from 'context/PostCardContext';
 import { Close, HeartOutline } from 'icons';
 import { useRouter } from 'next/router';
 import { Post } from 'types';
@@ -10,6 +11,7 @@ export type PostTopProps = {
 function PostTop({ post }: PostTopProps) {
   const router = useRouter();
   const { likes, title } = post;
+  const { clickedPostCard } = usePostCardContext();
 
   return (
     <div className={styles.container} data-testid="post-top">
@@ -23,10 +25,12 @@ function PostTop({ post }: PostTopProps) {
           {likes}
         </button>
         <span className={styles.title}>{title}</span>
+
         <button
           aria-label="게시물 닫기"
           onClick={() => {
-            router.back();
+            if (clickedPostCard) router.back();
+            else router.push('/');
           }}
           className={styles.closeButton}
         >

@@ -1,6 +1,7 @@
 import CommentForm from 'components/CommentForm';
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
+import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import { HeartOutline } from 'icons';
@@ -9,7 +10,6 @@ import { mutate } from 'swr';
 import { Comment, Post } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
-import useSWRImmutable from 'swr/immutable';
 
 export type commentProps = {
   comment: Comment;
@@ -20,7 +20,7 @@ const Comment = ({ comment }: commentProps) => {
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
-  const { data: postData } = useSWRImmutable<Post>(`/post/${postId}`);
+  const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -44,16 +44,17 @@ const Comment = ({ comment }: commentProps) => {
                   onConfirm={async () => {
                     await api.delete(`/comment/${commentId}`);
                     closeModal();
-                    await mutate(
+                    const data = await mutate(
                       `/post/${postId}`,
-                      {
-                        ...postData,
-                        comments: postData?.comments.filter(
+                      (post: Post) => ({
+                        ...post,
+                        comments: post.comments.filter(
                           (el) => el.commentId !== commentId
                         ),
-                      },
+                      }),
                       false
                     );
+                    dispatch({ type: 'CHANGE_POST', post: data });
                   }}
                   onCancel={closeModal}
                 />
@@ -73,13 +74,13 @@ const Comment = ({ comment }: commentProps) => {
                 await api.post(`/comment/${commentId}`, formData);
                 await mutate(
                   `/post/${postId}`,
-                  {
-                    ...postData,
-                    comments: postData?.comments.map((el) => {
+                  (post: Post) => ({
+                    ...post,
+                    comments: post.comments.map((el) => {
                       if (el.commentId !== commentId) return el;
                       return { ...el, content: comment };
                     }),
-                  },
+                  }),
                   false
                 );
               }

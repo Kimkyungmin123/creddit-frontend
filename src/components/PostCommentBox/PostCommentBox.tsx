@@ -1,5 +1,6 @@
 import Comment from 'components/Comment';
 import CommentForm from 'components/CommentForm';
+import { usePostsContext } from 'context/PostsContext';
 import { CaretDown, Sort } from 'icons';
 import { mutate } from 'swr';
 import { Post } from 'types';
@@ -13,6 +14,7 @@ export type PostCommentBoxProps = {
 // TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
   const { comments, id } = post;
+  const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
@@ -36,7 +38,8 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               parentCommentId: 0,
               postId: id,
             });
-            await mutate(`/post/${id}`);
+            const data = await mutate<Post>(`/post/${id}`);
+            dispatch({ type: 'CHANGE_POST', post: data });
           }}
         />
       </div>

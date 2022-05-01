@@ -46,7 +46,7 @@ function PostList() {
               : posts[posts.length - 1].id;
 
           const { data } = await api.get<Post[]>(
-            `/post?lastPostId=${id}&size=10`
+            `/post?lastPostId=${id}&size=10&sort=new`
           );
           dispatch({ type: 'ADD_POSTS', posts: data });
           return data;

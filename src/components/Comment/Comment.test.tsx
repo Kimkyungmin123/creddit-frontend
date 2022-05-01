@@ -8,7 +8,7 @@ import Comment, { commentProps } from './Comment';
 describe('Comment', () => {
   const setup = (props: Partial<commentProps> = {}) => {
     const initialProps: commentProps = {
-      comment: postDummy.comments[0],
+      comment: postDummy.commentList[0],
     };
     const utils = render(<Comment {...initialProps} {...props} />);
     return {

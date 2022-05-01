@@ -45,7 +45,7 @@ const PostCard = ({ post }: PostCardProps) => {
             <span>by </span>
             {member.nickname}
           </div>
-          <div className={styles.comments}>댓글 {comments.length}개</div>
+          <div className={styles.comments}>댓글 {comments}개</div>
           <button
             className={styles.likeCountBtn}
             onClick={(event) => {

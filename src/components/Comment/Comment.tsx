@@ -48,7 +48,7 @@ const Comment = ({ comment }: commentProps) => {
                       `/post/${postId}`,
                       (post: Post) => ({
                         ...post,
-                        comments: post.comments.filter(
+                        comments: post.commentList.filter(
                           (el) => el.commentId !== commentId
                         ),
                       }),
@@ -76,7 +76,7 @@ const Comment = ({ comment }: commentProps) => {
                   `/post/${postId}`,
                   (post: Post) => ({
                     ...post,
-                    comments: post.comments.map((el) => {
+                    comments: post.commentList.map((el) => {
                       if (el.commentId !== commentId) return el;
                       return { ...el, content: comment };
                     }),

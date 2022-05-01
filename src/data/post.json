@@ -1,5 +1,5 @@
 {
-  "comments": [
+  "commentList": [
     {
       "commentId": 12733,
       "content": "Et ut repellat illo nobis iusto. Dicta officiis accusantium perferendis repellat modi facilis tempore atque cupiditate.",
@@ -57,6 +57,7 @@
       "postId": 1
     }
   ],
+  "comments": 4,
   "content": "내용",
   "createdDate": "2022-04-27T15:28:54.186568",
   "id": 1,

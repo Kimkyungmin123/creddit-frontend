@@ -13,14 +13,14 @@ export type PostCommentBoxProps = {
 
 // TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { comments, id } = post;
+  const { comments, id, commentList } = post;
   const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
       <div className={styles.commentBoxTop}>
         <div className={styles.commentInfo}>
-          <span>댓글 {comments.length}개</span>
+          <span>댓글 {comments}개</span>
           <button
             // TODO: 현재 정렬 기준에 따라 aria-label 변경
             aria-label={'댓글 정렬 기준 변경'}
@@ -44,7 +44,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
         />
       </div>
       <div className={styles.commentsContainer}>
-        {[...comments].reverse().map((comment) => {
+        {[...commentList].reverse().map((comment) => {
           return <Comment key={comment.commentId} comment={comment} />;
         })}
       </div>

@@ -6,7 +6,7 @@
   padding: 1rem 1.25rem;
   border-bottom: solid 0.03125rem var(--chat-box-border);
   cursor: pointer;
-
+  background-color: var(--page-bg-secondary);
   @media (max-width: $breakpoints-xxl) {
     font-size: 0.875rem;
   }

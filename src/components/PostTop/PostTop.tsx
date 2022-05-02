@@ -1,6 +1,8 @@
+import LikeButton from 'components/LikeButton';
 import { usePostCardContext } from 'context/PostCardContext';
-import { Close, HeartOutline } from 'icons';
+import { Close } from 'icons';
 import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 import { Post } from 'types';
 import styles from './PostTop.module.scss';
 
@@ -10,22 +12,32 @@ export type PostTopProps = {
 
 function PostTop({ post }: PostTopProps) {
   const router = useRouter();
-  const { likes, title } = post;
+  const { likes, title, id, liked } = post;
   const { clickedPostCard } = usePostCardContext();
 
   return (
     <div className={styles.container} data-testid="post-top">
       <div className={styles.inside}>
-        <button
-          className={styles.likeButton}
-          // TODO: 좋아요 누른 상태면 "좋아요 취소"로 변경
-          aria-label="좋아요"
+        <LikeButton
+          type="post"
+          id={id}
+          liked={liked}
+          variant="large"
+          onClick={async () => {
+            await mutate(
+              `/post/${id}`,
+              (post: Post) => ({
+                ...post,
+                liked: !post.liked,
+                likes: post.liked ? post.likes - 1 : post.likes + 1,
+              }),
+              false
+            );
+          }}
         >
-          <HeartOutline />
           {likes}
-        </button>
+        </LikeButton>
         <span className={styles.title}>{title}</span>
-
         <button
           aria-label="게시물 닫기"
           onClick={() => {

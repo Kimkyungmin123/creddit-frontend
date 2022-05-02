@@ -2,7 +2,8 @@ import { createContext, FC, useContext, useReducer } from 'react';
 import { Post } from 'types';
 
 interface Action {
-  type: 'RESET' | 'CHANGE_POST' | 'ADD_POSTS';
+  type: 'RESET' | 'CHANGE_POST' | 'LIKE_POST' | 'ADD_POSTS';
+  postId?: number;
   post?: Partial<Post>;
   posts?: Post[];
 }
@@ -15,6 +16,18 @@ function reducer(state: Post[] | null, action: Action) {
       return (
         state?.map((post) => {
           if (post.id === action.post?.id) return { ...post, ...action.post };
+          return post;
+        }) || []
+      );
+    case 'LIKE_POST':
+      return (
+        state?.map((post) => {
+          if (post.id === action.postId)
+            return {
+              ...post,
+              liked: !post.liked,
+              likes: post.liked ? post.likes - 1 : post.likes + 1,
+            };
           return post;
         }) || []
       );

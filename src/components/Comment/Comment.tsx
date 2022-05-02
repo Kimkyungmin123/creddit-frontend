@@ -1,14 +1,15 @@
 import CommentForm from 'components/CommentForm';
 import DeleteModal from 'components/DeleteModal';
+import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
-import { HeartOutline } from 'icons';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { mutate } from 'swr';
 import { Comment, Post } from 'types';
 import api from 'utils/api';
+import getFormData from 'utils/getFormData';
 import styles from './Comment.module.scss';
 
 export type commentProps = {
@@ -17,7 +18,8 @@ export type commentProps = {
 };
 
 const Comment = ({ comment, setComments }: commentProps) => {
-  const { member, createdDate, content, likes, commentId, postId } = comment;
+  const { member, createdDate, content, liked, likes, commentId, postId } =
+    comment;
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
@@ -70,10 +72,13 @@ const Comment = ({ comment, setComments }: commentProps) => {
             initialValues={{ comment: content }}
             onSubmit={async ({ comment }) => {
               if (comment !== content) {
-                const formData = new FormData();
-                formData.append('content', comment);
-                formData.append('id', `${commentId}`);
-                await api.post(`/comment/${commentId}`, formData);
+                await api.post(
+                  `/comment/${commentId}`,
+                  getFormData({
+                    content: comment,
+                    id: commentId,
+                  })
+                );
                 setComments((prev) =>
                   prev?.map((el) => {
                     if (el.commentId !== commentId) return el;
@@ -91,10 +96,26 @@ const Comment = ({ comment, setComments }: commentProps) => {
       </div>
       {!isEditing && (
         <div className={styles.bottom}>
-          <button aria-label="좋아요">
-            <HeartOutline />
+          <LikeButton
+            type="comment"
+            id={commentId}
+            liked={liked}
+            variant="medium"
+            onClick={() => {
+              setComments((prev) =>
+                prev?.map((el) => {
+                  if (el.commentId !== commentId) return el;
+                  return {
+                    ...el,
+                    liked: !el.liked,
+                    likes: el.liked ? el.likes - 1 : el.likes + 1,
+                  };
+                })
+              );
+            }}
+          >
             {likes}
-          </button>
+          </LikeButton>
           <button aria-label="답글 달기">답글</button>
         </div>
       )}

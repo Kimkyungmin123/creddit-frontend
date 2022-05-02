@@ -42,7 +42,7 @@ describe('Comment', () => {
     expect(editButton).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
     expect(screen.getByText(content)).toBeInTheDocument();
-    expect(screen.getByLabelText('좋아요')).toBeInTheDocument();
+    expect(screen.getByTestId('like-button')).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
     expect(screen.getByLabelText('답글 달기')).toBeInTheDocument();
   });

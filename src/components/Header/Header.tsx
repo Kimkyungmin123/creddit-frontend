@@ -1,5 +1,6 @@
 import AccountMenu from 'components/AccountMenu';
 import SearchBar from 'components/SearchBar';
+import { usePostsContext } from 'context/PostsContext';
 import useUser from 'hooks/useUser';
 import { EditOutline, Github, MoonOutline, SunOutline } from 'icons';
 import { useSession } from 'next-auth/react';
@@ -15,6 +16,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
   const { status } = useSession();
+  const { dispatch } = usePostsContext();
 
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
@@ -57,7 +59,11 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
     <header className={styles.header} data-testid="header">
       <div className={styles.container}>
         <Link href="/">
-          <a aria-label="홈" className={styles.logo}>
+          <a
+            aria-label="홈"
+            className={styles.logo}
+            onClick={() => dispatch({ type: 'RESET' })}
+          >
             creddit
           </a>
         </Link>

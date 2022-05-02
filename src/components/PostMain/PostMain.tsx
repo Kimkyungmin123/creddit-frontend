@@ -1,5 +1,6 @@
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
+import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import Link from 'next/link';
@@ -17,6 +18,7 @@ function PostMain({ post }: PostMainProps) {
   const { user } = useUser();
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.postMain} data-testid="post-main">
@@ -40,7 +42,8 @@ function PostMain({ post }: PostMainProps) {
                 }
                 onConfirm={async () => {
                   await api.delete(`/post/${id}`);
-                  router.push('/');
+                  dispatch({ type: 'RESET' });
+                  router.replace('/profile');
                 }}
                 onCancel={closeModal}
               />

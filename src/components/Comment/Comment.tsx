@@ -1,12 +1,13 @@
 import CommentForm from 'components/CommentForm';
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
+import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import { HeartOutline } from 'icons';
 import { useState } from 'react';
 import { mutate } from 'swr';
-import { Comment } from 'types';
+import { Comment, Post } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
 
@@ -19,6 +20,7 @@ const Comment = ({ comment }: commentProps) => {
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
+  const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -42,7 +44,18 @@ const Comment = ({ comment }: commentProps) => {
                   onConfirm={async () => {
                     await api.delete(`/comment/${commentId}`);
                     closeModal();
-                    mutate(`/post/${postId}`);
+                    const data = await mutate(
+                      `/post/${postId}`,
+                      (post: Post) => ({
+                        ...post,
+                        comments: post.comments - 1,
+                        commentList: post.commentList.filter(
+                          (el) => el.commentId !== commentId
+                        ),
+                      }),
+                      false
+                    );
+                    dispatch({ type: 'CHANGE_POST', post: data });
                   }}
                   onCancel={closeModal}
                 />
@@ -60,7 +73,17 @@ const Comment = ({ comment }: commentProps) => {
                 formData.append('content', comment);
                 formData.append('id', `${commentId}`);
                 await api.post(`/comment/${commentId}`, formData);
-                await mutate(`/post/${postId}`);
+                await mutate(
+                  `/post/${postId}`,
+                  (post: Post) => ({
+                    ...post,
+                    commentList: post.commentList.map((el) => {
+                      if (el.commentId !== commentId) return el;
+                      return { ...el, content: comment };
+                    }),
+                  }),
+                  false
+                );
               }
               setIsEditing(false);
             }}

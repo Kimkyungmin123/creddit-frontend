@@ -1,3 +1,4 @@
+import { User } from 'types';
 import api from './api';
 
 type Params = {
@@ -14,7 +15,8 @@ async function editProfile({ introduction, imageFile }: Params) {
       type: 'application/json',
     })
   );
-  await api.post('/profile/create', formData);
+  const response = await api.post<User>('/profile/create', formData);
+  return response;
 }
 
 export default editProfile;

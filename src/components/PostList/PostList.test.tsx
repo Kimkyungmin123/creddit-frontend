@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from 'utils/test-utils';
+import { render, screen } from 'utils/test-utils';
 import PostList from './PostList';
 
 describe('PostList', () => {
@@ -21,8 +21,5 @@ describe('PostList', () => {
     const { sortByLikeButton, sortByRecentButton } = setup();
     expect(sortByLikeButton).toBeInTheDocument();
     expect(sortByRecentButton).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.getByTestId('post-card')).toBeInTheDocument();
-    });
   });
 });

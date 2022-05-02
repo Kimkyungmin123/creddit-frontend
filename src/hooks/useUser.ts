@@ -52,8 +52,8 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     Cookies.remove('refresh_token');
     Cookies.remove('auth_exp_date');
     if (sessionData) await signOut();
-    mutate('/profile/show');
-  }, [sessionData, mutate]);
+    await mutate('/profile/show', {}, false);
+  }, [sessionData]);
 
   return {
     user: data?.user,

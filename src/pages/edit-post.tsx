@@ -1,6 +1,8 @@
 import Layout from 'components/Layout';
 import NotFound from 'components/NotFound';
 import PostForm from 'components/PostForm';
+import { usePostCardContext } from 'context/PostCardContext';
+import { usePostsContext } from 'context/PostsContext';
 import useUser from 'hooks/useUser';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -22,6 +24,8 @@ const EditPost: NextPage = () => {
     id ? `/post/${id}` : null,
     fetcher
   );
+  const { dispatch } = usePostsContext();
+  const { setClickedPostCard } = usePostCardContext();
 
   const isAuthor = useCallback(() => {
     if (!user || !data) return true;
@@ -38,8 +42,15 @@ const EditPost: NextPage = () => {
           onSubmit={async (values) => {
             const formData = getPostFormData(values);
             await api.post(`/post/${id}/edit`, formData);
-            await mutate(`/post/${id}`);
-            router.back();
+            const { title, content } = values;
+            const post = await mutate<Post>(
+              `/post/${id}`,
+              { ...data, title, content },
+              false
+            );
+            dispatch({ type: 'CHANGE_POST', post });
+            setClickedPostCard(false);
+            router.push(`/post/${id}`);
           }}
         />
       )}

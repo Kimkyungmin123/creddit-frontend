@@ -37,6 +37,12 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
         try {
           await onSubmit(values);
           onCancel();
+          const { nickname, introduction } = values;
+          await mutate(
+            '/profile/show',
+            { user: { ...user, nickname, introduction } },
+            false
+          );
         } catch (_err) {
           const error = _err as { nicknameDuplicate?: boolean };
           if (error.nicknameDuplicate) {
@@ -45,8 +51,6 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
           } else {
             onCancel();
           }
-        } finally {
-          await mutate('/profile/show');
         }
       }}
     >

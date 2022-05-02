@@ -5,7 +5,7 @@ import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
 import { HeartOutline } from 'icons';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { mutate } from 'swr';
 import { Comment, Post } from 'types';
 import api from 'utils/api';
@@ -13,9 +13,10 @@ import styles from './Comment.module.scss';
 
 export type commentProps = {
   comment: Comment;
+  setComments: Dispatch<SetStateAction<Comment[] | null | undefined>>;
 };
 
-const Comment = ({ comment }: commentProps) => {
+const Comment = ({ comment, setComments }: commentProps) => {
   const { member, createdDate, content, likes, commentId, postId } = comment;
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -49,13 +50,13 @@ const Comment = ({ comment }: commentProps) => {
                       (post: Post) => ({
                         ...post,
                         comments: post.comments - 1,
-                        commentList: post.commentList.filter(
-                          (el) => el.commentId !== commentId
-                        ),
                       }),
                       false
                     );
                     dispatch({ type: 'CHANGE_POST', post: data });
+                    setComments((prev) =>
+                      prev?.filter((el) => el.commentId !== commentId)
+                    );
                   }}
                   onCancel={closeModal}
                 />
@@ -73,16 +74,11 @@ const Comment = ({ comment }: commentProps) => {
                 formData.append('content', comment);
                 formData.append('id', `${commentId}`);
                 await api.post(`/comment/${commentId}`, formData);
-                await mutate(
-                  `/post/${postId}`,
-                  (post: Post) => ({
-                    ...post,
-                    commentList: post.commentList.map((el) => {
-                      if (el.commentId !== commentId) return el;
-                      return { ...el, content: comment };
-                    }),
-                  }),
-                  false
+                setComments((prev) =>
+                  prev?.map((el) => {
+                    if (el.commentId !== commentId) return el;
+                    return { ...el, content: comment };
+                  })
                 );
               }
               setIsEditing(false);

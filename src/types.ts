@@ -29,7 +29,6 @@ export type Comment = {
 };
 
 export type Post = {
-  commentList: Comment[];
   comments: number;
   content: string;
   createdDate: string;

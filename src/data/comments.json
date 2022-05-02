@@ -1,0 +1,58 @@
+[
+  {
+    "commentId": 12733,
+    "content": "Et ut repellat illo nobis iusto. Dicta officiis accusantium perferendis repellat modi facilis tempore atque cupiditate.",
+    "createdDate": "2022-04-26T15:28:54.186568",
+    "liked": true,
+    "likes": 28353,
+    "member": {
+      "email": "Ryan_Bechtelar24@gmail.com",
+      "nickname": "닉네임"
+    },
+    "modifiedDate": "2022-04-27T15:28:54.186568",
+    "parentCommentId": 23027,
+    "postId": 1
+  },
+  {
+    "commentId": 16101,
+    "content": "Molestiae aut voluptas delectus. Aut ut nostrum laboriosam quia et. Ducimus voluptatum deserunt.",
+    "createdDate": "2022-04-26T15:28:54.186568",
+    "liked": false,
+    "likes": 32307,
+    "member": {
+      "email": "Laila64@yahoo.com",
+      "nickname": "Bianka Schoen"
+    },
+    "modifiedDate": "2022-04-27T15:28:54.186568",
+    "parentCommentId": 76664,
+    "postId": 1
+  },
+  {
+    "commentId": 77539,
+    "content": "Culpa nisi soluta aliquam earum non rerum omnis. Suscipit dolorum labore. Officiis voluptatem temporibus debitis dolorum id atque quasi.",
+    "createdDate": "2022-04-26T15:28:54.186568",
+    "liked": true,
+    "likes": 85470,
+    "member": {
+      "email": "Levi_Brown15@gmail.com",
+      "nickname": "Lenny Weimann"
+    },
+    "modifiedDate": "2022-04-27T15:28:54.186568",
+    "parentCommentId": 70044,
+    "postId": 1
+  },
+  {
+    "commentId": 45084,
+    "content": "Magnam voluptatem distinctio ea amet unde voluptatem nihil.",
+    "createdDate": "2022-04-26T15:28:54.186568",
+    "liked": false,
+    "likes": 19690,
+    "member": {
+      "email": "Vincenza_Hilpert25@gmail.com",
+      "nickname": "Miller Hermann"
+    },
+    "modifiedDate": "2022-04-27T15:28:54.186568",
+    "parentCommentId": 44415,
+    "postId": 1
+  }
+]

@@ -34,17 +34,17 @@ function PostList() {
         </button>
       </div>
       <div className={styles.postsContainer}>
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
       <InfiniteScroll
         data={posts}
+        size={10}
         onIntersect={async () => {
-          const id =
-            posts.length === 0
-              ? Number.MAX_SAFE_INTEGER
-              : posts[posts.length - 1].id;
+          const id = !posts
+            ? Number.MAX_SAFE_INTEGER
+            : posts[posts.length - 1].id;
 
           const { data } = await api.get<Post[]>(
             `/post?lastPostId=${id}&size=10&sort=new`

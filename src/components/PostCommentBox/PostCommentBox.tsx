@@ -1,6 +1,7 @@
 import Comment from 'components/Comment';
 import CommentForm from 'components/CommentForm';
 import InfiniteScroll from 'components/InfiniteScroll';
+import { usePostsContext } from 'context/PostsContext';
 import { CaretDown, Sort } from 'icons';
 import { useState } from 'react';
 import { mutate } from 'swr';
@@ -14,7 +15,8 @@ export type PostCommentBoxProps = {
 
 // TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [comments, setComments] = useState<CommentType[] | null>();
+  const { dispatch } = usePostsContext();
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
@@ -38,28 +40,35 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               parentCommentId: 0,
               postId: post.id,
             });
-            await mutate<Post>(`/post/${post.id}`);
-            setComments([]);
+            const data = await mutate<Post>(`/post/${post.id}`);
+            setComments(null);
+            dispatch({ type: 'CHANGE_POST', post: data });
           }}
         />
       </div>
       <div className={styles.commentsContainer}>
-        {[...comments].map((comment) => {
-          return <Comment key={comment.commentId} comment={comment} />;
+        {comments?.map((comment) => {
+          return (
+            <Comment
+              key={comment.commentId}
+              comment={comment}
+              setComments={setComments}
+            />
+          );
         })}
       </div>
       <InfiniteScroll
         data={comments}
+        size={10}
         onIntersect={async () => {
-          const id =
-            comments.length === 0
-              ? Number.MAX_SAFE_INTEGER
-              : comments[comments.length - 1].commentId;
+          const id = !comments
+            ? Number.MAX_SAFE_INTEGER
+            : comments[comments.length - 1].commentId;
 
           const { data } = await api.get<CommentType[]>(
             `/comment?postId=${post.id}&lastCommentId=${id}&size=10&sort=new`
           );
-          setComments((prev) => [...prev, ...data]);
+          setComments((prev) => [...(prev || []), ...data]);
           return data;
         }}
       />

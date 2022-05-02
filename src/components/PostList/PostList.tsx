@@ -39,6 +39,7 @@ function PostList() {
         ))}
       </div>
       <InfiniteScroll
+        data={posts}
         onIntersect={async () => {
           const id =
             posts.length === 0

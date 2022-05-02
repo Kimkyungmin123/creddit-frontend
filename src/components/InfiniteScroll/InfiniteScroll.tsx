@@ -1,23 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 
 type Props = {
-  data: any[];
+  size: number;
   onIntersect: () => Promise<any[]>;
+  data?: any[] | null;
 };
 
-function InfiniteScroll({ data, onIntersect }: Props) {
+function InfiniteScroll({ data, size, onIntersect }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [finished, setFinished] = useState(false);
+  const [prevData, setPrevData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (data.length !== 0 && finished) return;
+    if (isLoading || (data && prevData.length < size)) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(async (entry) => {
           if (entry.isIntersecting) {
+            setIsLoading(true);
             const data = await onIntersect();
-            if (data.length === 0) setFinished(true);
+            setPrevData(data);
+            setIsLoading(false);
           }
         });
       },
@@ -29,7 +33,7 @@ function InfiniteScroll({ data, onIntersect }: Props) {
     return () => {
       if (current) observer.unobserve(current);
     };
-  }, [onIntersect, finished, data]);
+  }, [onIntersect, isLoading, data, prevData, size]);
 
   return <div ref={ref}></div>;
 }

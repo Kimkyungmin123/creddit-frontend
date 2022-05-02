@@ -32,20 +32,6 @@
   }
 }
 
-.likeButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 400;
-  font-size: 0.875rem;
-
-  @media (hover: hover) {
-    &:hover {
-      color: var(--heart-fill);
-    }
-  }
-}
-
 .title {
   flex-grow: 1;
   white-space: nowrap;

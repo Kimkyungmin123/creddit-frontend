@@ -1,4 +1,4 @@
-import postDummy from 'data/post.json';
+import commentsDummy from 'data/comments.json';
 import { server } from 'mocks/server';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
@@ -8,7 +8,8 @@ import Comment, { commentProps } from './Comment';
 describe('Comment', () => {
   const setup = (props: Partial<commentProps> = {}) => {
     const initialProps: commentProps = {
-      comment: postDummy.commentList[0],
+      comment: commentsDummy[0],
+      setComments: jest.fn(),
     };
     const utils = render(<Comment {...initialProps} {...props} />);
     return {
@@ -41,7 +42,7 @@ describe('Comment', () => {
     expect(editButton).toBeInTheDocument();
     expect(deleteButton).toBeInTheDocument();
     expect(screen.getByText(content)).toBeInTheDocument();
-    expect(screen.getByLabelText('좋아요')).toBeInTheDocument();
+    expect(screen.getByTestId('like-button')).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
     expect(screen.getByLabelText('답글 달기')).toBeInTheDocument();
   });

@@ -52,25 +52,3 @@
 .creator span {
   color: var(--text-secondary);
 }
-
-.likeCountBtn {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0;
-
-  svg {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-
-  @media (hover: hover) {
-    &:hover {
-      color: var(--heart-fill);
-    }
-  }
-}
-
-.heartFillIcon {
-  color: var(--heart-fill);
-}

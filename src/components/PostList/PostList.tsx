@@ -10,7 +10,7 @@ import styles from './PostList.module.scss';
 
 // TODO: userID가 존재하면 해당 유저의 글만 받아오기
 function PostList() {
-  const [sortBy, setSortBy] = useState<'like' | 'recent'>('like');
+  const [sortBy, setSortBy] = useState<'like' | 'new'>('new');
   const { posts, dispatch } = usePostsContext();
 
   return (
@@ -25,8 +25,8 @@ function PostList() {
           <span>인기</span>
         </button>
         <button
-          className={classNames(sortBy === 'recent' && styles.selected)}
-          onClick={() => setSortBy('recent')}
+          className={classNames(sortBy === 'new' && styles.selected)}
+          onClick={() => setSortBy('new')}
           aria-label="최신순으로 정렬"
         >
           <Time />
@@ -34,17 +34,17 @@ function PostList() {
         </button>
       </div>
       <div className={styles.postsContainer}>
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
       <InfiniteScroll
         data={posts}
+        size={10}
         onIntersect={async () => {
-          const id =
-            posts.length === 0
-              ? Number.MAX_SAFE_INTEGER
-              : posts[posts.length - 1].id;
+          const id = !posts
+            ? Number.MAX_SAFE_INTEGER
+            : posts[posts.length - 1].id;
 
           const { data } = await api.get<Post[]>(
             `/post?lastPostId=${id}&size=10&sort=new`

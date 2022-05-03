@@ -15,6 +15,7 @@ export function handlers() {
       getNicknameDuplicate
     ),
     rest.get(`${API_ENDPOINT}/post`, getPosts),
+    rest.get(`${API_ENDPOINT}/post/search`, getPosts),
     rest.get(`${API_ENDPOINT}/post/1`, getPost),
     rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
     rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),

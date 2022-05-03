@@ -12,13 +12,16 @@ function AccoutMenuDetail({ onClick }: AccountMenuDetailProps) {
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        moveDown();
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        moveUp();
+      if (
+        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') ||
+        !document.activeElement?.closest('[data-testid="account-menu"]')
+      ) {
+        return;
       }
+
+      event.preventDefault();
+      if (event.key === 'ArrowDown') moveDown();
+      else if (event.key === 'ArrowUp') moveUp();
     };
     window.addEventListener('keydown', moveFocus);
     return () => window.removeEventListener('keydown', moveFocus);

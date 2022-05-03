@@ -11,13 +11,13 @@ import { Close } from 'icons';
 interface AddChatModalProps {
   show: boolean;
   onCloseModal: () => void;
-  setShowInviteWorkspaceModal: (flag: boolean) => void;
+  setShowInviteModal: (flag: boolean) => void;
 }
 
 const AddChatModal: FC<AddChatModalProps> = ({
   show,
   onCloseModal,
-  setShowInviteWorkspaceModal,
+  setShowInviteModal,
 }) => {
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data);
@@ -42,7 +42,7 @@ const AddChatModal: FC<AddChatModalProps> = ({
         })
         .then(() => {
           revalidateMember();
-          setShowInviteWorkspaceModal(false);
+          setShowInviteModal(false);
           setNewMember('');
         })
         .catch((error) => {
@@ -52,7 +52,7 @@ const AddChatModal: FC<AddChatModalProps> = ({
         });
     },
 
-    [newMember, revalidateMember, setShowInviteWorkspaceModal, setNewMember]
+    [newMember, revalidateMember, setShowInviteModal, setNewMember]
   );
   if (!show) {
     return null;
@@ -71,7 +71,7 @@ const AddChatModal: FC<AddChatModalProps> = ({
           <Input
             value={newMember}
             onChange={onChangeNewMember}
-            placeholder="닉네임 입력"
+            placeholder="대화할 상대를 입력하세요."
           />
 
           <Button type="submit" ariaLabel="확인">

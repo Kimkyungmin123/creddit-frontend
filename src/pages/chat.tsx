@@ -2,87 +2,74 @@ import ChatListBox from 'components/ChatListBox';
 import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
 import SendMessageDate from 'components/SendMessageDate';
-// import SendMessageForm from 'components/SendMessageForm';
+import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
-// import SockJS from 'sockjs-client';
-// import { Stomp } from '@stomp/stompjs';
-// import {
-//   useCallback
-//   ,
-//   useEffect,
-//    useState } from 'react';
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { useEffect, useState } from 'react';
 import useUser from 'hooks/useUser';
 // import axios from 'axios';
-// import useInput from 'hooks/useInput';
+import useInput from 'hooks/useInput';
 // import useSWR from 'swr';
-// import AddChatButton from 'components/AddChatButton';
-// import AddChatModal from 'components/AddChatModal';
+import AddChatButton from 'components/AddChatButton';
+import AddChatModal from 'components/AddChatModal';
 
-// const socketUrl = 'http://localhost:8000/ws';
-// let client: any = null;
+const socketUrl = 'http://localhost:8000/ws';
+let client: any = null;
 const Chat: NextPage = () => {
   // const fetcher = (url: string) =>
   //   axios.get(url).then((response) => response.data);
 
   const { user } = useUser();
-  // const username = user?.nickname;
-  // const [
-  //   chat,
-  //   onChangeChat,
-  //   // setChat
-  // ] = useInput('');
-  // const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] =
-  //   useState(false);
+  const username = user?.nickname;
+  const [chat, onChangeChat, setChat] = useInput('');
+  const [showInviteModal, setShowInviteModal] = useState(false);
 
-  // 채팅 받아 오는 API
-  // const {
-  //   data: chatData,
-  //   mutate: mutateChat
-  // } = useSWR(
-  //   process.env.REACT_APP_CHAT_API_BASE_URL + '/' + username + '/chatrooms',
+  //채팅 받아 오는 API
+  // const { data: chatData, mutate: mutateChat } = useSWR(
+  //   API + '/' + username + '/chatrooms',
   //   fetcher,
   //   {
-  //     onSuccess(data) {
-  //       if (data?.length === 1) {
-  //         setTimeout(() => {
-  //           scrollbarRef.current?.scrollToBottom();
-  //         }, 100);
-  //       }
-  //     },
+  // onSuccess(data) {
+  //   if (data?.length === 1) {
+  //     setTimeout(() => {
+  //       scrollbarRef.current?.scrollToBottom();
+  //     }, 100);
   //   }
-  // );
+  // },
+  //}
+  //);
 
-  // useEffect(() => {
-  //   connect();
+  useEffect(() => {
+    const socket = new SockJS(socketUrl);
+    client = Stomp.over(socket);
+    client.connect(
+      {},
+      () => {
+        console.log('현재' + username);
+        client.send('/topic/' + username, {}, JSON.stringify(chat));
+      },
+      onError
+    );
 
-  //   return () => client.disconnet();
-  // }, []);
+    // return () => client.disconnet();
+  }, [chat, username]);
 
-  // const connect = () => {
-  //   const socket = new SockJS(socketUrl);
-  //   client = Stomp.over(socket);
-  //   client.connect({}, onConnected, onError);
-  // };
+  const onError = (err: Error) => {
+    console.log(err);
+  };
 
-  // const onConnected = () => {
-  //   console.log('연결' + username);
-  //   client.send('/topic/' + username, {}, JSON.stringify(chat));
-  // };
-
-  // const onError = (err: Error) => {
-  //   console.log(err);
-  // };
-
-  // 채팅 보내는 API
+  //채팅 보내는 API
   // const onSubmitForm = useCallback((e) => {
   //   e.preventDefault();
+  //    setChat('')
   //   if (chat?.trim() && chatData) {
   //     // mutate ...
   //     // 스크롤 밑으로
   //     axios
   //       .post(
-  //         process.env.REACT_APP_CHAT_API_BASE_URL +
+  //        '채팅 POST API' +
   //           '/' +
   //           username +
   //           '/chatrooms',
@@ -94,21 +81,22 @@ const Chat: NextPage = () => {
   //   }
   // }, []);
 
-  // const onClickInviteWorkspace = () => {
-  //   setShowInviteWorkspaceModal(true);
-  // };
+  const onClickInvite = () => {
+    setShowInviteModal(true);
+  };
 
-  // const onCloseModal = () => {
-  //   setShowInviteWorkspaceModal(false);
-  // };
+  const onCloseModal = () => {
+    setShowInviteModal(false);
+  };
 
   return (
     <Layout title="creddit: Chat">
+      {/* 작업 중에만 반대로 */}
       {!user ? (
         <>
           <div className={styles.chatContainer}>
             <div className={styles.chatBox}>
-              {/* <AddChatButton onClick={onClickInviteWorkspace} /> */}
+              <AddChatButton onClick={onClickInvite} />
               <ChatListBox
                 interlocutorName="aa"
                 lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
@@ -194,19 +182,20 @@ const Chat: NextPage = () => {
                 />
               </div>
               <div className={styles.SendMessageBox}>
-                {/* <SendMessageForm
+                <SendMessageForm
                   // onSubmit={onSubmitForm}
-                  onSubmit={() => console.log('ok')}
+                  // 임시 onSubmit
+                  onSubmit={() => setChat('')}
                   onChange={onChangeChat}
                   value={chat}
-                /> */}
+                />
               </div>
             </div>
-            {/* <AddChatModal
-              show={showInviteWorkspaceModal}
+            <AddChatModal
+              show={showInviteModal}
               onCloseModal={onCloseModal}
-              setShowInviteWorkspaceModal={setShowInviteWorkspaceModal}
-            /> */}
+              setShowInviteModal={setShowInviteModal}
+            />
           </div>
         </>
       ) : (

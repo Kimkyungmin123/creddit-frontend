@@ -12,7 +12,9 @@ const Profile: NextPage = () => {
   return (
     <Layout title={`${user?.nickname} - creddit`}>
       <div className={styles.profileContainer}>
-        <PostList />
+        <div>
+          <PostList url="/post" />
+        </div>
         {user && <ProfileBox user={user} />}
       </div>
     </Layout>

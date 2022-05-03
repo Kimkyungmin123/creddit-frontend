@@ -4,8 +4,8 @@ import profileImg from 'images/profileImg.png';
 
 export type ChatListBoxProps = {
   interlocutorName: string;
-  lastMessage: string;
-  sentDate: string;
+  lastMessage?: string;
+  sentDate?: string;
   onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
 };
 const CONTENT_MAX_LENGTH = 35;
@@ -24,9 +24,11 @@ const ChatListBox = ({
       <div className={styles.chatContent}>
         <div>{interlocutorName}</div>
         <div className={styles.lastMessage}>
-          {lastMessage.length > CONTENT_MAX_LENGTH
-            ? `${lastMessage.slice(0, CONTENT_MAX_LENGTH)} ...`
-            : lastMessage}
+          {lastMessage
+            ? lastMessage.length > CONTENT_MAX_LENGTH
+              ? `${lastMessage.slice(0, CONTENT_MAX_LENGTH)} ...`
+              : lastMessage
+            : ''}
         </div>
       </div>
       <div className={styles.sentDate}>{sentDate}</div>

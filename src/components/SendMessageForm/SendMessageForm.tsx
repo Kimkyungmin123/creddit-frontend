@@ -2,7 +2,7 @@ import ReactTextareaAutosize from 'react-textarea-autosize';
 import styles from './SendMessageForm.module.scss';
 
 export type SendMessageFormProps = {
-  onSubmit: () => void;
+  onSubmit: (e: any) => void;
   onChange?: React.ChangeEventHandler<HTMLTextAreaElement>;
   value?: string;
 };
@@ -15,17 +15,12 @@ const SendMessageForm = ({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      onSubmit(e);
     }
   };
 
   return (
-    <form
-      className={styles.sendMessageFormBox}
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-    >
+    <form className={styles.sendMessageFormBox} onSubmit={onSubmit}>
       <ReactTextareaAutosize
         value={value}
         onChange={onChange}

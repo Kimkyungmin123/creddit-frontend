@@ -1,8 +1,8 @@
+import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
-import { HeartFill, HeartOutline } from 'icons';
+import { usePostCardContext } from 'context/PostCardContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { Post } from 'types';
 import styles from './PostCard.module.scss';
 
@@ -16,14 +16,21 @@ export type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { id, title, content, member, createdDate, likes, comments } = post;
-  const [clickedLike, setClickedLike] = useState(false);
+  const { id, title, content, member, createdDate, likes, comments, liked } =
+    post;
   const router = useRouter();
+  const { setClickedPostCard } = usePostCardContext();
 
   return (
     <section
       className={styles.postCard}
-      onClick={() => router.push({ pathname: `/post/${id}` })}
+      onClick={(event) => {
+        if ((event.target as HTMLElement).closest('button')) {
+          return;
+        }
+        setClickedPostCard(true);
+        router.push({ pathname: `/post/${id}` });
+      }}
       data-testid="post-card"
     >
       <Link href={`/post/${id}`}>
@@ -40,26 +47,10 @@ const PostCard = ({ post }: PostCardProps) => {
             <span>by </span>
             {member.nickname}
           </div>
-          <div className={styles.comments}>댓글 {comments.length}개</div>
-          <button
-            className={styles.likeCountBtn}
-            onClick={(event) => {
-              event.stopPropagation();
-              setClickedLike((prev) => !prev);
-            }}
-            aria-label={clickedLike ? '좋아요 취소' : '좋아요'}
-          >
-            {
-              <>
-                {clickedLike ? (
-                  <HeartFill className={styles.heartFillIcon} />
-                ) : (
-                  <HeartOutline />
-                )}
-              </>
-            }
-            {!clickedLike ? likes : likes + 1}
-          </button>
+          <div className={styles.comments}>댓글 {comments}개</div>
+          <LikeButton type="post" id={id} liked={liked} variant="small">
+            {likes}
+          </LikeButton>
         </div>
         <MyDate date={createdDate} />
       </div>

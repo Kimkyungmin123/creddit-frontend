@@ -1,6 +1,7 @@
 @import 'styles/app';
 
 .container {
+  z-index: 1;
   position: sticky;
   top: 3.0625rem;
   background-color: var(--post-top-bg);
@@ -31,21 +32,17 @@
   }
 }
 
-.likeButton {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 400;
-  font-size: 0.875rem;
-
-  svg {
-    color: var(--heart-fill);
-  }
-}
-
 .title {
   flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.closeButton {
+  @media (hover: hover) {
+    &:hover {
+      color: var(--post-top-hover-text);
+    }
+  }
 }

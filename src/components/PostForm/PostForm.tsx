@@ -1,7 +1,10 @@
 import Button from 'components/Button';
 import Textarea from 'components/Textarea';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import { LoadingSpokes } from 'icons';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 import styles from './PostForm.module.scss';
 
 export type PostFormProps = {
@@ -20,21 +23,32 @@ function PostForm({
       <h1>글 {title}</h1>
       <Formik
         initialValues={initialValues}
-        onSubmit={async (values, { setSubmitting }) => {
+        validationSchema={object({
+          content: getValidationSchema('content'),
+        })}
+        onSubmit={async (values) => {
           await onSubmit(values);
-          setSubmitting(false);
         }}
       >
-        {({ values, handleChange, handleSubmit, isSubmitting }) => {
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+        }) => {
           return (
             <form onSubmit={handleSubmit}>
+              <ConnectedFocusError focusDelay={0} />
               <Textarea
                 value={values.title}
                 onChange={handleChange}
                 placeholder="제목"
                 name="title"
                 resizable={false}
-                maxLength={255}
+                maxLength={50}
               />
               <Textarea
                 value={values.content}
@@ -42,7 +56,11 @@ function PostForm({
                 placeholder="내용"
                 name="content"
                 minRows={7}
+                onBlur={handleBlur}
               />
+              <p className={styles.error}>
+                {touched.content && errors.content}
+              </p>
               <Button
                 type="submit"
                 disabled={!values.title || !values.content || isSubmitting}

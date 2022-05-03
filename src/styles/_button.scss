@@ -1,12 +1,16 @@
 @mixin button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0.5rem 1.5rem;
   border-radius: 0.25rem;
   background-color: var(--btn-primary-bg);
   color: var(--btn-primary-text);
+  text-align: center;
 
   svg {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1.5rem;
+    height: 1.5rem;
   }
 
   &:hover {
@@ -20,5 +24,9 @@
   &:disabled {
     cursor: default;
     background-color: var(--btn-primary-disabled-bg);
+  }
+
+  &.round {
+    border-radius: 1rem;
   }
 }

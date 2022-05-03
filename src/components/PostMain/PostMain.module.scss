@@ -23,5 +23,11 @@
   & > button {
     padding: 0;
     color: var(--text-secondary);
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }

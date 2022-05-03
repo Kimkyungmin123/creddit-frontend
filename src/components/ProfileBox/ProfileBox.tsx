@@ -1,39 +1,85 @@
-import Image from 'next/image';
-import styles from './ProfileBox.module.scss';
-import cat from 'images/cat.jpg';
+import ButtonLink from 'components/ButtonLink';
+import ImageBox from 'components/ImageBox';
+import MyDate from 'components/MyDate';
+import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
 import Link from 'next/link';
+import { useState } from 'react';
+import { User } from 'types';
+import api from 'utils/api';
+import editProfile from 'utils/editProfile';
+import isDuplicate from 'utils/isDuplicate';
+import styles from './ProfileBox.module.scss';
 
-export type ProfileProps = {
-  nickName: string;
-  statusMessage: string;
-  signUpDateNum: string;
+export type ProfileBoxProps = {
+  user: User;
 };
 
-function ProfileBox({ nickName, statusMessage, signUpDateNum }: ProfileProps) {
+function ProfileBox({ user }: ProfileBoxProps) {
+  const { nickname, introduction, createdDate, image } = user;
+  const [isEditing, setIsEditing] = useState(false);
+
   return (
-    <div className={styles.profileBoxTop}>
-      <div className={styles.profileContent}>
-        <div className={styles.userInfo}>
-          <div className={styles.profileImg}>
-            <Image src={cat} alt="프로필 이미지" />
+    <div className={styles.profileBox}>
+      <ImageBox image={image} introduction={introduction} />
+      {isEditing ? (
+        <ProfileEditForm
+          user={user}
+          onCancel={() => setIsEditing(false)}
+          onSubmit={async ({ nickname, introduction }) => {
+            const error: { [key: string]: boolean } = {};
+            if (nickname !== user.nickname) {
+              const duplicate = await isDuplicate('nickname', nickname);
+              if (duplicate) {
+                error.nicknameDuplicate = true;
+                throw error;
+              }
+            }
+
+            const changeNickname = async () => {
+              if (nickname !== user.nickname) {
+                await api.post('/member/changeNickname', nickname, {
+                  headers: {
+                    'Content-Type': 'text/plain',
+                  },
+                });
+              }
+            };
+
+            const changeIntroduction = async () => {
+              if (introduction !== user.introduction) {
+                await editProfile({ introduction });
+              }
+            };
+
+            await Promise.all([changeNickname(), changeIntroduction()]);
+          }}
+        />
+      ) : (
+        <>
+          <p className={styles.nickName}>{nickname}</p>
+          {introduction && (
+            <span className={styles.introduction}>{introduction}</span>
+          )}
+          <div className={styles.signUpDate}>
+            <span>가입일</span>
+            <MyDate date={createdDate} />
           </div>
-          <span className={styles.nickName}>{nickName}</span>
-        </div>
-        <span className={styles.statusMessage}>{statusMessage}</span>
-        <div className={styles.signUpDate}>
-          <span className={styles.signUpDateText}>가입일</span>
-          <span className={styles.signUpDateNum}>{signUpDateNum}</span>
-        </div>
-        <div className={styles.profileBoxBtns}>
-          <Link href="/create-post">
-            <a className={styles.createNewPostBtn} aria-label="새 글 작성">
+          <div className={styles.buttons}>
+            <ButtonLink href="/create-post" round={true}>
               새 글 작성
-            </a>
-          </Link>
-          <button className={styles.chatListBtn}>대화 목록</button>
-        </div>
-        <button className={styles.modifyProfile}>프로필 수정</button>
-      </div>
+            </ButtonLink>
+            <ButtonLink href="/chat" round={true}>
+              대화 목록
+            </ButtonLink>
+          </div>
+          <div className={styles.bottomButtons}>
+            <button onClick={() => setIsEditing(true)}>프로필 수정</button>
+            <Link href="/reset-password">
+              <a>비밀번호 변경</a>
+            </Link>
+          </div>
+        </>
+      )}
     </div>
   );
 }

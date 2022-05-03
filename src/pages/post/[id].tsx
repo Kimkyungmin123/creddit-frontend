@@ -3,6 +3,7 @@ import NotFound from 'components/NotFound';
 import PostCommentBox from 'components/PostCommentBox';
 import PostMain from 'components/PostMain';
 import PostTop from 'components/PostTop';
+import { usePostCardContext } from 'context/PostCardContext';
 import { useRouter } from 'next/router';
 import styles from 'styles/Post.module.scss';
 import useSWR from 'swr';
@@ -12,7 +13,10 @@ import { fetcher } from 'utils/api';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error } = useSWR<PostType>(id ? `/post/${id}` : null, fetcher);
+  const { data, error } = useSWR<PostType>(id ? `/post/${id}` : null, fetcher, {
+    revalidateOnFocus: false,
+  });
+  const { clickedPostCard } = usePostCardContext();
 
   return (
     <Layout title={data?.title}>
@@ -23,7 +27,8 @@ const Post = () => {
           onClick={(event) => {
             const target = event.target as HTMLElement;
             if (target.classList.contains(styles.postContainer)) {
-              router.back();
+              if (clickedPostCard) router.back();
+              else router.push('/');
             }
           }}
         >

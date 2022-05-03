@@ -7,11 +7,12 @@ import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useUser from 'hooks/useUser';
 // import axios from 'axios';
 import useInput from 'hooks/useInput';
 // import useSWR from 'swr';
+import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
 
@@ -24,7 +25,7 @@ const Chat: NextPage = () => {
   const { user } = useUser();
   const username = user?.nickname;
   const [chat, onChangeChat, setChat] = useInput('');
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   //채팅 받아 오는 API
   // const { data: chatData, mutate: mutateChat } = useSWR(
@@ -81,14 +82,6 @@ const Chat: NextPage = () => {
   //   }
   // }, []);
 
-  const onClickInvite = () => {
-    setShowInviteModal(true);
-  };
-
-  const onCloseModal = () => {
-    setShowInviteModal(false);
-  };
-
   return (
     <Layout title="creddit: Chat">
       {/* 작업 중에만 반대로 */}
@@ -96,7 +89,7 @@ const Chat: NextPage = () => {
         <>
           <div className={styles.chatContainer}>
             <div className={styles.chatBox}>
-              <AddChatButton onClick={onClickInvite} />
+              <AddChatButton onClick={openModal} />
               <ChatListBox
                 interlocutorName="aa"
                 lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
@@ -192,9 +185,9 @@ const Chat: NextPage = () => {
               </div>
             </div>
             <AddChatModal
-              show={showInviteModal}
-              onCloseModal={onCloseModal}
-              setShowInviteModal={setShowInviteModal}
+              show={isModalOpen}
+              onCloseModal={closeModal}
+              setShowInviteModal={openModal}
             />
           </div>
         </>

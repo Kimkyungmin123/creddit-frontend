@@ -3,8 +3,9 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
-import useDebounce from 'hooks/useDebounce';
+import useDuplicateError from 'hooks/useDuplicateError';
 import useLogin from 'hooks/useLogin';
 import useSocialLogin from 'hooks/useSocialLogin';
 import useUser from 'hooks/useUser';
@@ -12,10 +13,12 @@ import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
 import styles from 'styles/Signup.module.scss';
 import api from 'utils/api';
-import { object, string } from 'yup';
+import focusOnFormElement from 'utils/focusOnFormElement';
+import getValidationSchema from 'utils/getValidationSchema';
+import isDuplicate from 'utils/isDuplicate';
+import { object } from 'yup';
 
 const Signup: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
@@ -25,7 +28,7 @@ const Signup: NextPage = () => {
 
   return (
     <Layout
-      title="creddit: 회원가입"
+      title="회원가입 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >
@@ -36,12 +39,15 @@ const Signup: NextPage = () => {
             onSubmit={async (values) => {
               const error: { [key: string]: boolean } = {};
               const checkEmailDuplicate = async () => {
-                const duplicate = await isEmailDuplicate(values.email);
+                const duplicate = await isDuplicate('email', values.email);
                 if (duplicate) error.emailDuplicate = true;
               };
 
               const checkNicknameDuplicate = async () => {
-                const duplicate = await isNicknameDuplicate(values.nickname);
+                const duplicate = await isDuplicate(
+                  'nickname',
+                  values.nickname
+                );
                 if (duplicate) error.nicknameDuplicate = true;
               };
 
@@ -80,32 +86,20 @@ type SignupFormProps = {
 };
 
 export function SignupForm({ onSubmit }: SignupFormProps) {
-  const [myEmailError, setMyEmailError] = useState<string | null>(null);
-  const [myNicknameError, setMyNicknameError] = useState<string | null>(null);
-  const debounce = useDebounce();
+  const { error: emailError, onChange: onChangeEmail } =
+    useDuplicateError('email');
+  const { error: nicknameError, onChange: onChangeNickname } =
+    useDuplicateError('nickname');
 
   return (
     <Formik
       initialValues={{ email: '', nickname: '', password: '' }}
       validationSchema={object({
-        email: string()
-          .email(ERRORS.emailInvalid)
-          .required(ERRORS.emailRequired),
-        nickname: string()
-          .matches(/^[ㄱ-ㅎ가-힣a-zA-Z0-9-_]+$/, ERRORS.nicknameInvalid)
-          .min(2, ERRORS.nicknameShort)
-          .max(10, ERRORS.nicknameLong)
-          .required(ERRORS.nicknameRequired),
-        password: string()
-          .matches(
-            /(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*\W)(?=\S+$).+/,
-            ERRORS.passwordInvalid
-          )
-          .min(8, ERRORS.passwordShort)
-          .max(20, ERRORS.passwordLong)
-          .required(ERRORS.passwordRequired),
+        email: getValidationSchema('email'),
+        nickname: getValidationSchema('nickname'),
+        password: getValidationSchema('passwordStrict'),
       })}
-      onSubmit={async (values, { setSubmitting, setErrors }) => {
+      onSubmit={async (values, { setErrors }) => {
         try {
           await onSubmit(values);
         } catch (_err) {
@@ -117,8 +111,11 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
             email: error.emailDuplicate ? ERRORS.emailDuplicate : '',
             nickname: error.nicknameDuplicate ? ERRORS.nicknameDuplicate : '',
           });
-        } finally {
-          setSubmitting(false);
+          if (error.emailDuplicate) {
+            focusOnFormElement('email');
+          } else if (error.nicknameDuplicate) {
+            focusOnFormElement('nickname');
+          }
         }
       }}
     >
@@ -132,44 +129,29 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
         isSubmitting,
       }) => (
         <form onSubmit={handleSubmit}>
+          <ConnectedFocusError focusDelay={0} />
           <Input
             value={values.email}
             onChange={(event) => {
               handleChange(event);
-              setMyEmailError(null);
-              debounce(() => {
-                const { value } = event.target;
-                if (value) {
-                  isEmailDuplicate(value).then((duplicate) => {
-                    if (duplicate) setMyEmailError(ERRORS.emailDuplicate);
-                  });
-                }
-              }, 200);
+              onChangeEmail(event);
             }}
             placeholder="이메일"
             type="email"
             name="email"
             onBlur={handleBlur}
-            error={myEmailError || (touched.email && errors.email)}
+            error={emailError || (touched.email && errors.email)}
           />
           <Input
             value={values.nickname}
             onChange={(event) => {
               handleChange(event);
-              setMyNicknameError(null);
-              debounce(() => {
-                const { value } = event.target;
-                if (value) {
-                  isNicknameDuplicate(value).then((duplicate) => {
-                    if (duplicate) setMyNicknameError(ERRORS.nicknameDuplicate);
-                  });
-                }
-              }, 200);
+              onChangeNickname(event);
             }}
             placeholder="닉네임"
             name="nickname"
             onBlur={handleBlur}
-            error={myNicknameError || (touched.nickname && errors.nickname)}
+            error={nicknameError || (touched.nickname && errors.nickname)}
           />
           <Input
             value={values.password}
@@ -192,17 +174,5 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
     </Formik>
   );
 }
-
-const isEmailDuplicate = async (email: string): Promise<boolean> => {
-  const { data } = await api.get(`/member/checkDuplicateByEmail/${email}`);
-  return data;
-};
-
-const isNicknameDuplicate = async (nickname: string): Promise<boolean> => {
-  const { data } = await api.get(
-    `/member/checkDuplicateByNickname/${nickname}`
-  );
-  return data;
-};
 
 export default Signup;

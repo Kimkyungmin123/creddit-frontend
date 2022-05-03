@@ -3,6 +3,7 @@ import Input from 'components/Input';
 import Layout from 'components/Layout';
 import SocialLoginButtons from 'components/SocialLoginButtons';
 import ERRORS from 'constants/errors';
+import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik, FormikErrors } from 'formik';
 import useLogin from 'hooks/useLogin';
 import useSocialLogin from 'hooks/useSocialLogin';
@@ -12,7 +13,8 @@ import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Login.module.scss';
-import { object, string } from 'yup';
+import getValidationSchema from 'utils/getValidationSchema';
+import { object } from 'yup';
 
 const Login: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
@@ -22,7 +24,7 @@ const Login: NextPage = () => {
 
   return (
     <Layout
-      title="creddit: 로그인"
+      title="로그인 - creddit"
       backgroundColor="clean"
       hideSearchBar={true}
     >
@@ -63,18 +65,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     <Formik
       initialValues={{ email: '', password: '' }}
       validationSchema={object({
-        email: string()
-          .email(ERRORS.emailInvalid)
-          .required(ERRORS.emailRequired),
-        password: string().required(ERRORS.passwordRequired),
+        email: getValidationSchema('email'),
+        password: getValidationSchema('passwordLax'),
       })}
-      onSubmit={async (values, { setSubmitting, setFieldError }) => {
+      onSubmit={async (values, { setFieldError }) => {
         try {
           await onSubmit(values);
         } catch (err) {
           setFieldError('emailOrPassword', ERRORS.emailOrPasswordInvalid);
-        } finally {
-          setSubmitting(false);
         }
       }}
     >
@@ -95,6 +93,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
         return (
           <form onSubmit={handleSubmit}>
+            <ConnectedFocusError focusDelay={0} />
             <Input
               value={values.email}
               onChange={handleChange}
@@ -115,7 +114,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
               error={touched.password && errors.password}
             />
             {errors.emailOrPassword && (
-              <p className={styles.fieldError}>{errors.emailOrPassword}</p>
+              <p className={styles.error}>{errors.emailOrPassword}</p>
             )}
             <Button
               type="submit"

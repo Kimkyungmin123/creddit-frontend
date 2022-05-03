@@ -24,10 +24,12 @@ body[data-theme='light'] {
   --dropdown-hover-bg: #e8e5f6;
   --sort-selected-bg: #f2f0fa;
   --sort-selected-text: #501eba;
-  --post-outside-bg: #383838;
+  --sort-hover-bg: #e4e0f5;
+  --post-outside-bg: #2f2f2f;
   --post-container-bg: #eeecf3;
   --post-top-bg: #000000;
   --post-top-text: #dbdbdb;
+  --post-top-hover-text: #999999;
   --post-content-bg: #fff;
   --heart-fill: #ff5544;
   --profile-top-bg: #501eba;
@@ -44,7 +46,7 @@ body[data-theme='light'] {
   --text-primary: #dbdbdb;
   --text-secondary: #999999;
   --text-suggestion: #7c3ffd;
-  --text-error: #eb0000;
+  --text-error: #ff0000;
   --border: #4d4d4d;
   --border-focus: #cccccc;
   --box-shadow: rgba(255, 255, 255, 0.2);
@@ -61,12 +63,13 @@ body[data-theme='light'] {
   --search-bar-slash-bg: #424242;
   --dropdown-hover-bg: #3e364f;
   --sort-selected-bg: #424242;
-  --sort-selected-text: #dbdbdb;
   --sort-selected-text: #fff;
-  --post-outside-bg: #2f2f2f;
+  --sort-hover-bg: #575757;
+  --post-outside-bg: #0f0f0f;
   --post-container-bg: #000000;
   --post-top-bg: #000000;
   --post-top-text: #dbdbdb;
+  --post-top-hover-text: #999999;
   --post-content-bg: #1f1f1f;
   --heart-fill: #ff5544;
   --profile-top-bg: #574a73;

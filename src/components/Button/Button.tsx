@@ -8,6 +8,7 @@ export type ButtonProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   ariaLabel?: string;
+  round?: boolean;
   variant?: 'primary' | 'error' | 'plain';
 };
 
@@ -17,6 +18,7 @@ function Button({
   onClick,
   disabled,
   ariaLabel,
+  round,
   variant = 'primary',
   ...props
 }: ButtonProps) {
@@ -24,6 +26,7 @@ function Button({
     <button
       className={classNames(
         styles.button,
+        round && styles.round,
         variant === 'error' && styles.error,
         variant === 'plain' && styles.plain
       )}

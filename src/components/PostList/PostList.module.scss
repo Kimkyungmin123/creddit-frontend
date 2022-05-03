@@ -26,11 +26,17 @@
     align-items: center;
     gap: 0.25rem;
     padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
 
     &.selected {
       background-color: var(--sort-selected-bg);
       color: var(--sort-selected-text);
-      border-radius: 0.25rem;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: var(--sort-hover-bg);
+      }
     }
   }
 }

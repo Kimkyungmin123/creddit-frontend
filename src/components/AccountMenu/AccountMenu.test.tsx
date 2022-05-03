@@ -1,11 +1,16 @@
+import userDummy from 'data/user.json';
 import { fireEvent, render, screen } from 'utils/test-utils';
-import AccountMenu from './AccountMenu';
+import AccountMenu, { AccountMenuProps } from './AccountMenu';
 
 describe('AccountMenu', () => {
   const setup = () => {
-    const utils = render(<AccountMenu />);
+    const initialProps: AccountMenuProps = {
+      user: userDummy,
+    };
+    const utils = render(<AccountMenu {...initialProps} />);
     const button = screen.getByLabelText('계정 메뉴') as HTMLButtonElement;
     return {
+      initialProps,
       button,
       ...utils,
     };

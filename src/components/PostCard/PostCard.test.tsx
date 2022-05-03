@@ -23,9 +23,9 @@ describe('PostCard', () => {
     expect(screen.getByTestId('creator').textContent).toBe(
       `by ${member.nickname}`
     );
-    expect(screen.getByText(`댓글 ${comments.length}개`)).toBeInTheDocument();
-    const likeButton = screen.getByLabelText('좋아요');
-    expect(likeButton.textContent).toMatch(new RegExp(`${likes}`));
+    expect(screen.getByText(`댓글 ${comments}개`)).toBeInTheDocument();
+    expect(screen.getByTestId('like-button')).toBeInTheDocument();
+    expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
     expect(screen.getByTestId('my-date')).toBeInTheDocument();
   });
 

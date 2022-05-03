@@ -52,6 +52,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.11.0"],\
             ["eslint-config-next", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:12.1.0"],\
             ["eslint-plugin-testing-library", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:5.2.0"],\
+            ["focus-formik-error", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.1.0"],\
             ["formik", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:2.2.9"],\
             ["husky", "npm:7.0.4"],\
             ["intermock", "npm:0.2.5"],\
@@ -5385,6 +5386,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["core-js", [\
+        ["npm:3.10.2", {\
+          "packageLocation": "./.yarn/unplugged/core-js-npm-3.10.2-f47c97f865/node_modules/core-js/",\
+          "packageDependencies": [\
+            ["core-js", "npm:3.10.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["core-js-compat", [\
         ["npm:3.21.1", {\
           "packageLocation": "./.yarn/cache/core-js-compat-npm-3.21.1-90d7dc97f2-6af1bcbc94.zip/node_modules/core-js-compat/",\
@@ -5443,6 +5453,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint", "npm:8.11.0"],\
             ["eslint-config-next", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:12.1.0"],\
             ["eslint-plugin-testing-library", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:5.2.0"],\
+            ["focus-formik-error", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.1.0"],\
             ["formik", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:2.2.9"],\
             ["husky", "npm:7.0.4"],\
             ["intermock", "npm:0.2.5"],\
@@ -6728,6 +6739,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/flatted-npm-3.2.5-0ee5a8875f-3c436e9695.zip/node_modules/flatted/",\
           "packageDependencies": [\
             ["flatted", "npm:3.2.5"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["focus-formik-error", [\
+        ["npm:1.1.0", {\
+          "packageLocation": "./.yarn/cache/focus-formik-error-npm-1.1.0-e0646be3dd-36679c18e0.zip/node_modules/focus-formik-error/",\
+          "packageDependencies": [\
+            ["focus-formik-error", "npm:1.1.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.1.0", {\
+          "packageLocation": "./.yarn/__virtual__/focus-formik-error-virtual-5ae06df347/0/cache/focus-formik-error-npm-1.1.0-e0646be3dd-36679c18e0.zip/node_modules/focus-formik-error/",\
+          "packageDependencies": [\
+            ["focus-formik-error", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.1.0"],\
+            ["@types/formik", null],\
+            ["@types/react", "npm:17.0.41"],\
+            ["core-js", "npm:3.10.2"],\
+            ["formik", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:2.2.9"],\
+            ["react", "npm:18.0.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/formik",\
+            "@types/react",\
+            "formik",\
+            "react"\
           ],\
           "linkType": "HARD"\
         }]\

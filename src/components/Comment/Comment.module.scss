@@ -1,78 +1,59 @@
-@mixin btn {
-  background-color: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
-
-.commentContainer {
+.container {
   display: flex;
   flex-direction: column;
   gap: 0.625rem;
 }
 
-.commentBoxTop {
+.top {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 
-  p {
+  & > p {
     font-size: 0.875rem;
   }
 }
 
-.commentInfo {
+.info {
   display: flex;
   font-size: 0.75rem;
   align-items: center;
   color: var(--text-secondary);
 
-  span:first-child {
+  & > span:first-child {
     color: var(--text-primary);
     font-weight: 700;
   }
 
-  span:nth-child(2) {
+  & > span:nth-child(2) {
     padding: 0 0.1875rem;
   }
-}
 
-.commentBtn {
-  padding-left: 0.75rem;
-  display: flex;
-  gap: 0.75rem;
+  & > button {
+    margin-left: 0.75rem;
+    padding: 0;
 
-  button {
-    @include btn;
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
-.commentBoxBottom {
+.bottom {
   display: flex;
-  gap: 0.375rem;
   align-items: center;
+  gap: 0.5rem;
   font-size: 0.75rem;
 
-  button:first-child {
-    display: flex;
-    gap: 0.25rem;
-    align-items: center;
-
-    @include btn;
-  }
-
   button:last-child {
-    @include btn;
+    padding: 0;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
-}
-
-.heartOutlineIcon {
-  width: 1rem;
-  height: 1rem;
-}
-
-.heartFillIcon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--heart-fill);
 }

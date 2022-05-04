@@ -29,7 +29,7 @@ api.interceptors.response.use(
     return response;
   },
   async (error: ResponseError) => {
-    const { method, url } = error.config;
+    const { url } = error.config;
     if (
       url === '/auth/reissueAccessRefreshToken' ||
       url === '/auth/reissueAccessToken'
@@ -38,8 +38,6 @@ api.interceptors.response.use(
     }
 
     await reIssueAuthToken();
-    if (method === 'get') return Promise.reject(error);
-
     error.config.retryCount = (error.config.retryCount || 0) + 1;
     return api(error.config);
   }

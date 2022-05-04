@@ -1,20 +1,20 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 function useDebounce() {
-  let timeoutID: NodeJS.Timeout | null = null;
+  const timeoutId = useRef<NodeJS.Timeout | null>(null);
 
   const debounce = (callback: any, timeout: number) => {
-    if (timeoutID) clearTimeout(timeoutID);
-    timeoutID = setTimeout(() => {
+    if (timeoutId.current) clearTimeout(timeoutId.current);
+    timeoutId.current = setTimeout(() => {
       callback();
     }, timeout);
   };
 
   useEffect(() => {
     return () => {
-      if (timeoutID) clearTimeout(timeoutID);
+      if (timeoutId.current) clearTimeout(timeoutId.current);
     };
-  }, [timeoutID]);
+  }, [timeoutId]);
 
   return debounce;
 }

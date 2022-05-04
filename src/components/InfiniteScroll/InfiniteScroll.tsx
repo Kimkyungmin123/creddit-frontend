@@ -8,11 +8,13 @@ type Props = {
 
 function InfiniteScroll({ data, size, onIntersect }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [prevData, setPrevData] = useState<any[]>([]);
+  const [prevData, setPrevData] = useState<any[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoading || (data && prevData.length < size)) return;
+    if (isLoading || (data && prevData && prevData.length < size)) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {

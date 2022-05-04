@@ -3,7 +3,7 @@ import PostList from './PostList';
 
 describe('PostList', () => {
   const setup = () => {
-    const utils = render(<PostList />);
+    const utils = render(<PostList url="url" />);
     const sortByLikeButton = screen.getByLabelText(
       '인기순으로 정렬'
     ) as HTMLButtonElement;

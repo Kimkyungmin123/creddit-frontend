@@ -1,57 +1,86 @@
-import { createContext, FC, useContext, useReducer } from 'react';
+import { useRouter } from 'next/router';
+import { createContext, FC, useContext, useEffect, useReducer } from 'react';
 import { Post } from 'types';
+
+interface State {
+  posts: Post[] | null;
+  url: string;
+}
 
 interface Action {
   type: 'RESET' | 'CHANGE_POST' | 'LIKE_POST' | 'ADD_POSTS';
   postId?: number;
   post?: Partial<Post>;
   posts?: Post[];
+  url?: string;
 }
 
-function reducer(state: Post[] | null, action: Action) {
+const initialState: State = { posts: null, url: '' };
+
+function reducer(state: State, action: Action) {
   switch (action.type) {
     case 'RESET':
-      return null;
+      return { ...initialState };
     case 'CHANGE_POST':
-      return (
-        state?.map((post) => {
-          if (post.id === action.post?.id) return { ...post, ...action.post };
-          return post;
-        }) || []
-      );
+      return {
+        ...state,
+        posts:
+          state.posts?.map((post) => {
+            if (post.id === action.post?.id) return { ...post, ...action.post };
+            return post;
+          }) || [],
+      };
     case 'LIKE_POST':
-      return (
-        state?.map((post) => {
-          if (post.id === action.postId)
-            return {
-              ...post,
-              liked: !post.liked,
-              likes: post.liked ? post.likes - 1 : post.likes + 1,
-            };
-          return post;
-        }) || []
-      );
+      return {
+        ...state,
+        posts:
+          state.posts?.map((post) => {
+            if (post.id === action.postId)
+              return {
+                ...post,
+                liked: !post.liked,
+                likes: post.liked ? post.likes - 1 : post.likes + 1,
+              };
+            return post;
+          }) || [],
+      };
     case 'ADD_POSTS':
-      return [...(state || []), ...(action.posts || [])];
+      return {
+        ...state,
+        posts: [...(state.posts || []), ...(action.posts || [])],
+        url: action.url || '',
+      };
     default:
       throw new Error();
   }
 }
 
 const Context = createContext<{
-  posts: Post[] | null;
+  state: State;
   dispatch: (value: Action) => void;
 }>({
-  posts: null,
+  state: initialState,
   dispatch: () => {},
 });
 
 export const PostsContextProvider: FC = ({ children }) => {
-  const [posts, dispatch] = useReducer(reducer, null);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
-    <Context.Provider value={{ posts, dispatch }}>{children}</Context.Provider>
+    <Context.Provider value={{ state, dispatch }}>{children}</Context.Provider>
   );
 };
 
 export const usePostsContext = () => useContext(Context);
+
+export function useResetPosts() {
+  const { state, dispatch } = usePostsContext();
+  const { url } = state;
+  const router = useRouter();
+
+  useEffect(() => {
+    if (url !== router.asPath) {
+      dispatch({ type: 'RESET' });
+    }
+  }, [url, dispatch, router]);
+}

@@ -7,153 +7,135 @@ import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useUser from 'hooks/useUser';
-// import axios from 'axios';
+import axios from 'axios';
 import useInput from 'hooks/useInput';
-// import useSWR from 'swr';
+
 import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
+import { useDispatch } from 'react-redux';
+import { createChatRoom, sendNewMessage, receiveMessage } from '../store/slice';
 
-const socketUrl = 'http://localhost:8000/ws';
+export type messageInfo = {
+  message?: any;
+  sender: string;
+  receiver: string;
+  createdDate: string | number;
+};
+
 let client: any = null;
+const socketUrl = 'http://localhost:8000/ws';
 const Chat: NextPage = () => {
-  // const fetcher = (url: string) =>
-  //   axios.get(url).then((response) => response.data);
-
   const { user } = useUser();
   const username = user?.nickname;
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
+  const dispatch = useDispatch();
+  const [targetUser, setTargetUser] = useState('');
 
-  //채팅 받아 오는 API
-  // const { data: chatData, mutate: mutateChat } = useSWR(
-  //   API + '/' + username + '/chatrooms',
-  //   fetcher,
-  //   {
-  // onSuccess(data) {
-  //   if (data?.length === 1) {
-  //     setTimeout(() => {
-  //       scrollbarRef.current?.scrollToBottom();
-  //     }, 100);
-  //   }
-  // },
-  //}
-  //);
+  const getChatRooms = useCallback(() => {
+    axios({
+      method: 'get',
+      url: 'http://localhost:8000/chat/' + username + '/chatrooms',
+    }).then((response) => {
+      console.log('response: ', response);
+      setChat(''); //
+      setTargetUser('');
+      for (const key in response.data) {
+        dispatch(
+          createChatRoom({
+            targetUser: response.data[key].target,
+            messages: [...response.data[key].messages],
+          })
+        );
+      }
+    });
+  }, [dispatch, setChat, username]);
+
+  const receiveMessageData = useCallback(
+    (...message: any) => {
+      dispatch(receiveMessage(message));
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
+    getChatRooms();
     const socket = new SockJS(socketUrl);
     client = Stomp.over(socket);
     client.connect(
       {},
       () => {
         console.log('현재' + username);
-        client.send('/topic/' + username, {}, JSON.stringify(chat));
+
+        client.subscribe('/topic/' + username, function (msg: any) {
+          receiveMessageData(
+            _processMessage(msg.body),
+            msg.headers.destination
+          );
+        });
+        // client.send('/topic/' + username, {}, JSON.stringify(chat));
       },
-      onError
+      (err: Error) => {
+        console.log(err);
+      }
     );
 
-    // return () => client.disconnet();
-  }, [chat, username]);
+    return () => client.deactivate();
+  }, [username, getChatRooms, receiveMessageData]);
 
-  const onError = (err: Error) => {
-    console.log(err);
+  const _processMessage = (msgBody: any) => {
+    try {
+      return JSON.parse(msgBody);
+    } catch (e) {
+      return msgBody;
+    }
   };
 
-  //채팅 보내는 API
-  // const onSubmitForm = useCallback((e) => {
-  //   e.preventDefault();
-  //    setChat('')
-  //   if (chat?.trim() && chatData) {
-  //     // mutate ...
-  //     // 스크롤 밑으로
-  //     axios
-  //       .post(
-  //        '채팅 POST API' +
-  //           '/' +
-  //           username +
-  //           '/chatrooms',
-  //         {
-  //           content: chat,
-  //         }
-  //       )
-  //       .catch(console.error);
-  //   }
-  // }, []);
+  const publish = (messageInfo: messageInfo) => {
+    if (!client.connected) {
+      return;
+    }
+
+    client.publish({
+      destination: '/app/send',
+      body: JSON.stringify(messageInfo),
+    });
+
+    // setMessage("");
+  };
+
+  const sendMessageData = (message: any, sender: string, receiver: string) => {
+    const messageInfo = {
+      message,
+      sender,
+      receiver,
+      createdDate: new Date().getTime(),
+    };
+
+    publish(messageInfo);
+    dispatch(sendNewMessage(messageInfo));
+  };
+
+  // console.log(chatRooms);
 
   return (
     <Layout title="creddit: Chat">
-      {/* 작업 중에만 반대로 */}
-      {!user ? (
+      {user ? (
         <>
           <div className={styles.chatContainer}>
             <div className={styles.chatBox}>
               <AddChatButton onClick={openModal} />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
+              {/* {Object.keys(chatRooms).map((key) => (
+                <ChatListBox
+                  key={key}
+                  interlocutorName={key}
+                  sendMessageData={sendMessageData}
+                />
+              ))} */}
+
               <ChatListBox
                 interlocutorName="aa"
                 lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
@@ -176,9 +158,7 @@ const Chat: NextPage = () => {
               </div>
               <div className={styles.SendMessageBox}>
                 <SendMessageForm
-                  // onSubmit={onSubmitForm}
-                  // 임시 onSubmit
-                  onSubmit={() => setChat('')}
+                  onSubmit={() => sendMessageData}
                   onChange={onChangeChat}
                   value={chat}
                 />
@@ -188,6 +168,7 @@ const Chat: NextPage = () => {
               show={isModalOpen}
               onCloseModal={closeModal}
               setShowInviteModal={openModal}
+              targetUser={targetUser || ''}
             />
           </div>
         </>

@@ -6,6 +6,13 @@ export type ChatListBoxProps = {
   interlocutorName: string;
   lastMessage?: string;
   sentDate?: string;
+  sendMessageData?: {
+    message?: any;
+    sender: string;
+    receiver: string;
+    createdDate: string | number;
+  };
+
   onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
 };
 const CONTENT_MAX_LENGTH = 35;
@@ -15,7 +22,11 @@ const ChatListBox = ({
   lastMessage,
   sentDate,
   onClick,
+  sendMessageData,
 }: ChatListBoxProps) => {
+  {
+    sendMessageData;
+  }
   return (
     <div className={styles.ChatBox} onClick={onClick}>
       <div className={styles.profileImg}>

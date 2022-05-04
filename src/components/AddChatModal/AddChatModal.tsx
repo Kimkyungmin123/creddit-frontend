@@ -1,59 +1,52 @@
 import useInput from 'hooks/useInput';
-import { FC, useCallback } from 'react';
+// import { FC, useCallback } from 'react';
 import styles from './AddChatModal.module.scss';
 import axios from 'axios';
-import useSWR from 'swr';
-import useUser from 'hooks/useUser';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { Close } from 'icons';
+import useSWR from 'swr';
 
 interface AddChatModalProps {
   show: boolean;
   onCloseModal: () => void;
   setShowInviteModal: (flag: boolean) => void;
+  targetUser: string;
 }
 
-const AddChatModal: FC<AddChatModalProps> = ({
+const AddChatModal = ({
   show,
   onCloseModal,
   setShowInviteModal,
-}) => {
+}: AddChatModalProps) => {
+  const [newMember, onChangeNewMember, setNewMember] = useInput('');
+  // const [keyword, setKeyword, onChangeKeyword] = useInput('');
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data);
-
-  const { user } = useUser();
-  const username = user?.nickname;
-  const [newMember, onChangeNewMember, setNewMember] = useInput('');
-  const { mutate: revalidateMember } = useSWR(
-    username ? `/api/멤버 초대 API` : null,
+  const { data } = useSWR(
+    `http://localhost:8080/member/search?page=0&keyword=${newMember}`,
     fetcher
   );
-  const onInviteMember = useCallback(
-    (e) => {
-      e.preventDefault();
 
-      if (!newMember || !newMember.trim()) {
-        return;
-      }
-      axios
-        .post(`/api/`, {
-          // 멤버 초대 API 추가
-        })
-        .then(() => {
-          revalidateMember();
-          setShowInviteModal(false);
-          setNewMember('');
-        })
-        .catch((error) => {
-          setNewMember('');
-          console.dir(error);
-          alert(error.response?.data);
-        });
-    },
+  console.log(data);
 
-    [newMember, revalidateMember, setShowInviteModal, setNewMember]
-  );
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+    axios({
+      method: 'get',
+      url: `http://localhost:8080/member/search?page=0&keyword=${newMember}`,
+    })
+      .then((response) => {
+        console.log(response);
+        setNewMember('');
+        setShowInviteModal(false);
+      })
+      .catch((error) => {
+        setNewMember('');
+        console.log(error.response);
+        console.log(newMember + '추가실패');
+      });
+  };
   if (!show) {
     return null;
   }
@@ -67,7 +60,7 @@ const AddChatModal: FC<AddChatModalProps> = ({
         <Button type="reset" variant="plain" onClick={onCloseModal}>
           <Close />
         </Button>
-        <form onSubmit={onInviteMember}>
+        <form onSubmit={onSubmit}>
           <Input
             value={newMember}
             onChange={onChangeNewMember}

@@ -11,7 +11,11 @@
     },
     "modifiedDate": "2022-04-27T15:28:54.186568",
     "parentCommentId": 23027,
-    "postId": 1
+    "postId": 1,
+    "profile": {
+      "imgName": null,
+      "imgUrl": null
+    }
   },
   {
     "commentId": 16101,
@@ -25,7 +29,11 @@
     },
     "modifiedDate": "2022-04-27T15:28:54.186568",
     "parentCommentId": 76664,
-    "postId": 1
+    "postId": 1,
+    "profile": {
+      "imgName": null,
+      "imgUrl": null
+    }
   },
   {
     "commentId": 77539,
@@ -39,7 +47,11 @@
     },
     "modifiedDate": "2022-04-27T15:28:54.186568",
     "parentCommentId": 70044,
-    "postId": 1
+    "postId": 1,
+    "profile": {
+      "imgName": null,
+      "imgUrl": null
+    }
   },
   {
     "commentId": 45084,
@@ -53,6 +65,10 @@
     },
     "modifiedDate": "2022-04-27T15:28:54.186568",
     "parentCommentId": 44415,
-    "postId": 1
+    "postId": 1,
+    "profile": {
+      "imgName": null,
+      "imgUrl": null
+    }
   }
 ]

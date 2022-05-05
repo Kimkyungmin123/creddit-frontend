@@ -27,6 +27,7 @@
 
 .postDetail {
   display: flex;
+  align-items: center;
   gap: 1rem;
   font-size: 0.875rem;
 
@@ -41,4 +42,10 @@
       }
     }
   }
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }

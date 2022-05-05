@@ -65,8 +65,9 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
             : comments[comments.length - 1].commentId;
 
           const { data } = await api.get<CommentType[]>(
-            `/comment?postId=${post.id}&lastCommentId=${id}&size=10&sort=new`
+            `/comment?postId=${post.id}&index=${id}&size=10&sort=new`
           );
+
           setComments((prev) => [...(prev || []), ...data]);
           return data;
         }}

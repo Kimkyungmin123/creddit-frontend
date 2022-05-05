@@ -1,5 +1,6 @@
 .container {
   position: relative;
+  display: block;
   overflow: hidden;
 
   &.circle {
@@ -13,7 +14,8 @@
 }
 
 .emptyImage {
-  display: flex;
+  width: 100%;
+  height: 100%;
   padding-top: 0.25rem;
   background-color: #e4e6e7;
   color: #aeb4b7;

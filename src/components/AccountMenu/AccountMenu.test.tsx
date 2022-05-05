@@ -18,7 +18,7 @@ describe('AccountMenu', () => {
 
   it('renders properly', () => {
     const { button } = setup();
-    expect(screen.getByTestId('프로필 이미지')).toBeInTheDocument();
+    expect(screen.getByTestId('profile-image')).toBeInTheDocument();
     expect(button).toBeInTheDocument();
   });
 

@@ -26,6 +26,7 @@ export type Comment = {
   modifiedDate: string;
   parentCommentId: number;
   postId: number;
+  profile: MyImage;
 };
 
 export type Post = {
@@ -38,5 +39,6 @@ export type Post = {
   likes: number;
   member: Member;
   modifiedDate: string;
+  profile: MyImage;
   title: string;
 };

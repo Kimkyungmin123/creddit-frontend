@@ -1,5 +1,6 @@
 import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
+import ProfileImage from 'components/ProfileImage';
 import { usePostCardContext } from 'context/PostCardContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -26,8 +27,8 @@ const PostCard = ({ post }: PostCardProps) => {
     comments,
     liked,
     image,
+    profile,
   } = post;
-  const { imgUrl } = image;
   const router = useRouter();
   const { setClickedPostCard } = usePostCardContext();
 
@@ -51,15 +52,15 @@ const PostCard = ({ post }: PostCardProps) => {
       <p data-testid="content">
         {content.length > CONTENT_MAX_LENGTH ? cutContents(content) : content}
       </p>
-      {imgUrl && (
+      {image.imgUrl && (
         <div className={styles.imageContainer}>
-          <img src={imgUrl} alt="글 이미지" />
+          <img src={image.imgUrl} alt="글 이미지" />
         </div>
       )}
       <div className={styles.postDetail}>
         <div className={styles.postDetailLeft}>
-          <div className={styles.creator} data-testid="creator">
-            <span>by </span>
+          <div className={styles.author} data-testid="author">
+            <ProfileImage imgUrl={profile.imgUrl} size={1.5} />
             {member.nickname}
           </div>
           <div className={styles.comments}>댓글 {comments}개</div>

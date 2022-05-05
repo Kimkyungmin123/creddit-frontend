@@ -37,6 +37,7 @@ describe('PostMain', () => {
     const { post } = initialProps;
     const { title, member, content, id } = post;
     expect(screen.getByText(title)).toBeInTheDocument();
+    expect(screen.getByTestId('profile-image')).toBeInTheDocument();
     expect(screen.getByText(member.nickname)).toBeInTheDocument();
     expect(screen.getByTestId('my-date')).toBeInTheDocument();
     expect(editButton).toHaveAttribute('href', `/edit-post?id=${id}`);

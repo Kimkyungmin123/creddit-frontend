@@ -1,5 +1,6 @@
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
+import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
@@ -14,8 +15,7 @@ export type PostMainProps = {
 };
 
 function PostMain({ post }: PostMainProps) {
-  const { title, createdDate, content, member, id, image } = post;
-  const { imgUrl } = image;
+  const { title, createdDate, content, member, id, image, profile } = post;
   const { user } = useUser();
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -25,7 +25,10 @@ function PostMain({ post }: PostMainProps) {
     <div className={styles.postMain} data-testid="post-main">
       <h2>{title}</h2>
       <div className={styles.postDetail}>
-        <span>{member.nickname}</span>
+        <div className={styles.author}>
+          <ProfileImage imgUrl={profile.imgUrl} size={1.5} />
+          <span>{member.nickname}</span>
+        </div>
         <MyDate date={createdDate} />
         {user?.nickname === member.nickname && (
           <>
@@ -53,7 +56,7 @@ function PostMain({ post }: PostMainProps) {
         )}
       </div>
       <p data-testid="content">{content}</p>
-      {imgUrl && <img src={imgUrl} alt="글 이미지" />}
+      {image.imgUrl && <img src={image.imgUrl} alt="글 이미지" />}
     </div>
   );
 }

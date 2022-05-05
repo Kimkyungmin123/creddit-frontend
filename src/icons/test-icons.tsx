@@ -12,6 +12,7 @@ const LoadingSpokes = () => <>테스트용입니다.</>;
 const Menu = () => <>테스트용입니다.</>;
 const MoonOutline = () => <>테스트용입니다.</>;
 const Naver = () => <>테스트용입니다.</>;
+const Person = () => <>테스트용입니다.</>;
 const Rising = () => <>테스트용입니다.</>;
 const Search = () => <>테스트용입니다.</>;
 const Sort = () => <>테스트용입니다.</>;
@@ -32,6 +33,7 @@ export {
   Menu,
   MoonOutline,
   Naver,
+  Person,
   Rising,
   Search,
   Sort,

@@ -1,9 +1,8 @@
 import Button from 'components/Button';
 import DeleteModal from 'components/DeleteModal';
+import ProfileImage from 'components/ProfileImage';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
-import profile from 'images/profileImg.png';
-import Image from 'next/image';
 import { useRef } from 'react';
 import { mutate } from 'swr';
 import { MyImage } from 'types';
@@ -24,14 +23,7 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
 
   return (
     <div className={styles.imageBox} data-testid="image-box">
-      <div className={styles.profileImage}>
-        <Image
-          src={imgUrl || profile}
-          alt="프로필 이미지"
-          layout="fill"
-          objectFit="cover"
-        />
-      </div>
+      <ProfileImage imgUrl={imgUrl} shape="rectangle" size={6} />
       <div className={styles.buttons}>
         <input
           type="file"
@@ -69,8 +61,8 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
         )}
         {isModalOpen && (
           <DeleteModal
-            title="이미지 삭제"
-            message={'정말 이미지를 삭제하시겠습니까?'}
+            title="이미지 제거"
+            message={'정말 이미지를 제거하시겠습니까?'}
             onConfirm={async () => {
               const { data } = await editProfile({ introduction });
               const { image } = data;
@@ -82,6 +74,7 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
               );
             }}
             onCancel={closeModal}
+            buttonName="제거"
           />
         )}
       </div>

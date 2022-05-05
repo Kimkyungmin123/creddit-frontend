@@ -1,0 +1,20 @@
+.container {
+  position: relative;
+  overflow: hidden;
+
+  &.circle {
+    border-radius: 50%;
+  }
+
+  &.rectangle {
+    border: solid 0.125rem var(--border);
+    border-radius: 0.25rem;
+  }
+}
+
+.emptyImage {
+  display: flex;
+  padding-top: 0.25rem;
+  background-color: #e4e6e7;
+  color: #aeb4b7;
+}

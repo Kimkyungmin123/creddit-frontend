@@ -7,6 +7,7 @@ export type DeleteModalProps = {
   message: string;
   onConfirm: MouseEventHandler<HTMLButtonElement>;
   onCancel: MouseEventHandler<HTMLElement>;
+  buttonName?: string;
 };
 
 // TODO: 포커스 트랩
@@ -15,6 +16,7 @@ function DeleteModal({
   message,
   onConfirm,
   onCancel,
+  buttonName,
 }: DeleteModalProps) {
   return (
     <div
@@ -32,7 +34,7 @@ function DeleteModal({
         <p>{message}</p>
         <div className={styles.buttonsContainer}>
           <Button onClick={onConfirm} variant="error">
-            삭제
+            {buttonName || '삭제'}
           </Button>
           <Button variant="plain" onClick={onCancel} ariaLabel="삭제 취소">
             취소

@@ -13,7 +13,6 @@ export type PostCommentBoxProps = {
   post: Post;
 };
 
-// TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
   const [comments, setComments] = useState<CommentType[] | null>();
   const { dispatch } = usePostsContext();

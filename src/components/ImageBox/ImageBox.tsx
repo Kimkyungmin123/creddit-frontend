@@ -1,9 +1,9 @@
 import Button from 'components/Button';
 import DeleteModal from 'components/DeleteModal';
+import ImageUploadButton from 'components/ImageUploadButton';
 import ProfileImage from 'components/ProfileImage';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
-import { useRef } from 'react';
 import { mutate } from 'swr';
 import { MyImage } from 'types';
 import editProfile from 'utils/editProfile';
@@ -14,10 +14,8 @@ export type ImageBoxProps = {
   introduction: string;
 };
 
-// TODO: 현재 로그인한 사용자의 프로필일 때만 업로드, 삭제 버튼 출력
 function ImageBox({ image, introduction }: ImageBoxProps) {
   const { imgUrl } = image;
-  const inputRef = useRef<HTMLInputElement>(null);
   const { isModalOpen, openModal, closeModal } = useModal();
   const { user } = useUser();
 
@@ -25,31 +23,17 @@ function ImageBox({ image, introduction }: ImageBoxProps) {
     <div className={styles.imageBox} data-testid="image-box">
       <ProfileImage imgUrl={imgUrl} shape="rectangle" size={6} />
       <div className={styles.buttons}>
-        <input
-          type="file"
-          ref={inputRef}
-          hidden
-          onChange={async (event) => {
-            if (event.target.files) {
-              const { data } = await editProfile({
-                introduction,
-                imageFile: event.target.files[0],
-              });
-              const { image } = data;
-              await mutate(
-                '/profile/show',
-                { user: { ...user, image } },
-                false
-              );
-            }
+        <ImageUploadButton
+          ariaLabel={'프로필 이미지 업로드'}
+          onChange={async (file) => {
+            const { data } = await editProfile({
+              introduction,
+              imageFile: file,
+            });
+            const { image } = data;
+            await mutate('/profile/show', { user: { ...user, image } }, false);
           }}
         />
-        <Button
-          ariaLabel="프로필 이미지 업로드"
-          onClick={() => inputRef.current?.click()}
-        >
-          이미지 업로드
-        </Button>
         {imgUrl && (
           <Button
             variant="plain"

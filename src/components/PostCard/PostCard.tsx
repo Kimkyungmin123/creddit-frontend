@@ -16,8 +16,18 @@ export type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { id, title, content, member, createdDate, likes, comments, liked } =
-    post;
+  const {
+    id,
+    title,
+    content,
+    member,
+    createdDate,
+    likes,
+    comments,
+    liked,
+    image,
+  } = post;
+  const { imgUrl } = image;
   const router = useRouter();
   const { setClickedPostCard } = usePostCardContext();
 
@@ -41,6 +51,11 @@ const PostCard = ({ post }: PostCardProps) => {
       <p data-testid="content">
         {content.length > CONTENT_MAX_LENGTH ? cutContents(content) : content}
       </p>
+      {imgUrl && (
+        <div className={styles.imageContainer}>
+          <img src={imgUrl} alt="글 이미지" />
+        </div>
+      )}
       <div className={styles.postDetail}>
         <div className={styles.postDetailLeft}>
           <div className={styles.creator} data-testid="creator">

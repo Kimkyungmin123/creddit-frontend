@@ -14,7 +14,8 @@ export type PostMainProps = {
 };
 
 function PostMain({ post }: PostMainProps) {
-  const { title, createdDate, content, member, id } = post;
+  const { title, createdDate, content, member, id, image } = post;
+  const { imgUrl } = image;
   const { user } = useUser();
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -52,6 +53,7 @@ function PostMain({ post }: PostMainProps) {
         )}
       </div>
       <p data-testid="content">{content}</p>
+      {imgUrl && <img src={imgUrl} alt="글 이미지" />}
     </div>
   );
 }

@@ -13,6 +13,7 @@ import { Post } from 'types';
 import api, { fetcher } from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
 
+// TODO: 기존 이미지를 없앨 수 있도록 하기
 const EditPost: NextPage = () => {
   const { isLoading, user } = useUser({
     redirectTo: '/',
@@ -38,9 +39,10 @@ const EditPost: NextPage = () => {
       {!isLoading && user && data && id !== undefined && (
         <PostForm
           title="수정"
+          imageUrl={data.image.imgUrl}
           initialValues={{ title: data.title, content: data.content }}
-          onSubmit={async (values) => {
-            const formData = getPostFormData(values);
+          onSubmit={async (values, imageFile) => {
+            const formData = getPostFormData({ values, imageFile });
             await api.post(`/post/${id}/edit`, formData);
             const { title, content } = values;
             const post = await mutate<Post>(

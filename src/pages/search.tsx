@@ -18,7 +18,7 @@ const Search: NextPage = () => {
           <PostList
             url="/post/search"
             params={{ keyword: q }}
-            diableSort={true}
+            disableSort={true}
           />
         )}
       </div>

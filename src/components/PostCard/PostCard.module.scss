@@ -32,6 +32,18 @@
   }
 }
 
+.imageContainer {
+  @media (max-width: $breakpoints-sm) {
+    margin: 0 -0.75rem;
+  }
+
+  img {
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 34.125rem;
+  }
+}
+
 .postDetail {
   display: flex;
   align-items: center;
@@ -49,6 +61,8 @@
   }
 }
 
-.creator span {
-  color: var(--text-secondary);
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }

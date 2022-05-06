@@ -1,7 +1,6 @@
 import AccoutMenuDetail from 'components/AccountMenuDetail';
+import ProfileImage from 'components/ProfileImage';
 import { CaretDown } from 'icons';
-import profile from 'images/profileImg.png';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { User } from 'types';
 import styles from './AccountMenu.module.scss';
@@ -42,14 +41,7 @@ function AccountMenu({ user }: AccountMenuProps) {
         aria-label="계정 메뉴"
         onClick={() => setExpanded((prev) => !prev)}
       >
-        <div className={styles.imageContainer}>
-          <Image
-            src={user.image.imgUrl || profile}
-            alt="사용자 프로필 이미지"
-            layout="fill"
-            objectFit="cover"
-          />
-        </div>
+        <ProfileImage imgUrl={user.image.imgUrl} size={1.875} />
         <CaretDown />
       </button>
       {expanded && <AccoutMenuDetail onClick={() => setExpanded(false)} />}

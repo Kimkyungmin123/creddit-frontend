@@ -13,7 +13,6 @@ export type PostCommentBoxProps = {
   post: Post;
 };
 
-// TODO: 댓글 무한 스크롤
 function PostCommentBox({ post }: PostCommentBoxProps) {
   const [comments, setComments] = useState<CommentType[] | null>();
   const { dispatch } = usePostsContext();
@@ -37,7 +36,6 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
           onSubmit={async ({ comment }) => {
             await api.post('/comment', {
               content: comment,
-              parentCommentId: 0,
               postId: post.id,
             });
             const data = await mutate<Post>(`/post/${post.id}`);
@@ -66,8 +64,9 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
             : comments[comments.length - 1].commentId;
 
           const { data } = await api.get<CommentType[]>(
-            `/comment?postId=${post.id}&lastCommentId=${id}&size=10&sort=new`
+            `/comment?postId=${post.id}&index=${id}&size=10&sort=new`
           );
+
           setComments((prev) => [...(prev || []), ...data]);
           return data;
         }}

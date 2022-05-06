@@ -33,6 +33,7 @@ describe('PostForm', () => {
     const { title } = initialProps;
     expect(screen.getByText(title)).toBeInTheDocument();
     expect(titleTextarea).toBeInTheDocument();
+    expect(screen.getByTestId('image-upload-button')).toBeInTheDocument();
     expect(contentTextarea).toBeInTheDocument();
     expect(submitButton).toBeDisabled();
   });
@@ -67,7 +68,7 @@ describe('PostForm', () => {
     expect(submitButton).not.toBeDisabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith(values);
+      expect(onSubmit).toHaveBeenCalledWith(values, null);
     });
   });
 });

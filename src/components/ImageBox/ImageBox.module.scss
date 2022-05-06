@@ -7,15 +7,6 @@
   color: var(--text-secondary);
 }
 
-.profileImage {
-  position: relative;
-  width: 6rem;
-  height: 6rem;
-  border: solid 0.125rem var(--border);
-  border-radius: 0.25rem;
-  overflow: hidden;
-}
-
 .buttons {
   display: flex;
   gap: 0.5rem;

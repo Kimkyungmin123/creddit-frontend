@@ -1,5 +1,4 @@
 import useInput from 'hooks/useInput';
-// import { FC, useCallback } from 'react';
 import styles from './AddChatModal.module.scss';
 import axios from 'axios';
 import Button from 'components/Button';
@@ -26,20 +25,10 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data.data);
 
-  // const fetcherAddMember = (url: string) =>
-  //   axios.get(url).then((response) => response.data);
-
   const { data: subscribed } = useSWR(
     `http://localhost:8080/member/search?page=0&keyword=${newMember}`,
     fetcher
   );
-  // const { mutate: revalidateMembers } = useSWR(
-  //   username
-  //     ? `http://localhost:8000/chat/register/${username}/${newMember}`
-  //     : null,
-  //   fetcherAddMember
-  // );
-  console.log(subscribed);
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
@@ -75,6 +64,9 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
       e.preventDefault();
       setNewMember('');
       setDebouncedValue('');
+      onCloseModal();
+
+      alert('임시 알림 ) 추가완료. (현재는 새로고침해야 보여요..😅)');
       if (!newMember || !newMember.trim()) {
         return;
       }
@@ -84,21 +76,12 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
           if (subscribed !== response.data) {
             return;
           }
-          // revalidateMembers();
-
-          console.log(response);
         })
         .catch((error) => {
           console.dir(error.response?.data);
         });
     },
-    [
-      username,
-      newMember,
-      // revalidateMembers,
-      setNewMember,
-      subscribed,
-    ]
+    [username, newMember, setNewMember, onCloseModal, subscribed]
   );
 
   if (!show) {
@@ -143,7 +126,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
                     currentIndex === 0 && styles.selected
                   )}
                   data-index={0}
-                  onClick={() => console.log('ok')}
                 >
                   <span> {debouncedValue}</span>
                 </li>
@@ -154,8 +136,9 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
                       index + 1 === currentIndex && styles.selected
                     )}
                     data-index={index + 1}
+                    onClick={() => setNewMember(data.nickname)}
                   >
-                    <span onClick={() => setNewMember(data.nickname)}>
+                    <span>
                       {data.nickname} ({data.email})
                     </span>
                   </li>

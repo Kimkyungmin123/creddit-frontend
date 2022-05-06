@@ -18,6 +18,8 @@ const ERRORS = Object.freeze({
   contentLong: '글 내용은 2,000자 이상 작성할 수 없습니다.',
   commentLong: '댓글 내용은 2,000자 이상 작성할 수 없습니다.',
   commentRequired: '댓글이 비어있습니다.',
+  imageLarge: '10MB 이하의 이미지만 업로드할 수 있습니다.',
+  imageWrongType: 'JPG, PNG, GIF 파일만 업로드할 수 있습니다.',
 });
 
 export default ERRORS;

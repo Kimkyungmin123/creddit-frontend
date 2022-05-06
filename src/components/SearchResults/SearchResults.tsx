@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { usePostCardContext } from 'context/PostCardContext';
 import { usePostsContext } from 'context/PostsContext';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ function SearchResults({ value, onClick }: SearchResultsProps) {
     fetcher
   );
   const { dispatch } = usePostsContext();
+  const { setClickedPostCard } = usePostCardContext();
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
@@ -50,7 +52,10 @@ function SearchResults({ value, onClick }: SearchResultsProps) {
   return (
     <ul
       className={styles.results}
-      onClick={onClick}
+      onClick={() => {
+        setClickedPostCard(true);
+        onClick();
+      }}
       data-testid="search-results"
     >
       <li

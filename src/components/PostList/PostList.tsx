@@ -60,7 +60,7 @@ function PostList({ url, params, diableSort }: PostListProps) {
           const { data } = await api.get<Post[]>(url, {
             params: {
               ...params,
-              lastPostId: id,
+              index: id,
               size: 10,
               sort: diableSort ? null : 'new',
             },

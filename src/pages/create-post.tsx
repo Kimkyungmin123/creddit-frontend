@@ -22,8 +22,8 @@ const CreatePost: NextPage = () => {
       {!isLoading && user && (
         <PostForm
           title="작성"
-          onSubmit={async (values) => {
-            const formData = getPostFormData(values);
+          onSubmit={async (values, imageFile) => {
+            const formData = getPostFormData({ values, imageFile });
             const { data } = await api.post('/post/create', formData);
             dispatch({ type: 'RESET' });
             setClickedPostCard(false);

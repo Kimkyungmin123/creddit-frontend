@@ -1,13 +1,14 @@
 type Params = {
-  title: string;
-  content: string;
+  values: { title: string; content: string };
+  imageFile?: File | null;
 };
 
-function getPostFormData({ title, content }: Params) {
+function getPostFormData({ values, imageFile }: Params) {
   const formData = new FormData();
+  if (imageFile) formData.append('image', imageFile);
   formData.append(
     'requestDto',
-    new Blob([JSON.stringify({ title, content })], {
+    new Blob([JSON.stringify(values)], {
       type: 'application/json',
     })
   );

@@ -3,7 +3,7 @@ import api from './api';
 
 type Params = {
   introduction: string;
-  imageFile?: File;
+  imageFile?: File | null;
 };
 
 async function editProfile({ introduction, imageFile }: Params) {

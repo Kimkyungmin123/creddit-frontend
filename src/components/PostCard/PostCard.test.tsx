@@ -20,9 +20,8 @@ describe('PostCard', () => {
     const { title, content, member, comments, likes } = post;
     expect(screen.getByText(title)).toBeInTheDocument();
     expect(screen.getByTestId('content').textContent).toBe(content);
-    expect(screen.getByTestId('creator').textContent).toBe(
-      `by ${member.nickname}`
-    );
+    expect(screen.getByTestId('profile-image')).toBeInTheDocument();
+    expect(screen.getByTestId('author').textContent).toBe(member.nickname);
     expect(screen.getByText(`댓글 ${comments}개`)).toBeInTheDocument();
     expect(screen.getByTestId('like-button')).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();

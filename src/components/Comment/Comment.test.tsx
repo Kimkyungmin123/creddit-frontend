@@ -37,6 +37,7 @@ describe('Comment', () => {
     const { editButton, deleteButton } = await setupButtons();
     const { comment } = initialProps;
     const { member, content, likes } = comment;
+    expect(screen.getByTestId('profile-image')).toBeInTheDocument();
     expect(screen.getByText(member.nickname)).toBeInTheDocument();
     expect(screen.getByTestId('my-date')).toBeInTheDocument();
     expect(editButton).toBeInTheDocument();

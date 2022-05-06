@@ -36,7 +36,6 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
           onSubmit={async ({ comment }) => {
             await api.post('/comment', {
               content: comment,
-              parentCommentId: 0,
               postId: post.id,
             });
             const data = await mutate<Post>(`/post/${post.id}`);

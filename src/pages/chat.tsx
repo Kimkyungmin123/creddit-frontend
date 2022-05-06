@@ -65,7 +65,7 @@ const Chat: NextPage = () => {
         client.subscribe('/topic/' + username, function (msg: any) {
           _processMessage(msg.body), msg.headers.destination;
         });
-        client.send('/topic/' + username, {}, JSON.stringify(chat));
+        client.send('/topic/' + currChatUser, {}, JSON.stringify(chat));
       },
       (err: Error) => {
         console.log(err);
@@ -77,6 +77,7 @@ const Chat: NextPage = () => {
     //  getChatRooms,
     chatData,
     chat,
+    currChatUser,
   ]);
 
   const _processMessage = (msgBody: any) => {
@@ -87,33 +88,33 @@ const Chat: NextPage = () => {
     }
   };
 
-  const publish = (messageInfo: messageInfo) => {
-    if (!client.connected) {
-      return;
-    }
+  // const publish = (messageInfo: messageInfo) => {
+  //   if (!client.connected) {
+  //     return;
+  //   }
 
-    client.publish({
-      destination: '/app/send',
-      body: JSON.stringify(messageInfo),
-    });
-  };
+  //   client.publish({
+  //     destination: '/app/send',
+  //     body: JSON.stringify(messageInfo),
+  //   });
+  // };
 
   const onSubmitForm = (
     e: any,
     message: any,
-    sender: string,
-    receiver: string
+    username: string,
+    currChatUser: string
   ) => {
     e.preventDefault();
     setChat('');
     const messageInfo = {
-      message,
-      sender,
-      receiver,
+      message: message,
+      sender: username,
+      receiver: currChatUser,
       createdDate: new Date().getTime(),
     };
 
-    publish(messageInfo);
+    // publish(messageInfo);
     console.log(messageInfo);
   };
 
@@ -152,25 +153,25 @@ const Chat: NextPage = () => {
                   onClick={() => {
                     setCurrChatUser(data.target);
                     console.log(currChatUser);
+                    setChat('');
                   }}
                 />
               ))}
             </div>
             <div className={styles.messageform}>
               <div className={styles.messageBox}>
-                <SendMessageDate date="2022년 00월 00일" />
-
+                {currChatUser && <SendMessageDate date="2022년 00월 00일" />}
                 {/* target별로 메시지 받아와야함 */}
-                {chatData?.map((data: any, i: number) => (
-                  <MessageBox
-                    key={i}
-                    interlocutorName={data.messages.currChatUser}
-                    content={data.messages.message}
-                    time={data.messages.createdDate}
 
+                {currChatUser && (
+                  <MessageBox
+                    // key={i}
+                    interlocutorName={currChatUser}
+                    content=""
+                    time=""
                     // isMe={true}
                   />
-                ))}
+                )}
               </div>
               <div className={styles.SendMessageBox}>
                 <SendMessageForm

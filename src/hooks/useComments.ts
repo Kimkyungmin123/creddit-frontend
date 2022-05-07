@@ -62,7 +62,6 @@ function reducer(state: State, action: CommentsAction) {
           }) || [],
       };
     case 'ADD_COMMENTS':
-      if (action.comments?.length === 0) return { ...state };
       return {
         ...state,
         comments: [

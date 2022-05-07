@@ -49,7 +49,6 @@ function reducer(state: State, action: Action) {
           }) || [],
       };
     case 'ADD_POSTS':
-      if (action.posts?.length === 0) return { ...state };
       return {
         ...state,
         posts: [

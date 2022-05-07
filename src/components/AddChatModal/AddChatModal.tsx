@@ -47,18 +47,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     return () => window.removeEventListener('keydown', moveFocus);
   }, [subscribed]);
 
-  useEffect(() => {
-    const enter = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        const selectors = `.${styles.results} li[data-index="${currentIndex}"] `;
-        const element = document.querySelector<HTMLElement>(selectors);
-        element?.click();
-      }
-    };
-    window.addEventListener('keydown', enter);
-    return () => window.removeEventListener('keydown', enter);
-  }, [currentIndex]);
-
   const handleAddChatPartner = useCallback(
     (e) => {
       e.preventDefault();

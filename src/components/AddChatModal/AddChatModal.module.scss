@@ -46,6 +46,8 @@
   border-radius: 0 0 0.25rem 0.25rem;
   background-color: var(--page-bg-primary);
   box-shadow: 0 0.125rem 0.25rem var(--box-shadow);
+  max-height: 12.5rem;
+  overflow-y: auto;
 
   li {
     span {

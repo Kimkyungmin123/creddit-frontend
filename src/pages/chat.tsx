@@ -7,11 +7,7 @@ import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import {
-  //  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useUser from 'hooks/useUser';
 import axios from 'axios';
 import useInput from 'hooks/useInput';
@@ -22,7 +18,7 @@ import useSWR from 'swr';
 
 export type messageInfo = {
   message?: any;
-  sender: string;
+  sender?: string;
   receiver: string;
   createdDate: string | number;
 };
@@ -36,25 +32,24 @@ const Chat: NextPage = () => {
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
-
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data);
 
   const {
     data: chatData,
-    // mutate: mutateChat
+    //  mutate: mutateChat
   } = useSWR(`http://localhost:8000/chat/${username}/chatrooms`, fetcher);
 
-  // const getChatRooms = useCallback(() => {
-  //   axios
-  //     .get(`http://localhost:8000/chat/${username}/chatrooms`)
-  //     .then((response) => {
-  //       console.log('response: ', response);
-  //     });
-  // }, [username]);
+  const getChatRooms = useCallback(() => {
+    axios
+      .get(`http://localhost:8000/chat/${username}/chatrooms`)
+      .then((response) => {
+        console.log('response: ', response);
+      });
+  }, [username]);
 
   useEffect(() => {
-    // getChatRooms();
+    getChatRooms();
     const socket = new SockJS(socketUrl);
     client = Stomp.over(socket);
     client.connect(
@@ -72,13 +67,7 @@ const Chat: NextPage = () => {
       }
     );
     return () => client.deactivate();
-  }, [
-    username,
-    //  getChatRooms,
-    chatData,
-    chat,
-    currChatUser,
-  ]);
+  }, [username, getChatRooms, chatData, chat, currChatUser]);
 
   const _processMessage = (msgBody: any) => {
     try {
@@ -88,57 +77,30 @@ const Chat: NextPage = () => {
     }
   };
 
-  // const publish = (messageInfo: messageInfo) => {
-  //   if (!client.connected) {
-  //     return;
-  //   }
+  const publish = (messageInfo: messageInfo) => {
+    if (!client.connected) {
+      return;
+    }
 
-  //   client.publish({
-  //     destination: '/app/send',
-  //     body: JSON.stringify(messageInfo),
-  //   });
-  // };
+    client.publish({
+      destination: '/app/send',
+      body: JSON.stringify(messageInfo),
+    });
+  };
 
-  const onSubmitForm = (
-    e: any,
-    message: any,
-    username: string,
-    currChatUser: string
-  ) => {
+  const onSubmitForm = (e: any) => {
     e.preventDefault();
     setChat('');
-    const messageInfo = {
-      message: message,
+    const messageInfo: messageInfo = {
+      message: chat,
       sender: username,
       receiver: currChatUser,
       createdDate: new Date().getTime(),
     };
-
-    // publish(messageInfo);
+    publish(messageInfo);
     console.log(messageInfo);
   };
 
-  // const onSubmitForm = useCallback(
-  //   (e) => {
-  //     e.preventDefault();
-  //     if (chat?.trim() && chatData) {
-  //       const savedChat = chat;
-  //       mutateChat((prevChatData: any) => {
-  //         prevChatData?.[0].unshift({
-  //           message: savedChat,
-  //           sender: username,
-  //           receiver: currChatUser,
-  //           createdDate: new Date(),
-  //         });
-  //         return prevChatData;
-  //       }, false).then(() => {
-  //         setChat('');
-  //       });
-  //     }
-  //     // publish();
-  //   },
-  //   [chat, currChatUser, username, chatData, setChat, mutateChat]
-  // );
   return (
     <Layout title="creddit: Chat">
       {user ? (
@@ -163,19 +125,20 @@ const Chat: NextPage = () => {
                 {currChatUser && <SendMessageDate date="2022년 00월 00일" />}
                 {/* target별로 메시지 받아와야함 */}
 
-                {currChatUser && (
-                  <MessageBox
-                    // key={i}
-                    interlocutorName={currChatUser}
-                    content=""
-                    time=""
-                    // isMe={true}
-                  />
-                )}
+                {currChatUser &&
+                  chatData?.map((data: any, i: number) => (
+                    <MessageBox
+                      key={i}
+                      interlocutorName={currChatUser}
+                      content={data.target.message}
+                      time=""
+                      isMe={true}
+                    />
+                  ))}
               </div>
               <div className={styles.SendMessageBox}>
                 <SendMessageForm
-                  onSubmit={() => onSubmitForm}
+                  onSubmit={onSubmitForm}
                   onChange={onChangeChat}
                   value={chat}
                 />

@@ -1,23 +1,32 @@
-import useUser from 'hooks/useUser';
+import classNames from 'classnames';
 import Link from 'next/link';
-import { MouseEventHandler, useEffect } from 'react';
-import styles from './AccoutMenuDetail.module.scss';
+import { MouseEventHandler, RefObject, useEffect } from 'react';
+import styles from './DropdownDetail.module.scss';
 
-export type AccountMenuDetailProps = {
+export interface Option {
+  name: string;
+  href?: string;
+  onClick?: () => void;
+}
+
+export type DropdownDetailProps = {
+  parent: { className: string; ref: RefObject<HTMLDivElement> };
   onClick: MouseEventHandler<HTMLUListElement>;
+  options: Option[];
+  fullWidth?: boolean;
 };
 
-function AccoutMenuDetail({ onClick }: AccountMenuDetailProps) {
-  const { logout } = useUser();
-
+function DropdownDetail({
+  parent,
+  onClick,
+  options,
+  fullWidth,
+}: DropdownDetailProps) {
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
-      if (
-        (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') ||
-        !document.activeElement?.closest('[data-testid="account-menu"]')
-      ) {
-        return;
-      }
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      const p = document.activeElement?.closest(`.${parent.className}`);
+      if (p !== parent.ref.current) return;
 
       event.preventDefault();
       if (event.key === 'ArrowDown') moveDown();
@@ -25,32 +34,25 @@ function AccoutMenuDetail({ onClick }: AccountMenuDetailProps) {
     };
     window.addEventListener('keydown', moveFocus);
     return () => window.removeEventListener('keydown', moveFocus);
-  }, []);
+  }, [parent]);
 
   return (
     <ul
-      className={styles.container}
-      data-testid="account-menu-detail"
+      className={classNames(styles.container, fullWidth && styles.fullWidth)}
+      data-testid="dropdown-detail"
       onClick={onClick}
     >
-      <li>
-        <Link href="/profile">
-          <a>프로필</a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/create-post">
-          <a>새 글 작성</a>
-        </Link>
-      </li>
-      <li>
-        <Link href="/chat">
-          <a>대화 목록</a>
-        </Link>
-      </li>
-      <li>
-        <button onClick={logout}>로그아웃</button>
-      </li>
+      {options.map(({ name, href, onClick }, index) => (
+        <li key={index}>
+          {href ? (
+            <Link href={href}>
+              <a onClick={onClick}>{name}</a>
+            </Link>
+          ) : (
+            <button onClick={onClick}>{name}</button>
+          )}
+        </li>
+      ))}
     </ul>
   );
 }
@@ -94,4 +96,4 @@ const moveUp = () => {
   }
 };
 
-export default AccoutMenuDetail;
+export default DropdownDetail;

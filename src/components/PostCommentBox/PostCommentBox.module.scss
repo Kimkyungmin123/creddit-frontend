@@ -16,10 +16,11 @@
   font-size: 0.875rem;
   align-items: center;
 
-  button {
-    padding: 0;
-    display: flex;
+  span {
+    white-space: pre;
+  }
 
+  button {
     svg:first-child {
       height: 1.25rem;
       width: 1.25rem;
@@ -30,12 +31,6 @@
       align-self: center;
       width: 1rem;
       height: 1rem;
-    }
-
-    @media (hover: hover) {
-      &:hover {
-        color: var(--header-element-hover-text);
-      }
     }
   }
 }

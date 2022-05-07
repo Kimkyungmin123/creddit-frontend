@@ -12,9 +12,11 @@ function InfiniteScroll({ data, size, onIntersect }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoading || (data && prevData && prevData.length < size)) {
-      return;
-    }
+    if (isLoading) return;
+    // 첫 요청 시 데이터 개수가 size 이하이면 요청 중단
+    if (data && data.length < size) return;
+    // 끝에 도달하면 요청 중단
+    if (data && prevData && prevData.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {

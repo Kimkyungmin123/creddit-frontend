@@ -5,6 +5,7 @@ import useUser from 'hooks/useUser';
 import { CaretDown, EditOutline, Github, MoonOutline, SunOutline } from 'icons';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useLayoutEffect, useState } from 'react';
 import styles from './Header.module.scss';
 
@@ -16,6 +17,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading, logout } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
   const { status } = useSession();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
@@ -110,7 +112,16 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             ) : (
               <>
                 <Link href="/login">
-                  <a className={styles.authLink}>로그인</a>
+                  <a
+                    className={styles.authLink}
+                    onClick={() => {
+                      if (router.asPath !== '/login') {
+                        sessionStorage.setItem('prevUrl', router.asPath);
+                      }
+                    }}
+                  >
+                    로그인
+                  </a>
                 </Link>
                 <Link href="/signup">
                   <a className={styles.authLink}>회원가입</a>

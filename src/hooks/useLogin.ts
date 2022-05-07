@@ -15,7 +15,8 @@ function useLogin() {
       setAuthToken(data);
       dispatch({ type: 'RESET' });
       await mutate('/profile/show');
-      router.replace('/');
+      const prevUrl = sessionStorage.getItem('prevUrl');
+      router.replace(prevUrl || '/');
     },
     [dispatch, router]
   );

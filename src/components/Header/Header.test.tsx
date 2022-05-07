@@ -35,7 +35,7 @@ describe('Header', () => {
         '/create-post'
       );
     });
-    expect(screen.getByTestId('account-menu')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
   });
 
   it('renders properly when not logged in', async () => {

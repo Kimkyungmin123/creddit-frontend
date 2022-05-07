@@ -56,7 +56,10 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     dispatch({ type: 'RESET' });
     if (sessionData) await signOut();
     await mutate('/profile/show', {}, false);
-  }, [dispatch, sessionData]);
+    if (/\/post\/\d/.test(router.asPath)) {
+      await mutate(router.asPath);
+    }
+  }, [dispatch, sessionData, router]);
 
   return {
     user: data?.user,

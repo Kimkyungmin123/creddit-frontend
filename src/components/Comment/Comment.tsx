@@ -4,21 +4,21 @@ import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
+import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, useState } from 'react';
 import { mutate } from 'swr';
 import { Comment, Post } from 'types';
 import api from 'utils/api';
-import getFormData from 'utils/getFormData';
 import styles from './Comment.module.scss';
 
 export type commentProps = {
   comment: Comment;
-  setComments: Dispatch<SetStateAction<Comment[] | null | undefined>>;
+  dispatchComments: Dispatch<CommentsAction>;
 };
 
-const Comment = ({ comment, setComments }: commentProps) => {
+const Comment = ({ comment, dispatchComments }: commentProps) => {
   const {
     member,
     createdDate,
@@ -70,9 +70,7 @@ const Comment = ({ comment, setComments }: commentProps) => {
                         false
                       );
                       dispatch({ type: 'CHANGE_POST', post: data });
-                      setComments((prev) =>
-                        prev?.filter((el) => el.commentId !== commentId)
-                      );
+                      dispatchComments({ type: 'REMOVE_COMMENT', commentId });
                     }}
                     onCancel={closeModal}
                   />
@@ -86,19 +84,17 @@ const Comment = ({ comment, setComments }: commentProps) => {
               initialValues={{ comment: content }}
               onSubmit={async ({ comment }) => {
                 if (comment !== content) {
-                  await api.post(
-                    `/comment/${commentId}`,
-                    getFormData({
+                  await api.post(`/comment/${commentId}`, {
+                    content: comment,
+                    id: commentId,
+                  });
+                  dispatchComments({
+                    type: 'CHANGE_COMMENT',
+                    comment: {
+                      commentId,
                       content: comment,
-                      id: commentId,
-                    })
-                  );
-                  setComments((prev) =>
-                    prev?.map((el) => {
-                      if (el.commentId !== commentId) return el;
-                      return { ...el, content: comment };
-                    })
-                  );
+                    },
+                  });
                 }
                 setIsEditing(false);
               }}
@@ -116,16 +112,7 @@ const Comment = ({ comment, setComments }: commentProps) => {
               liked={liked}
               variant="medium"
               onClick={() => {
-                setComments((prev) =>
-                  prev?.map((el) => {
-                    if (el.commentId !== commentId) return el;
-                    return {
-                      ...el,
-                      liked: !el.liked,
-                      likes: el.liked ? el.likes - 1 : el.likes + 1,
-                    };
-                  })
-                );
+                dispatchComments({ type: 'LIKE_COMMENT', commentId });
               }}
             >
               {likes}

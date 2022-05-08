@@ -1,14 +1,17 @@
-import userDummy from 'data/user.json';
 import { fireEvent, render, screen } from 'utils/test-utils';
-import AccountMenu, { AccountMenuProps } from './AccountMenu';
+import Dropdown, { DropdownProps } from './Dropdown';
 
-describe('AccountMenu', () => {
+describe('Dropdown', () => {
   const setup = () => {
-    const initialProps: AccountMenuProps = {
-      user: userDummy,
+    const initialProps: DropdownProps = {
+      children: 'children',
+      options: [],
+      ariaLabel: 'ariaLabel',
     };
-    const utils = render(<AccountMenu {...initialProps} />);
-    const button = screen.getByLabelText('계정 메뉴') as HTMLButtonElement;
+    const utils = render(<Dropdown {...initialProps} />);
+    const button = screen.getByLabelText(
+      '' + initialProps.ariaLabel
+    ) as HTMLButtonElement;
     return {
       initialProps,
       button,
@@ -18,34 +21,33 @@ describe('AccountMenu', () => {
 
   it('renders properly', () => {
     const { button } = setup();
-    expect(screen.getByTestId('profile-image')).toBeInTheDocument();
     expect(button).toBeInTheDocument();
   });
 
   it('shows detail when expanded', () => {
     const { button } = setup();
     fireEvent.click(button);
-    expect(screen.getByTestId('account-menu-detail')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-detail')).toBeInTheDocument();
   });
 
   it('hides detail when closed', () => {
     const { button } = setup();
     fireEvent.click(button);
     fireEvent.click(button);
-    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('dropdown-detail')).not.toBeInTheDocument();
   });
 
   it('closes detail when click outside', () => {
     const { button } = setup();
     fireEvent.click(button);
     fireEvent.click(document.body);
-    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('dropdown-detail')).not.toBeInTheDocument();
   });
 
   it('closes detail when press esc key', () => {
     const { button } = setup();
     fireEvent.click(button);
     fireEvent.keyDown(window, { key: 'Escape' });
-    expect(screen.queryByTestId('account-menu-detail')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('dropdown-detail')).not.toBeInTheDocument();
   });
 });

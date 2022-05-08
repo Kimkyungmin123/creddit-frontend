@@ -1,3 +1,4 @@
+import { usePostsContext } from 'context/PostsContext';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
@@ -35,6 +36,7 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
   const router = useRouter();
   const { data: sessionData } = useSession();
   const isLoading = useMemo(() => !error && !data, [error, data]);
+  const { dispatch } = usePostsContext();
 
   useEffect(() => {
     if (!redirectTo || isLoading || error) return;
@@ -51,9 +53,13 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
     Cookies.remove('auth_exp_date');
+    dispatch({ type: 'RESET' });
     if (sessionData) await signOut();
     await mutate('/profile/show', {}, false);
-  }, [sessionData]);
+    if (/\/post\/\d/.test(router.asPath)) {
+      await mutate(router.asPath);
+    }
+  }, [dispatch, sessionData, router]);
 
   return {
     user: data?.user,

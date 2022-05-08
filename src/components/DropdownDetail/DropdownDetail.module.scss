@@ -1,4 +1,5 @@
 .container {
+  z-index: 1;
   position: absolute;
   top: calc(100% + 0.5625rem);
   right: 0;
@@ -8,6 +9,16 @@
   background-color: var(--element-bg-primary);
   border: 0.0625rem solid var(--border);
   box-shadow: 0 0.0625rem 0.125rem var(--box-shadow);
+
+  &.fullWidth {
+    left: 0;
+
+    & > li > a,
+    & > li > button {
+      padding: 0.75rem 0;
+      justify-content: center;
+    }
+  }
 
   & > li > a,
   & > li > button {

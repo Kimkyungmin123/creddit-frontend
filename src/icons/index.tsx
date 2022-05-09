@@ -1,3 +1,4 @@
+import ArrowSubDownRight from './assets/arrow-sub-down-right.svg';
 import CaretDown from './assets/caret-down.svg';
 import ChevronLeft from './assets/chevron-left.svg';
 import Close from './assets/close.svg';
@@ -19,6 +20,7 @@ import SunOutline from './assets/sun-outline.svg';
 import Time from './assets/time.svg';
 
 export {
+  ArrowSubDownRight,
   CaretDown,
   ChevronLeft,
   Close,

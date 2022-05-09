@@ -95,9 +95,6 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
               autoFocus
             />
             <div className={styles.buttons}>
-              <Button type="submit" disabled={isSubmitting}>
-                저장
-              </Button>
               <Button
                 variant="plain"
                 onClick={(event) => {
@@ -106,6 +103,9 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
                 }}
               >
                 취소
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                저장
               </Button>
             </div>
           </form>

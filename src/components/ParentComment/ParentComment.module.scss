@@ -1,0 +1,25 @@
+.parentComment {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.replyButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--reply-toggle-btn-text);
+
+  &.expanded {
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.subArrow {
+  transform: translateY(-15%);
+}

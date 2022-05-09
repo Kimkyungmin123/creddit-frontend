@@ -33,11 +33,11 @@ function DeleteModal({
         <h3>{title}</h3>
         <p>{message}</p>
         <div className={styles.buttonsContainer}>
-          <Button onClick={onConfirm} variant="error">
-            {buttonName || '삭제'}
-          </Button>
           <Button variant="plain" onClick={onCancel} ariaLabel="삭제 취소">
             취소
+          </Button>
+          <Button onClick={onConfirm} variant="error">
+            {buttonName || '삭제'}
           </Button>
         </div>
       </div>

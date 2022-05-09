@@ -7,32 +7,37 @@ import { usePostsContext } from 'context/PostsContext';
 import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
 import useUser from 'hooks/useUser';
-import { Dispatch, useState } from 'react';
+import { Dispatch, ReactNode, useState } from 'react';
 import { mutate } from 'swr';
-import { Comment, Post } from 'types';
+import { Comment as CommentType, Post } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
 
 export type commentProps = {
-  comment: Comment;
+  comment: CommentType;
   dispatchComments: Dispatch<CommentsAction>;
+  children?: ReactNode;
+  enableReply?: boolean;
+  onDelete?: () => void;
+  postId?: number;
 };
 
-const Comment = ({ comment, dispatchComments }: commentProps) => {
-  const {
-    member,
-    createdDate,
-    content,
-    liked,
-    likes,
-    commentId,
-    postId,
-    profile,
-  } = comment;
+function Comment({
+  comment,
+  dispatchComments,
+  children,
+  enableReply,
+  onDelete,
+  postId: pid,
+}: commentProps) {
+  const { member, createdDate, content, liked, likes, commentId, profile } =
+    comment;
   const { user } = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
   const { dispatch } = usePostsContext();
+  const [isReplying, setIsReplying] = useState(false);
+  const postId = pid || comment.postId;
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -47,7 +52,10 @@ const Comment = ({ comment, dispatchComments }: commentProps) => {
               <>
                 <button
                   aria-label="댓글 수정"
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => {
+                    setIsEditing(true);
+                    setIsReplying(false);
+                  }}
                 >
                   수정
                 </button>
@@ -71,6 +79,7 @@ const Comment = ({ comment, dispatchComments }: commentProps) => {
                       );
                       dispatch({ type: 'CHANGE_POST', post: data });
                       dispatchComments({ type: 'REMOVE_COMMENT', commentId });
+                      if (onDelete) onDelete();
                     }}
                     onCancel={closeModal}
                   />
@@ -117,12 +126,38 @@ const Comment = ({ comment, dispatchComments }: commentProps) => {
             >
               {likes}
             </LikeButton>
-            <button aria-label="답글 달기">답글</button>
+            {enableReply && (
+              <button
+                className={styles.replyButton}
+                aria-label="답글 추가"
+                onClick={() => setIsReplying(true)}
+              >
+                답글
+              </button>
+            )}
           </div>
         )}
+        {!isEditing && isReplying && (
+          <CommentForm
+            type="reply"
+            onSubmit={async ({ comment }) => {
+              await api.post('/comment', {
+                content: comment,
+                parentCommentId: commentId,
+                postId: postId,
+              });
+              const data = await mutate<Post>(`/post/${postId}`);
+              dispatch({ type: 'CHANGE_POST', post: data });
+              dispatchComments({ type: 'RESET' });
+              setIsReplying(false);
+            }}
+            onCancel={() => setIsReplying(false)}
+          />
+        )}
+        {children}
       </div>
     </div>
   );
-};
+}
 
 export default Comment;

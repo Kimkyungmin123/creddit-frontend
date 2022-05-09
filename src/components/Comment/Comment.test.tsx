@@ -9,7 +9,7 @@ describe('Comment', () => {
   const setup = (props: Partial<commentProps> = {}) => {
     const initialProps: commentProps = {
       comment: commentsDummy[0],
-      setComments: jest.fn(),
+      dispatchComments: jest.fn(),
     };
     const utils = render(<Comment {...initialProps} {...props} />);
     return {
@@ -45,7 +45,6 @@ describe('Comment', () => {
     expect(screen.getByText(content)).toBeInTheDocument();
     expect(screen.getByTestId('like-button')).toBeInTheDocument();
     expect(screen.getByText(new RegExp(`${likes}`))).toBeInTheDocument();
-    expect(screen.getByLabelText('답글 달기')).toBeInTheDocument();
   });
 
   it('renders DeleteModal when click delete button', async () => {
@@ -103,5 +102,13 @@ describe('Comment', () => {
     expect(cancelButton).toBeInTheDocument();
     fireEvent.click(cancelButton);
     expect(screen.queryByTestId('comment-form')).not.toBeInTheDocument();
+  });
+
+  it('shows reply form when click reply button', () => {
+    setup({ enableReply: true });
+    const replyButton = screen.getByLabelText('답글 추가');
+    expect(replyButton).toBeInTheDocument();
+    fireEvent.click(replyButton);
+    expect(screen.getByPlaceholderText('답글 추가...')).toBeInTheDocument();
   });
 });

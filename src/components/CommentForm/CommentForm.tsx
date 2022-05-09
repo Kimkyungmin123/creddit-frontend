@@ -13,7 +13,7 @@ export type CommentFormProps = {
   onSubmit: (values: { comment: string }) => Promise<void>;
   initialValues?: { comment: string };
   onCancel?: () => void;
-  type?: 'create' | 'edit';
+  type?: 'create' | 'edit' | 'reply';
 };
 
 function CommentForm({
@@ -70,7 +70,13 @@ function CommentForm({
                 setErrors({ comment: undefined });
                 handleChange(event);
               }}
-              placeholder={type === 'create' ? '댓글을 남겨보세요' : ''}
+              placeholder={
+                type === 'create'
+                  ? '댓글을 남겨보세요'
+                  : type === 'reply'
+                  ? '답글 추가...'
+                  : ''
+              }
               name="comment"
               minRows={type === 'create' ? 3 : undefined}
             />
@@ -78,13 +84,6 @@ function CommentForm({
               {touched.comment && errors.comment && (
                 <p className={styles.error}>{errors.comment}</p>
               )}
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                data-testid="submitButton"
-              >
-                {type === 'edit' ? '수정' : '작성'}
-              </Button>
               {onCancel && (
                 <Button
                   variant="plain"
@@ -96,6 +95,13 @@ function CommentForm({
                   취소
                 </Button>
               )}
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                data-testid="submitButton"
+              >
+                {type === 'edit' ? '수정' : '작성'}
+              </Button>
             </div>
           </form>
         );

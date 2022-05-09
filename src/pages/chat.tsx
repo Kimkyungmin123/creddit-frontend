@@ -15,6 +15,8 @@ import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
 import useSWR from 'swr';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko';
 
 export type messageInfo = {
   message?: any;
@@ -32,24 +34,42 @@ const Chat: NextPage = () => {
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
+  const [chatDate, setChatDate] = useState(
+    dayjs().format('YYYY년 MM월 DD일 dddd')
+  );
+  dayjs.locale('ko');
+
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data);
+  const fetcherDetails = (url: string) =>
+    axios.get(url).then((response) => response.data.messages);
 
   const {
     data: chatData,
     //  mutate: mutateChat
   } = useSWR(`http://localhost:8000/chat/${username}/chatrooms`, fetcher);
 
+  const { data: chatDetails } = useSWR(
+    `http://localhost:8000/chat/${username}/chatrooms/${currChatUser}/messages`,
+    fetcherDetails
+  );
+
+  // const { data: localUser } = useSWR(currChatUser, (key) => {
+  //   localStorage.setItem('curUser', key);
+  //   return localStorage.getItem('curUser');
+  // });
+
   const getChatRooms = useCallback(() => {
     axios
       .get(`http://localhost:8000/chat/${username}/chatrooms`)
       .then((response) => {
-        console.log('response: ', response);
+        console.log('response: ', response.data);
       });
   }, [username]);
 
   useEffect(() => {
     getChatRooms();
+
     const socket = new SockJS(socketUrl);
     client = Stomp.over(socket);
     client.connect(
@@ -66,8 +86,9 @@ const Chat: NextPage = () => {
         console.log(err);
       }
     );
+    setChatDate(dayjs().format('YYYY년 MM월 DD일 dddd'));
     return () => client.deactivate();
-  }, [username, getChatRooms, chatData, chat, currChatUser]);
+  }, [username, getChatRooms, chatData, chat, currChatUser, chatDetails]);
 
   const _processMessage = (msgBody: any) => {
     try {
@@ -91,11 +112,12 @@ const Chat: NextPage = () => {
   const onSubmitForm = (e: any) => {
     e.preventDefault();
     setChat('');
+
     const messageInfo: messageInfo = {
       message: chat,
       sender: username,
       receiver: currChatUser,
-      createdDate: new Date().getTime(),
+      createdDate: dayjs().format('HH:MM'),
     };
     publish(messageInfo);
     console.log(messageInfo);
@@ -117,22 +139,23 @@ const Chat: NextPage = () => {
                     console.log(currChatUser);
                     setChat('');
                   }}
+                  // lastMessage={}
+                  // sentDate={}
                 />
               ))}
             </div>
             <div className={styles.messageform}>
               <div className={styles.messageBox}>
-                {currChatUser && <SendMessageDate date="2022년 00월 00일" />}
-                {/* target별로 메시지 받아와야함 */}
+                {currChatUser && <SendMessageDate date={chatDate} />}
 
                 {currChatUser &&
-                  chatData?.map((data: any, i: number) => (
+                  chatDetails?.map((data: any, i: number) => (
                     <MessageBox
                       key={i}
-                      interlocutorName={currChatUser}
-                      content={data.target.message}
-                      time=""
-                      isMe={true}
+                      interlocutorName={data.sender}
+                      content={data.message}
+                      time={data.createdDate}
+                      isMe={data.receiver === currChatUser ? true : false}
                     />
                   ))}
               </div>

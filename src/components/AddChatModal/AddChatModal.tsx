@@ -47,30 +47,27 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     return () => window.removeEventListener('keydown', moveFocus);
   }, [subscribed]);
 
-  const handleAddChatPartner = useCallback(
-    (e) => {
-      e.preventDefault();
-      setNewMember('');
-      setDebouncedValue('');
-      onCloseModal();
+  const handleAddChatPartner = useCallback(() => {
+    // e.preventDefault();
+    setNewMember('');
+    setDebouncedValue('');
+    onCloseModal();
 
-      alert('임시 알림 ) 추가완료. (현재는 새로고침해야 보여요..😅)');
-      if (!newMember || !newMember.trim()) {
-        return;
-      }
-      axios
-        .get(`http://localhost:8000/chat/register/${username}/${newMember}`)
-        .then((response) => {
-          if (subscribed !== response.data) {
-            return;
-          }
-        })
-        .catch((error) => {
-          console.dir(error.response?.data);
-        });
-    },
-    [username, newMember, setNewMember, onCloseModal, subscribed]
-  );
+    // alert('임시 알림 ) 추가완료. (현재는 새로고침해야 보여요..😅)');
+    if (!newMember || !newMember.trim()) {
+      return;
+    }
+    axios
+      .get(`http://localhost:8000/chat/register/${username}/${newMember}`)
+      .then((response) => {
+        if (subscribed !== response.data) {
+          return;
+        }
+      })
+      .catch((error) => {
+        console.dir(error.response?.data);
+      });
+  }, [username, newMember, setNewMember, onCloseModal, subscribed]);
 
   if (!show) {
     return null;

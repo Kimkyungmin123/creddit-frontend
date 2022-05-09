@@ -1,4 +1,5 @@
 // React Testing Library 최신 버전에서 SVGR로 아이콘을 불러올 때 에러가 나서 임시로 만든 파일.
+const ArrowSubDownRight = () => <></>;
 const CaretDown = () => <></>;
 const ChevronLeft = () => <></>;
 const Close = () => <></>;
@@ -20,6 +21,7 @@ const SunOutline = () => <></>;
 const Time = () => <></>;
 
 export {
+  ArrowSubDownRight,
   CaretDown,
   ChevronLeft,
   Close,

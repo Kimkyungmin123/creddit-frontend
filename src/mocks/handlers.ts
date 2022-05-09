@@ -2,6 +2,7 @@ import postDummy from 'data/post.json';
 import userDummy from 'data/user.json';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
+import commentsDummy from 'data/comments.json';
 
 export function handlers() {
   return [
@@ -19,6 +20,7 @@ export function handlers() {
     rest.get(`${API_ENDPOINT}/post/1`, getPost),
     rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
     rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
+    rest.get(`${API_ENDPOINT}/comment/detail`, getComments),
   ];
 }
 
@@ -56,4 +58,8 @@ const getPost: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
 
 const postAny: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
   return res(ctx.status(200), ctx.json(true));
+};
+
+const getComments: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json([commentsDummy[0]]));
 };

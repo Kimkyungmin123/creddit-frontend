@@ -1,7 +1,7 @@
-import Comment from 'components/Comment';
 import CommentForm from 'components/CommentForm';
 import Dropdown from 'components/Dropdown';
 import InfiniteScroll from 'components/InfiniteScroll';
+import ParentComment from 'components/ParentComment';
 import { usePostsContext } from 'context/PostsContext';
 import useComments from 'hooks/useComments';
 import useUser from 'hooks/useUser';
@@ -79,7 +79,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
       <div className={styles.commentsContainer}>
         {comments?.map((comment) => {
           return (
-            <Comment
+            <ParentComment
               key={comment.commentId}
               comment={comment}
               dispatchComments={dispatchComments}

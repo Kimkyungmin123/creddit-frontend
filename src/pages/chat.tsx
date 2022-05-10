@@ -16,13 +16,14 @@ import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
+import ChatDelete from 'components/ChatDelete';
+// import 'dayjs/locale/ko';
 
 export type messageInfo = {
   message?: any;
   sender?: string;
   receiver: string;
-  createdDate: string | number;
+  createdDate: string;
 };
 
 let client: any = null;
@@ -34,10 +35,6 @@ const Chat: NextPage = () => {
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
-  const [chatDate, setChatDate] = useState(
-    dayjs().format('YYYY년 MM월 DD일 dddd')
-  );
-  dayjs.locale('ko');
 
   const fetcher = (url: string) =>
     axios.get(url).then((response) => response.data);
@@ -86,7 +83,7 @@ const Chat: NextPage = () => {
         console.log(err);
       }
     );
-    setChatDate(dayjs().format('YYYY년 MM월 DD일 dddd'));
+
     return () => client.deactivate();
   }, [username, getChatRooms, chatData, chat, currChatUser, chatDetails]);
 
@@ -121,6 +118,8 @@ const Chat: NextPage = () => {
     };
     publish(messageInfo);
     console.log(messageInfo);
+    console.log('chatDetails: ', chatDetails);
+    console.log(dayjs().format('HH:MM'));
   };
 
   return (
@@ -145,8 +144,14 @@ const Chat: NextPage = () => {
               ))}
             </div>
             <div className={styles.messageform}>
+              <div className={styles.chatDelete}>
+                {currChatUser && <ChatDelete />}
+              </div>
               <div className={styles.messageBox}>
-                {currChatUser && <SendMessageDate date={chatDate} />}
+                {/* 임시 시간 */}
+                {currChatUser && (
+                  <SendMessageDate date={'2022년 00월 00일 0요일'} />
+                )}
 
                 {currChatUser &&
                   chatDetails?.map((data: any, i: number) => (

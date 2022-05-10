@@ -1,3 +1,4 @@
+import ERRORS from 'constants/errors';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 import PostForm, { PostFormProps } from './PostForm';
 
@@ -32,8 +33,28 @@ describe('PostForm', () => {
     const { title } = initialProps;
     expect(screen.getByText(title)).toBeInTheDocument();
     expect(titleTextarea).toBeInTheDocument();
+    expect(screen.getByTestId('image-upload-button')).toBeInTheDocument();
     expect(contentTextarea).toBeInTheDocument();
     expect(submitButton).toBeDisabled();
+  });
+
+  it('renders properly when initialValues exist', async () => {
+    const initialValues = { title: '제목', content: '내용' };
+    const { titleTextarea, contentTextarea, submitButton } = setup({
+      initialValues,
+    });
+    expect(titleTextarea.value).toBe(initialValues.title);
+    expect(contentTextarea.value).toBe(initialValues.content);
+    expect(submitButton).not.toBeDisabled();
+  });
+
+  it('shows an content error message if the content is invalid', async () => {
+    const { contentTextarea } = setup();
+    fireEvent.change(contentTextarea, { target: { value: '1'.repeat(2001) } });
+    fireEvent.blur(contentTextarea);
+    await waitFor(() => {
+      expect(screen.getByText(ERRORS.contentLong)).toBeInTheDocument();
+    });
   });
 
   it('submit the values if the all values are filled', async () => {
@@ -47,7 +68,7 @@ describe('PostForm', () => {
     expect(submitButton).not.toBeDisabled();
     fireEvent.click(submitButton);
     await waitFor(() => {
-      expect(onSubmit).toHaveBeenCalledWith(values);
+      expect(onSubmit).toHaveBeenCalledWith(values, null);
     });
   });
 });

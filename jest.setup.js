@@ -10,6 +10,14 @@ jest.mock('next/router', () => ({
   },
 }));
 
+window.matchMedia = () => ({ matches: false });
+document.cookie = 'access_token=123';
+window.IntersectionObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());
 // Reset any request handlers that we may add during the tests,
@@ -17,4 +25,3 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 // Clean up after the tests are finished.
 afterAll(() => server.close());
-window.matchMedia = () => ({ matches: false });

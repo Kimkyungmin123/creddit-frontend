@@ -1,0 +1,13 @@
+@import 'styles/app';
+
+.container {
+  & > h2 {
+    margin: 1rem auto;
+    text-align: center;
+  }
+}
+
+.postsContainer {
+  margin: 0 auto;
+  max-width: 36.75rem;
+}

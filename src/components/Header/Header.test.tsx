@@ -1,5 +1,6 @@
 import { server } from 'mocks/server';
 import { rest } from 'msw';
+import { API_ENDPOINT } from 'utils/api';
 import { render, screen, waitFor } from 'utils/test-utils';
 import Header, { HeaderProps } from './Header';
 
@@ -34,13 +35,13 @@ describe('Header', () => {
         '/create-post'
       );
     });
-    expect(screen.getByTestId('account-menu')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
   });
 
   it('renders properly when not logged in', async () => {
     server.use(
-      rest.get('/api/me', (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json({}));
+      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
+        return res(ctx.status(200), ctx.json(null));
       })
     );
     setup();

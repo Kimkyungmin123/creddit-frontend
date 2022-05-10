@@ -1,0 +1,11 @@
+.addChatButton {
+  display: flex;
+  z-index: 1;
+  max-width: 31.25rem;
+  width: 100%;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  border-bottom: solid 0.03125rem var(--chat-box-border);
+  background-color: var(--page-bg-secondary);
+}

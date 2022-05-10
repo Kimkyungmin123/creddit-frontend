@@ -1,0 +1,11 @@
+@import 'styles/app';
+
+.SendMessageDate {
+  display: flex;
+  justify-content: center;
+  color: var(--text-secondary);
+
+  @media (max-width: $breakpoints-lg) {
+    font-size: 0.875rem;
+  }
+}

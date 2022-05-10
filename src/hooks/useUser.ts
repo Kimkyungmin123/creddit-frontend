@@ -1,31 +1,21 @@
-import axios from 'axios';
+import { usePostsContext } from 'context/PostsContext';
 import Cookies from 'js-cookie';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useMemo } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
+import useSWRImmutable from 'swr/immutable';
+import { User } from 'types';
+import api from 'utils/api';
 
-type UserType = {
-  id: string;
-  createdDate: string;
-  nickname: string;
-  introduce: string;
-} | null;
+type UserResponse = { user?: User; message?: string };
 
-const fetcher = (url: string) => {
+const fetcher = async (url: string): Promise<UserResponse> => {
   const accessToken = Cookies.get('access_token');
-  return axios
-    .get(url, {
-      headers: accessToken
-        ? {
-            Authorization: `Bearer ${accessToken}`,
-          }
-        : {},
-    })
-    .then((res) => res.data);
+  if (!accessToken) return { message: 'access token이 존재하지 않습니다' };
+  const response = await api.get(url);
+  return { user: response.data };
 };
-
-// const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 type Options = {
   redirectTo?: string;
@@ -33,15 +23,23 @@ type Options = {
 };
 
 function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
-  // TODO: 백엔드에서 현재 로그인한 유저 정보를 조회할 수 있는 API가 만들어지면 리팩토링
-  const { data, error } = useSWR<{ user: UserType }>('/api/me', fetcher);
+  const { data, error } = useSWRImmutable<UserResponse>(
+    '/profile/show',
+    fetcher,
+    {
+      onErrorRetry: (error, key, config, revalidate, { retryCount }) => {
+        if (retryCount >= 2) return;
+        revalidate({ retryCount });
+      },
+    }
+  );
   const router = useRouter();
-  const { mutate } = useSWRConfig();
   const { data: sessionData } = useSession();
   const isLoading = useMemo(() => !error && !data, [error, data]);
+  const { dispatch } = usePostsContext();
 
   useEffect(() => {
-    if (!redirectTo || isLoading) return;
+    if (!redirectTo || isLoading || error) return;
 
     if (
       (redirectWhen === 'authorized' && data?.user) ||
@@ -49,14 +47,19 @@ function useUser({ redirectTo, redirectWhen = 'authorized' }: Options = {}) {
     ) {
       router.replace(redirectTo);
     }
-  }, [redirectTo, redirectWhen, isLoading, router, data]);
+  }, [redirectTo, redirectWhen, isLoading, router, data, error]);
 
   const logout = useCallback(async () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
+    Cookies.remove('auth_exp_date');
+    dispatch({ type: 'RESET' });
     if (sessionData) await signOut();
-    mutate('/api/me');
-  }, [sessionData, mutate]);
+    await mutate('/profile/show', {}, false);
+    if (/\/post\/\d/.test(router.asPath)) {
+      await mutate(router.asPath);
+    }
+  }, [dispatch, sessionData, router]);
 
   return {
     user: data?.user,

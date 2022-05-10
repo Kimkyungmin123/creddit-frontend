@@ -1,5 +1,5 @@
 import Post from 'pages/post/[id]';
-import { render, screen } from 'utils/test-utils';
+import { render, screen, waitFor } from 'utils/test-utils';
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -17,10 +17,12 @@ describe('Post', () => {
     };
   };
 
-  it('renders properly', () => {
+  it('renders properly', async () => {
     setup();
     expect(screen.getByTestId('layout')).toBeInTheDocument();
-    expect(screen.getByTestId('post-top')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('post-top')).toBeInTheDocument();
+    });
     expect(screen.getByTestId('post-main')).toBeInTheDocument();
     expect(screen.getByTestId('post-comment-box')).toBeInTheDocument();
   });

@@ -1,0 +1,32 @@
+@mixin button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.25rem;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  text-align: center;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  &:hover {
+    background-color: var(--btn-primary-hover-bg);
+  }
+
+  &:active {
+    background-color: var(--btn-primary-active-bg);
+  }
+
+  &:disabled {
+    cursor: default;
+    background-color: var(--btn-primary-disabled-bg);
+  }
+
+  &.round {
+    border-radius: 1rem;
+  }
+}

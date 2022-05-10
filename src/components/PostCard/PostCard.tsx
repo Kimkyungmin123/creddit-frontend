@@ -1,8 +1,9 @@
+import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
-import { HeartFill, HeartOutline } from 'icons';
+import ProfileImage from 'components/ProfileImage';
+import { usePostCardContext } from 'context/PostCardContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { Post } from 'types';
 import styles from './PostCard.module.scss';
 
@@ -16,18 +17,34 @@ export type PostCardProps = {
 };
 
 const PostCard = ({ post }: PostCardProps) => {
-  const { id, title, content, member, createdDate, likeCount, commentCount } =
-    post;
-  const [clickedLike, setClickedLike] = useState(false);
+  const {
+    id,
+    title,
+    content,
+    member,
+    createdDate,
+    likes,
+    comments,
+    liked,
+    image,
+    profile,
+  } = post;
   const router = useRouter();
+  const { setClickedPostCard } = usePostCardContext();
 
   return (
     <section
       className={styles.postCard}
-      onClick={() => router.push({ pathname: `/post/${post.id}` })}
-      data-testid={`post-card-${id}`}
+      onClick={(event) => {
+        if ((event.target as HTMLElement).closest('button')) {
+          return;
+        }
+        setClickedPostCard(true);
+        router.push({ pathname: `/post/${id}` });
+      }}
+      data-testid="post-card"
     >
-      <Link href={`/post/${post.id}`}>
+      <Link href={`/post/${id}`}>
         <a>
           <h2>{title}</h2>
         </a>
@@ -35,32 +52,21 @@ const PostCard = ({ post }: PostCardProps) => {
       <p data-testid="content">
         {content.length > CONTENT_MAX_LENGTH ? cutContents(content) : content}
       </p>
+      {image.imgUrl && (
+        <div className={styles.imageContainer}>
+          <img src={image.imgUrl} alt="글 이미지" />
+        </div>
+      )}
       <div className={styles.postDetail}>
         <div className={styles.postDetailLeft}>
-          <div className={styles.creator} data-testid="creator">
-            <span>by </span>
-            {member}
+          <div className={styles.author} data-testid="author">
+            <ProfileImage imgUrl={profile.imgUrl} size={1.5} />
+            {member.nickname}
           </div>
-          <div className={styles.comments}>댓글 {commentCount}개</div>
-          <button
-            className={styles.likeCountBtn}
-            onClick={(event) => {
-              event.stopPropagation();
-              setClickedLike((prev) => !prev);
-            }}
-            aria-label={clickedLike ? '좋아요 취소' : '좋아요'}
-          >
-            {
-              <>
-                {clickedLike ? (
-                  <HeartFill className={styles.heartFillIcon} />
-                ) : (
-                  <HeartOutline />
-                )}
-              </>
-            }
-            {!clickedLike ? likeCount : likeCount + 1}
-          </button>
+          <div className={styles.comments}>댓글 {comments}개</div>
+          <LikeButton type="post" id={id} liked={liked} variant="small">
+            {likes}
+          </LikeButton>
         </div>
         <MyDate date={createdDate} />
       </div>

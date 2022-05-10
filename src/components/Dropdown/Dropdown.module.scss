@@ -1,0 +1,15 @@
+.dropdown {
+  position: relative;
+}
+
+.dropdownButton {
+  display: flex;
+  align-items: center;
+  padding: 0;
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--header-element-hover-text);
+    }
+  }
+}

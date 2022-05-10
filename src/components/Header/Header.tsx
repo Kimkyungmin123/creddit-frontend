@@ -1,9 +1,11 @@
-import AccountMenu from 'components/AccountMenu';
+import Dropdown from 'components/Dropdown';
+import ProfileImage from 'components/ProfileImage';
 import SearchBar from 'components/SearchBar';
 import useUser from 'hooks/useUser';
-import { EditOutline, Github, MoonOutline, SunOutline } from 'icons';
+import { CaretDown, EditOutline, Github, MoonOutline, SunOutline } from 'icons';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useLayoutEffect, useState } from 'react';
 import styles from './Header.module.scss';
 
@@ -12,9 +14,10 @@ export type HeaderProps = {
 };
 
 const Header = ({ hideSearchBar }: HeaderProps) => {
-  const { user, isLoading } = useUser();
+  const { user, isLoading, logout } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
-  const { data, status } = useSession();
+  const { status } = useSession();
+  const router = useRouter();
 
   useLayoutEffect(() => {
     const localTheme = window.localStorage.getItem('theme');
@@ -63,7 +66,11 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
         </Link>
         {!isLoading && status !== 'loading' && (
           <>
-            {!hideSearchBar && <SearchBar />}
+            {hideSearchBar ? (
+              <div style={{ flexGrow: 1 }}></div>
+            ) : (
+              <SearchBar />
+            )}
             <button
               className={styles.hoverElement}
               onClick={themeHandle}
@@ -75,7 +82,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               {screenTheme ? <SunOutline /> : <MoonOutline />}
             </button>
-            {(data || user) && (
+            {user && (
               <Link href="/create-post">
                 <a className={styles.hoverElement} aria-label="글 작성">
                   <EditOutline />
@@ -89,12 +96,32 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             >
               <Github />
             </a>
-            {data || user ? (
-              <AccountMenu />
+            {user ? (
+              <Dropdown
+                ariaLabel="계정 메뉴"
+                options={[
+                  { name: '프로필', href: '/profile' },
+                  { name: '새 글 작성', href: '/create-post' },
+                  { name: '대화 목록', href: '/chat' },
+                  { name: '로그아웃', onClick: logout },
+                ]}
+              >
+                <ProfileImage imgUrl={user.image.imgUrl} size={1.875} />
+                <CaretDown />
+              </Dropdown>
             ) : (
               <>
                 <Link href="/login">
-                  <a className={styles.authLink}>로그인</a>
+                  <a
+                    className={styles.authLink}
+                    onClick={() => {
+                      if (router.asPath !== '/login') {
+                        sessionStorage.setItem('prevUrl', router.asPath);
+                      }
+                    }}
+                  >
+                    로그인
+                  </a>
                 </Link>
                 <Link href="/signup">
                   <a className={styles.authLink}>회원가입</a>

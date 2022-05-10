@@ -5,18 +5,47 @@
   flex-direction: column;
   gap: 0.875rem;
 
+  h2 {
+    word-break: break-all;
+  }
+
   @media (max-width: $breakpoints-sm) {
     gap: 0.75rem;
+  }
+
+  img {
+    margin: 0 auto;
+    max-width: 100%;
+    max-height: 45rem;
+
+    @media (max-width: $breakpoints-sm) {
+      max-width: calc(100% + 2rem);
+      margin-left: -1rem;
+    }
   }
 }
 
 .postDetail {
   display: flex;
+  align-items: center;
   gap: 1rem;
   font-size: 0.875rem;
 
-  button {
+  & > a,
+  & > button {
     padding: 0;
     color: var(--text-secondary);
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }

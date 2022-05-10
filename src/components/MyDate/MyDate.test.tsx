@@ -5,7 +5,7 @@ import MyDate, { MyDateProps } from './MyDate';
 describe('MyDate', () => {
   const setup = (props: Partial<MyDateProps> = {}) => {
     const initialProps: MyDateProps = {
-      date: '2020-12-29 13:10:40',
+      date: '2022-04-26T15:28:54.186568',
     };
     const utils = render(<MyDate {...initialProps} {...props} />);
     return {
@@ -17,6 +17,17 @@ describe('MyDate', () => {
   it('renders properly', () => {
     const { initialProps } = setup();
     const { date } = initialProps;
+    expect(
+      screen.getByText(formatDate(date, { hideTime: true }))
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(formatDate(date, { type: 'short', hideTime: true }))
+    ).toBeInTheDocument();
+  });
+
+  it('renders properly when the date is today', () => {
+    const date = new Date().toISOString();
+    setup({ date });
     expect(screen.getByText(formatDate(date))).toBeInTheDocument();
     expect(
       screen.getByText(formatDate(date, { type: 'short' }))

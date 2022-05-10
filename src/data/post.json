@@ -1,0 +1,22 @@
+{
+  "comments": 4,
+  "content": "내용",
+  "createdDate": "2022-04-27T15:28:54.186568",
+  "id": 1,
+  "image": {
+    "imgName": null,
+    "imgUrl": null
+  },
+  "liked": false,
+  "likes": 49893,
+  "member": {
+    "email": "Christine_Muller@hotmail.com",
+    "nickname": "닉네임"
+  },
+  "modifiedDate": "2022-04-26T15:28:54.186568",
+  "profile": {
+    "imgName": null,
+    "imgUrl": null
+  },
+  "title": "Vel reiciendis sit rerum soluta et."
+}

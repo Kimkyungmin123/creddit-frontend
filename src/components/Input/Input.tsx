@@ -38,7 +38,7 @@ function Input({
       >
         <span>{placeholder}</span>
         <input
-          className={styles.input}
+          className={classNames(styles.input, error && styles.errorBorder)}
           value={value}
           onChange={onChange}
           onFocus={() => {

@@ -1,10 +1,12 @@
+import postDummy from 'data/post.json';
+import userDummy from 'data/user.json';
 import { rest } from 'msw';
-
-const API_ENDPOINT = 'http://localhost:8080';
+import { API_ENDPOINT } from 'utils/api';
+import commentsDummy from 'data/comments.json';
 
 export function handlers() {
   return [
-    rest.get('/api/me', getMe),
+    rest.get(`${API_ENDPOINT}/profile/show`, getMe),
     rest.get(
       `${API_ENDPOINT}/member/checkDuplicateByEmail/:email`,
       getEmailDuplicate
@@ -13,29 +15,25 @@ export function handlers() {
       `${API_ENDPOINT}/member/checkDuplicateByNickname/:nickname`,
       getNicknameDuplicate
     ),
+    rest.get(`${API_ENDPOINT}/post`, getPosts),
+    rest.get(`${API_ENDPOINT}/post/search`, getPosts),
+    rest.get(`${API_ENDPOINT}/post/1`, getPost),
+    rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
+    rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
+    rest.get(`${API_ENDPOINT}/comment/detail`, getComments),
   ];
 }
 
 const getMe: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
-  return res(
-    ctx.status(200),
-    ctx.json({
-      user: {
-        id: 'id',
-        createdDate: '2020-12-29 13:10:40',
-        nickname: '이름',
-        introduce: '소개 글',
-      },
-    })
-  );
+  return res(ctx.status(200), ctx.json(userDummy));
 };
 
 const getEmailDuplicate: Parameters<typeof rest.get>[1] = (req, res, ctx) => {
   const { email } = req.params;
   if (email === 'duplicate@a.com') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
 };
 
 const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
@@ -45,7 +43,23 @@ const getNicknameDuplicate: Parameters<typeof rest.get>[1] = (
 ) => {
   const { nickname } = req.params;
   if (nickname === 'duplicate') {
-    return res(ctx.status(200), ctx.json({ data: true }));
+    return res(ctx.status(200), ctx.json(true));
   }
-  return res(ctx.status(200), ctx.json({ data: false }));
+  return res(ctx.status(200), ctx.json(false));
+};
+
+const getPosts: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json([postDummy]));
+};
+
+const getPost: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json(postDummy));
+};
+
+const postAny: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json(true));
+};
+
+const getComments: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  return res(ctx.status(200), ctx.json([commentsDummy[0]]));
 };

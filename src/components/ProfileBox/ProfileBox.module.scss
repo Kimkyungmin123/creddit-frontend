@@ -1,104 +1,75 @@
-@mixin btn {
-  background-color: var(--btn-bg);
-  border-radius: 0.9375rem;
-  padding: 0.25rem 1.5rem;
-  font-size: 1rem;
-  color: var(--btn-text);
-
-  &:hover {
-    background-color: var(--btn-hover-bg);
-  }
-
-  &:active {
-    background-color: var(--btn-active-bg);
-  }
-}
-
-.profileBoxTop {
-  height: 4.5rem;
-  background-color: var(--profile-top-bg);
-  border-radius: 0.25rem 0.25rem 0 0;
-}
-
-.profileContent {
+.profileBox {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  width: 17.625rem;
+  margin-top: 1rem;
   padding: 1.875rem 1.25rem 0.625rem;
   border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
-}
-
-.userInfo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.profileImg {
-  border: solid 0.125rem var(--border);
-  border-radius: 0.25rem;
-  width: 6rem;
-  height: 6rem;
   overflow: hidden;
+  background-color: var(--element-bg-primary);
 
-  img {
-    object-fit: cover;
-    border-radius: 0.25rem;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4.5rem;
+    background-color: var(--profile-top-bg);
   }
 }
 
 .nickName {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary);
-  padding-left: 0.344rem;
 }
 
-.statusMessage {
+.introduction {
+  word-break: break-all;
   font-size: 0.875rem;
-  color: var(--text-primary);
 }
 
 .signUpDate {
-  color: var(--text-primary);
+  display: flex;
+  gap: 0.875rem;
+
+  span {
+    font-size: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  & > span {
+    font-weight: 700;
+  }
 }
 
-.signUpDateText {
-  font-size: 0.75rem;
-  padding-right: 0.875rem;
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.signUpDateNum {
-  font-size: 0.75rem;
-}
-
-.profileBoxBtns {
+.buttons {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+
+  a {
+    padding: 0.25rem 1.5rem;
+  }
 }
 
-.createNewPostBtn {
+.bottomButtons {
   display: flex;
-  justify-content: center;
-  @include btn;
-}
+  flex-direction: column;
+  gap: 0.75rem;
 
-.chatListBtn {
-  @include btn;
-}
+  a,
+  button {
+    align-self: flex-start;
+    padding: 0;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
 
-.modifyProfile {
-  display: flex;
-  padding: 0;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-
-  &:hover {
-    text-decoration: underline;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }

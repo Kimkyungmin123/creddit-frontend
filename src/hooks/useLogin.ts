@@ -1,22 +1,24 @@
-import Cookies from 'js-cookie';
+import { usePostsContext } from 'context/PostsContext';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
-import { useSWRConfig } from 'swr';
+import { mutate } from 'swr';
 import api from 'utils/api';
+import setAuthToken from 'utils/setAuthToken';
 
 function useLogin() {
   const router = useRouter();
-  const { mutate } = useSWRConfig();
+  const { dispatch } = usePostsContext();
 
   const login = useCallback(
     async (values: { email: string; password: string }) => {
       const { data } = await api.post('/auth/login', values);
-      Cookies.set('access_token', data.accessToken, { expires: 1 });
-      Cookies.set('refresh_token', data.refreshToken, { expires: 7 });
-      await mutate('/api/me');
-      router.replace('/');
+      setAuthToken(data);
+      dispatch({ type: 'RESET' });
+      await mutate('/profile/show');
+      const prevUrl = sessionStorage.getItem('prevUrl');
+      router.replace(prevUrl || '/');
     },
-    [mutate, router]
+    [dispatch, router]
   );
 
   return login;

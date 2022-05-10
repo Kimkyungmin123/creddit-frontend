@@ -27,6 +27,23 @@
   }
 }
 
+.chatDelete {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 9.375rem 0 9.375rem;
+  @media (max-width: $breakpoints-xxl) {
+    padding: 0 3.2rem 0 3.2rem;
+  }
+
+  @media (max-width: $breakpoints-xl) {
+    padding: 0 2rem 0 2rem;
+  }
+
+  @media (max-width: $breakpoints-lg) {
+    padding: 0 1.5rem 0 1.5rem;
+  }
+}
+
 .messageform {
   display: flex;
   flex-direction: column;

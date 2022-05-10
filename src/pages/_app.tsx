@@ -9,7 +9,6 @@ import 'styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useIntentMouse();
-
   return (
     <ContextsProvider>
       <SessionProvider session={pageProps.session}>

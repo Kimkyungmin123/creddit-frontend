@@ -7,188 +7,172 @@ import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import useUser from 'hooks/useUser';
-// import axios from 'axios';
+import axios from 'axios';
 import useInput from 'hooks/useInput';
-// import useSWR from 'swr';
 import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
+import useSWR from 'swr';
+import dayjs from 'dayjs';
+import ChatDelete from 'components/ChatDelete';
+// import 'dayjs/locale/ko';
 
-const socketUrl = 'http://localhost:8000/ws';
+export type messageInfo = {
+  message?: any;
+  sender?: string;
+  receiver: string;
+  createdDate: string;
+};
+
 let client: any = null;
-const Chat: NextPage = () => {
-  // const fetcher = (url: string) =>
-  //   axios.get(url).then((response) => response.data);
+const socketUrl = 'http://localhost:8000/ws';
 
+const Chat: NextPage = () => {
   const { user } = useUser();
   const username = user?.nickname;
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
+  const [currChatUser, setCurrChatUser] = useState('');
 
-  //채팅 받아 오는 API
-  // const { data: chatData, mutate: mutateChat } = useSWR(
-  //   API + '/' + username + '/chatrooms',
-  //   fetcher,
-  //   {
-  // onSuccess(data) {
-  //   if (data?.length === 1) {
-  //     setTimeout(() => {
-  //       scrollbarRef.current?.scrollToBottom();
-  //     }, 100);
-  //   }
-  // },
-  //}
-  //);
+  const fetcher = (url: string) =>
+    axios.get(url).then((response) => response.data);
+  const fetcherDetails = (url: string) =>
+    axios.get(url).then((response) => response.data.messages);
+
+  const {
+    data: chatData,
+    //  mutate: mutateChat
+  } = useSWR(`http://localhost:8000/chat/${username}/chatrooms`, fetcher);
+
+  const { data: chatDetails } = useSWR(
+    `http://localhost:8000/chat/${username}/chatrooms/${currChatUser}/messages`,
+    fetcherDetails
+  );
+
+  // const { data: localUser } = useSWR(currChatUser, (key) => {
+  //   localStorage.setItem('curUser', key);
+  //   return localStorage.getItem('curUser');
+  // });
+
+  const getChatRooms = useCallback(() => {
+    axios
+      .get(`http://localhost:8000/chat/${username}/chatrooms`)
+      .then((response) => {
+        console.log('response: ', response.data);
+      });
+  }, [username]);
 
   useEffect(() => {
+    getChatRooms();
+
     const socket = new SockJS(socketUrl);
     client = Stomp.over(socket);
     client.connect(
       {},
       () => {
-        console.log('현재' + username);
-        client.send('/topic/' + username, {}, JSON.stringify(chat));
+        console.log('현재 ' + username);
+
+        client.subscribe('/topic/' + username, function (msg: any) {
+          _processMessage(msg.body), msg.headers.destination;
+        });
+        client.send('/topic/' + currChatUser, {}, JSON.stringify(chat));
       },
-      onError
+      (err: Error) => {
+        console.log(err);
+      }
     );
 
-    // return () => client.disconnet();
-  }, [chat, username]);
+    return () => client.deactivate();
+  }, [username, getChatRooms, chatData, chat, currChatUser, chatDetails]);
 
-  const onError = (err: Error) => {
-    console.log(err);
+  const _processMessage = (msgBody: any) => {
+    try {
+      return JSON.parse(msgBody);
+    } catch (e) {
+      return msgBody;
+    }
   };
 
-  //채팅 보내는 API
-  // const onSubmitForm = useCallback((e) => {
-  //   e.preventDefault();
-  //    setChat('')
-  //   if (chat?.trim() && chatData) {
-  //     // mutate ...
-  //     // 스크롤 밑으로
-  //     axios
-  //       .post(
-  //        '채팅 POST API' +
-  //           '/' +
-  //           username +
-  //           '/chatrooms',
-  //         {
-  //           content: chat,
-  //         }
-  //       )
-  //       .catch(console.error);
-  //   }
-  // }, []);
+  const publish = (messageInfo: messageInfo) => {
+    if (!client.connected) {
+      return;
+    }
+
+    client.publish({
+      destination: '/app/send',
+      body: JSON.stringify(messageInfo),
+    });
+  };
+
+  const onSubmitForm = (e: any) => {
+    e.preventDefault();
+    setChat('');
+
+    const messageInfo: messageInfo = {
+      message: chat,
+      sender: username,
+      receiver: currChatUser,
+      createdDate: dayjs().format('HH:MM'),
+    };
+    publish(messageInfo);
+    console.log(messageInfo);
+    console.log('chatDetails: ', chatDetails);
+    console.log(dayjs().format('HH:MM'));
+  };
 
   return (
     <Layout title="creddit: Chat">
-      {/* 작업 중에만 반대로 */}
-      {!user ? (
+      {user ? (
         <>
           <div className={styles.chatContainer}>
             <div className={styles.chatBox}>
               <AddChatButton onClick={openModal} />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
-              <ChatListBox
-                interlocutorName="aa"
-                lastMessage="뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??
-            뭐해 ?? 뭐해 ?? 뭐해 ??뭐해 ??뭐해 ??뭐해 ??뭐g
-            "
-                sentDate="13:11"
-              />
+              {chatData?.map((data: any, i: number) => (
+                <ChatListBox
+                  key={i}
+                  interlocutorName={data.target}
+                  onClick={() => {
+                    setCurrChatUser(data.target);
+                    console.log(currChatUser);
+                    setChat('');
+                  }}
+                  // lastMessage={}
+                  // sentDate={}
+                />
+              ))}
             </div>
             <div className={styles.messageform}>
+              <div className={styles.chatDelete}>
+                {currChatUser && <ChatDelete />}
+              </div>
               <div className={styles.messageBox}>
-                <SendMessageDate date="2022년 4월 1일" />
+                {/* 임시 시간 */}
+                {currChatUser && (
+                  <SendMessageDate date={'2022년 00월 00일 0요일'} />
+                )}
 
-                <MessageBox
-                  interlocutorName="김개발"
-                  content="aa"
-                  time="12:05"
-                  isMe={true}
-                />
+                {currChatUser &&
+                  chatDetails?.map((data: any, i: number) => (
+                    <MessageBox
+                      key={i}
+                      interlocutorName={data.sender}
+                      content={data.message}
+                      time={data.createdDate}
+                      isMe={data.receiver === currChatUser ? true : false}
+                    />
+                  ))}
               </div>
               <div className={styles.SendMessageBox}>
                 <SendMessageForm
-                  // onSubmit={onSubmitForm}
-                  // 임시 onSubmit
-                  onSubmit={() => setChat('')}
+                  onSubmit={onSubmitForm}
                   onChange={onChangeChat}
                   value={chat}
                 />
               </div>
             </div>
-            <AddChatModal
-              show={isModalOpen}
-              onCloseModal={closeModal}
-              setShowInviteModal={openModal}
-            />
+            <AddChatModal show={isModalOpen} onCloseModal={closeModal} />
           </div>
         </>
       ) : (

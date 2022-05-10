@@ -18,12 +18,12 @@ const MessageBox = ({
   return (
     <>
       {!isMe ? (
-        <div className={styles.MessageBox}>
+        <div className={styles.messageBox}>
           <div className={styles.profileImg}>
             <Image src={profile} alt="상대방 프로필 이미지" />
           </div>
 
-          <div className={styles.MessageContent}>
+          <div className={styles.messageContent}>
             <div className={styles.middleContent}>
               <span>{interlocutorName}</span>
               <div className={styles.textBox}>{content}</div>

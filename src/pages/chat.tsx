@@ -17,7 +17,7 @@ import AddChatModal from 'components/AddChatModal';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import ChatDelete from 'components/ChatDelete';
-// import 'dayjs/locale/ko';
+import 'dayjs/locale/ko';
 
 export type messageInfo = {
   message?: any;
@@ -46,11 +46,12 @@ const Chat: NextPage = () => {
     //  mutate: mutateChat
   } = useSWR(`http://localhost:8000/chat/${username}/chatrooms`, fetcher);
 
-  const { data: chatDetails } = useSWR(
+  const { data: chatDetails, mutate: mutateChatDetails } = useSWR(
     `http://localhost:8000/chat/${username}/chatrooms/${currChatUser}/messages`,
     fetcherDetails
   );
 
+  console.log('chatDetails는??', chatDetails);
   // const { data: localUser } = useSWR(currChatUser, (key) => {
   //   localStorage.setItem('curUser', key);
   //   return localStorage.getItem('curUser');
@@ -73,9 +74,22 @@ const Chat: NextPage = () => {
       {},
       () => {
         console.log('현재 ' + username);
+        const messageInfo: messageInfo = {
+          message: chat,
+          sender: username,
+          receiver: currChatUser,
+          createdDate: dayjs().format('HH:MM'),
+        };
 
         client.subscribe('/topic/' + username, function (msg: any) {
           _processMessage(msg.body), msg.headers.destination;
+
+          mutateChatDetails((prevChatData: any) => {
+            prevChatData?.unshift({
+              messageInfo,
+            });
+            return prevChatData;
+          });
         });
         client.send('/topic/' + currChatUser, {}, JSON.stringify(chat));
       },
@@ -85,7 +99,15 @@ const Chat: NextPage = () => {
     );
 
     return () => client.deactivate();
-  }, [username, getChatRooms, chatData, chat, currChatUser, chatDetails]);
+  }, [
+    username,
+    getChatRooms,
+    chatData,
+    chat,
+    currChatUser,
+    chatDetails,
+    mutateChatDetails,
+  ]);
 
   const _processMessage = (msgBody: any) => {
     try {
@@ -117,6 +139,13 @@ const Chat: NextPage = () => {
       createdDate: dayjs().format('HH:MM'),
     };
     publish(messageInfo);
+    mutateChatDetails((prevChatData: any) => {
+      prevChatData?.unshift({
+        messageInfo,
+      });
+      return prevChatData;
+    });
+
     console.log(messageInfo);
     console.log('chatDetails: ', chatDetails);
     console.log(dayjs().format('HH:MM'));

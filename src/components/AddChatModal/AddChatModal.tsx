@@ -53,7 +53,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     setDebouncedValue('');
     onCloseModal();
 
-    // alert('임시 알림 ) 추가완료. (현재는 새로고침해야 보여요..😅)');
     if (!newMember || !newMember.trim()) {
       return;
     }

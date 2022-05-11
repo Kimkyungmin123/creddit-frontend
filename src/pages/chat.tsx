@@ -55,7 +55,9 @@ const Chat: NextPage = () => {
       onConnect: () => {
         client.current?.subscribe(`/topic/${user?.nickname}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
-          setMessages((prev) => [...prev, message]);
+          if (currChatUser === message.sender) {
+            setMessages((prev) => [...prev, message]);
+          }
         });
       },
     });

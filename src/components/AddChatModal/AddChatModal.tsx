@@ -1,14 +1,15 @@
 import useInput from 'hooks/useInput';
 import styles from './AddChatModal.module.scss';
-import axios from 'axios';
 import Button from 'components/Button';
 import Input from 'components/Input';
 import { Close } from 'icons';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { useCallback, useEffect, useState } from 'react';
 import useDebounce from 'hooks/useDebounce';
 import useUser from 'hooks/useUser';
 import classNames from 'classnames';
+import wsInstance from 'utils/wsInstance';
+import { fetcher } from 'utils/api';
 
 interface AddChatModalProps {
   show: boolean;
@@ -22,13 +23,12 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   const { user } = useUser();
   const username = user?.nickname;
   const [currentIndex, setCurrentIndex] = useState(0);
-  const fetcher = (url: string) =>
-    axios.get(url).then((response) => response.data.data);
 
-  const { data: subscribed } = useSWR(
-    `http://localhost:8080/member/search?page=0&keyword=${newMember}`,
+  const { data } = useSWR(
+    `/member/search?page=0&keyword=${newMember}`,
     fetcher
   );
+  const subscribed = data?.data;
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
@@ -53,21 +53,18 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     setDebouncedValue('');
     onCloseModal();
 
-    // alert('임시 알림 ) 추가완료. (현재는 새로고침해야 보여요..😅)');
     if (!newMember || !newMember.trim()) {
       return;
     }
-    axios
-      .get(`http://localhost:8000/chat/register/${username}/${newMember}`)
-      .then((response) => {
-        if (subscribed !== response.data) {
-          return;
-        }
+    wsInstance
+      .get(`/chat/register/${username}/${newMember}`)
+      .then(() => {
+        mutate(`/chat/${username}/chatrooms`);
       })
       .catch((error) => {
         console.dir(error.response?.data);
       });
-  }, [username, newMember, setNewMember, onCloseModal, subscribed]);
+  }, [username, newMember, setNewMember, onCloseModal]);
 
   if (!show) {
     return null;

@@ -43,3 +43,10 @@ export type Post = {
   profile: MyImage;
   title: string;
 };
+
+export type Message = {
+  sender: string;
+  receiver: string;
+  message: string;
+  createdDate: string;
+};

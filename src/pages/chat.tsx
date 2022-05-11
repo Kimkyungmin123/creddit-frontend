@@ -141,13 +141,15 @@ const Chat: NextPage = () => {
                   />
                 ))}
               </div>
-              <div className={styles.SendMessageBox}>
-                <SendMessageForm
-                  onSubmit={onSubmitForm}
-                  onChange={onChangeChat}
-                  value={chat}
-                />
-              </div>
+              {currChatUser && (
+                <div className={styles.SendMessageBox}>
+                  <SendMessageForm
+                    onSubmit={onSubmitForm}
+                    onChange={onChangeChat}
+                    value={chat}
+                  />
+                </div>
+              )}
             </div>
             <AddChatModal show={isModalOpen} onCloseModal={closeModal} />
           </div>

@@ -6,10 +6,9 @@ import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
-import { useCallback, useEffect, useState } from 'react';
+import { Client } from '@stomp/stompjs';
+import { useEffect, useRef, useState } from 'react';
 import useUser from 'hooks/useUser';
-import axios from 'axios';
 import useInput from 'hooks/useInput';
 import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
@@ -17,112 +16,67 @@ import AddChatModal from 'components/AddChatModal';
 import useSWR from 'swr';
 import dayjs from 'dayjs';
 import ChatDelete from 'components/ChatDelete';
+
 import 'dayjs/locale/ko';
 
-export type messageInfo = {
-  message?: any;
-  sender?: string;
-  receiver: string;
-  createdDate: string;
-};
-
-let client: any = null;
-const socketUrl = 'http://localhost:8000/ws';
+import { Message } from 'types';
+import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
+// import 'dayjs/locale/ko';
 
 const Chat: NextPage = () => {
   const { user } = useUser();
-  const username = user?.nickname;
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
+  const [messages, setMessages] = useState<Message[]>([]);
+  const client = useRef<Client | null>(null);
 
-  const fetcher = (url: string) =>
-    axios.get(url).then((response) => response.data);
-  const fetcherDetails = (url: string) =>
-    axios.get(url).then((response) => response.data.messages);
-
-  const {
-    data: chatData,
-    //  mutate: mutateChat
-  } = useSWR(`http://localhost:8000/chat/${username}/chatrooms`, fetcher);
-
-  const { data: chatDetails, mutate: mutateChatDetails } = useSWR(
-    `http://localhost:8000/chat/${username}/chatrooms/${currChatUser}/messages`,
-    fetcherDetails
+  const { data: chatData } = useSWR(
+    user ? `/chat/${user.nickname}/chatrooms` : null,
+    fetcher
   );
 
-  console.log('chatDetails는??', chatDetails);
+  useEffect(() => {
+    if (!user || !currChatUser) return;
+    wsInstance
+      .get<{ messages: Message[] }>(
+        `/chat/${user.nickname}/chatrooms/${currChatUser}/messages`
+      )
+      .then(({ data }) => {
+        setMessages(data.messages);
+      });
+  }, [user, currChatUser]);
+
   // const { data: localUser } = useSWR(currChatUser, (key) => {
   //   localStorage.setItem('curUser', key);
   //   return localStorage.getItem('curUser');
   // });
 
-  const getChatRooms = useCallback(() => {
-    axios
-      .get(`http://localhost:8000/chat/${username}/chatrooms`)
-      .then((response) => {
-        console.log('response: ', response.data);
-      });
-  }, [username]);
-
   useEffect(() => {
-    getChatRooms();
-
-    const socket = new SockJS(socketUrl);
-    client = Stomp.over(socket);
-    client.connect(
-      {},
-      () => {
-        console.log('현재 ' + username);
-        const messageInfo: messageInfo = {
-          message: chat,
-          sender: username,
-          receiver: currChatUser,
-          createdDate: dayjs().format('HH:MM'),
-        };
-
-        client.subscribe('/topic/' + username, function (msg: any) {
-          _processMessage(msg.body), msg.headers.destination;
-
-          mutateChatDetails((prevChatData: any) => {
-            prevChatData?.unshift({
-              messageInfo,
-            });
-            return prevChatData;
-          });
+    client.current = new Client({
+      webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
+      onConnect: () => {
+        client.current?.subscribe(`/topic/${user?.nickname}`, ({ body }) => {
+          const message = JSON.parse(body) as Message;
+          if (currChatUser === message.sender) {
+            setMessages((prev) => [...prev, message]);
+          }
         });
-        client.send('/topic/' + currChatUser, {}, JSON.stringify(chat));
       },
-      (err: Error) => {
-        console.log(err);
-      }
-    );
+    });
+    client.current.activate();
 
-    return () => client.deactivate();
-  }, [
-    username,
-    getChatRooms,
-    chatData,
-    chat,
-    currChatUser,
-    chatDetails,
-    mutateChatDetails,
-  ]);
+    return () => {
+      client.current?.deactivate();
+    };
+  }, [user, currChatUser]);
 
-  const _processMessage = (msgBody: any) => {
-    try {
-      return JSON.parse(msgBody);
-    } catch (e) {
-      return msgBody;
-    }
-  };
-
-  const publish = (messageInfo: messageInfo) => {
-    if (!client.connected) {
+  const publish = (messageInfo: Message) => {
+    if (!client.current?.connected) {
       return;
     }
 
-    client.publish({
+    client.current.publish({
       destination: '/app/send',
       body: JSON.stringify(messageInfo),
     });
@@ -130,25 +84,24 @@ const Chat: NextPage = () => {
 
   const onSubmitForm = (e: any) => {
     e.preventDefault();
+
+    if (!chat) return;
     setChat('');
 
-    const messageInfo: messageInfo = {
+    if (!user) return;
+    const messageInfo: Message = {
       message: chat,
-      sender: username,
+      sender: user.nickname,
       receiver: currChatUser,
       createdDate: dayjs().format('HH:MM'),
     };
-    publish(messageInfo);
-    mutateChatDetails((prevChatData: any) => {
-      prevChatData?.unshift({
-        messageInfo,
-      });
-      return prevChatData;
-    });
+    setMessages((prev) => [...prev, messageInfo]);
 
-    console.log(messageInfo);
-    console.log('chatDetails: ', chatDetails);
-    console.log(dayjs().format('HH:MM'));
+    publish(messageInfo);
+
+    // console.log(messageInfo);
+    // console.log('messages: ', messages);
+    // console.log(dayjs().format('HH:MM'));
   };
 
   return (
@@ -182,24 +135,25 @@ const Chat: NextPage = () => {
                   <SendMessageDate date={'2022년 00월 00일 0요일'} />
                 )}
 
-                {currChatUser &&
-                  chatDetails?.map((data: any, i: number) => (
-                    <MessageBox
-                      key={i}
-                      interlocutorName={data.sender}
-                      content={data.message}
-                      time={data.createdDate}
-                      isMe={data.receiver === currChatUser ? true : false}
-                    />
-                  ))}
+                {messages.map((data: any, i: number) => (
+                  <MessageBox
+                    key={i}
+                    interlocutorName={data.sender}
+                    content={data.message}
+                    time={data.createdDate}
+                    isMe={data.receiver === currChatUser ? true : false}
+                  />
+                ))}
               </div>
-              <div className={styles.SendMessageBox}>
-                <SendMessageForm
-                  onSubmit={onSubmitForm}
-                  onChange={onChangeChat}
-                  value={chat}
-                />
-              </div>
+              {currChatUser && (
+                <div className={styles.SendMessageBox}>
+                  <SendMessageForm
+                    onSubmit={onSubmitForm}
+                    onChange={onChangeChat}
+                    value={chat}
+                  />
+                </div>
+              )}
             </div>
             <AddChatModal show={isModalOpen} onCloseModal={closeModal} />
           </div>

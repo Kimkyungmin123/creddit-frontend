@@ -100,7 +100,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
               <Dropdown
                 ariaLabel="계정 메뉴"
                 options={[
-                  { name: '프로필', href: '/profile' },
+                  { name: '프로필', href: `/profile/${user.nickname}` },
                   { name: '새 글 작성', href: '/create-post' },
                   { name: '대화 목록', href: '/chat' },
                   { name: '로그아웃', onClick: logout },

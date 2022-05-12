@@ -1,5 +1,6 @@
 import LikeButton from 'components/LikeButton';
 import { usePostCardContext } from 'context/PostCardContext';
+import useUser from 'hooks/useUser';
 import { Close } from 'icons';
 import { useRouter } from 'next/router';
 import { mutate } from 'swr';
@@ -14,6 +15,7 @@ function PostTop({ post }: PostTopProps) {
   const router = useRouter();
   const { likes, title, id, liked } = post;
   const { clickedPostCard } = usePostCardContext();
+  const { user } = useUser();
 
   return (
     <div className={styles.container} data-testid="post-top">
@@ -24,8 +26,9 @@ function PostTop({ post }: PostTopProps) {
           liked={liked}
           variant="large"
           onClick={async () => {
+            const userQuery = user ? `?nickname=${user.nickname}` : '';
             await mutate(
-              `/post/${id}`,
+              `/post/${id}${userQuery}`,
               (post: Post) => ({
                 ...post,
                 liked: !post.liked,

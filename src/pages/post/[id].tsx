@@ -4,6 +4,7 @@ import PostCommentBox from 'components/PostCommentBox';
 import PostMain from 'components/PostMain';
 import PostTop from 'components/PostTop';
 import { usePostCardContext } from 'context/PostCardContext';
+import useUser from 'hooks/useUser';
 import { useRouter } from 'next/router';
 import styles from 'styles/Post.module.scss';
 import useSWR from 'swr';
@@ -13,9 +14,14 @@ import { fetcher } from 'utils/api';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data, error } = useSWR<PostType>(id ? `/post/${id}` : null, fetcher, {
-    revalidateOnFocus: false,
-  });
+  const { user } = useUser();
+  const { data, error } = useSWR<PostType>(
+    id && user ? `/post/${id}?nickname=${user.nickname}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
   const { clickedPostCard } = usePostCardContext();
 
   return (

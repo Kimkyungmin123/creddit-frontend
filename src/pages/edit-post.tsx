@@ -46,7 +46,7 @@ const EditPost: NextPage = () => {
             await api.post(`/post/${id}/edit`, formData);
             const { title, content } = values;
             const post = await mutate<Post>(
-              `/post/${id}`,
+              `/post/${id}?nickname=${user.nickname}`,
               { ...data, title, content },
               false
             );

@@ -1,14 +1,17 @@
 import userDummy from 'data/user.json';
-import { fireEvent, render, screen } from 'utils/test-utils';
+import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 import ProfileBox, { ProfileBoxProps } from './ProfileBox';
 
 describe('ProfileBox', () => {
-  const setup = (props: Partial<ProfileBoxProps> = {}) => {
+  const setup = async (props: Partial<ProfileBoxProps> = {}) => {
     const initialProps: ProfileBoxProps = {
       user: userDummy,
     };
     const utils = render(<ProfileBox {...initialProps} {...props} />);
-    const editButton = screen.getByText('프로필 수정') as HTMLButtonElement;
+    let editButton!: HTMLButtonElement;
+    await waitFor(() => {
+      editButton = screen.getByText('프로필 수정');
+    });
     return {
       initialProps,
       editButton,
@@ -16,8 +19,8 @@ describe('ProfileBox', () => {
     };
   };
 
-  it('renders properly', () => {
-    const { initialProps, editButton } = setup();
+  it('renders properly', async () => {
+    const { initialProps, editButton } = await setup();
     const { nickname, introduction } = initialProps.user;
     expect(screen.getByTestId('image-box')).toBeInTheDocument();
     expect(screen.getByText(nickname)).toBeInTheDocument();
@@ -37,7 +40,7 @@ describe('ProfileBox', () => {
   });
 
   it('shows ProfileEditForm when click editButton', async () => {
-    const { editButton } = setup();
+    const { editButton } = await setup();
     fireEvent.click(editButton);
     expect(screen.getByTestId('profile-edit-form')).toBeInTheDocument();
     const cancelButton = screen.getByText('취소');

@@ -1,19 +1,19 @@
 import Button from 'components/Button';
-import useSWRImmutable from 'swr/immutable';
 import ButtonLink from 'components/ButtonLink';
 import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
+import useFollowingList from 'hooks/useFollowingList';
 import useUser from 'hooks/useUser';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
-import { Follower, User } from 'types';
-import api, { fetcher } from 'utils/api';
+import { mutate } from 'swr';
+import { User } from 'types';
+import api from 'utils/api';
 import editProfile from 'utils/editProfile';
 import isDuplicate from 'utils/isDuplicate';
 import styles from './ProfileBox.module.scss';
-import { mutate } from 'swr';
-import { useRouter } from 'next/router';
 
 export type ProfileBoxProps = {
   user: User;
@@ -27,17 +27,8 @@ function ProfileBox({ user }: ProfileBoxProps) {
     () => currentUser?.nickname === nickname,
     [currentUser, nickname]
   );
-  const { data: followingList } = useSWRImmutable<Follower[]>(
-    currentUser ? '/member/follow/list' : null,
-    fetcher
-  );
   const router = useRouter();
-
-  const isFollowing = useMemo(() => {
-    return followingList?.find((user) => user.nickname === nickname)
-      ? true
-      : false;
-  }, [followingList, nickname]);
+  const { data: followingList, isFollowing } = useFollowingList();
 
   return (
     <div className={styles.profileBox}>
@@ -85,6 +76,13 @@ function ProfileBox({ user }: ProfileBoxProps) {
             <span>가입일</span>
             <MyDate date={createdDate} />
           </div>
+          {isAuthor && (
+            <Link href="/following">
+              <a className={styles.followingLink}>
+                {followingList?.length} <span>팔로우 중</span>
+              </a>
+            </Link>
+          )}
           <div className={styles.buttons}>
             {isAuthor ? (
               <>
@@ -111,7 +109,7 @@ function ProfileBox({ user }: ProfileBoxProps) {
                         headers: { 'Content-Type': 'text/plain' },
                       });
 
-                    if (isFollowing) {
+                    if (isFollowing(nickname)) {
                       await post('/member/follow/delete');
                       mutate('/member/follow/list');
                     } else {
@@ -120,7 +118,7 @@ function ProfileBox({ user }: ProfileBoxProps) {
                     }
                   }}
                 >
-                  {isFollowing ? '팔로우 해제' : '팔로우'}
+                  {isFollowing(nickname) ? '팔로우 해제' : '팔로우'}
                 </Button>
                 <Button
                   round={true}

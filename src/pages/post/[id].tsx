@@ -14,9 +14,10 @@ import { fetcher } from 'utils/api';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
+  const userQuery = user ? `?nickname=${user.nickname}` : '';
   const { data, error } = useSWR<PostType>(
-    id && user ? `/post/${id}?nickname=${user.nickname}` : null,
+    id && !isLoading ? `/post/${id}${userQuery}` : null,
     fetcher,
     {
       revalidateOnFocus: false,

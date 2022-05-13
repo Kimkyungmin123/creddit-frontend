@@ -22,7 +22,7 @@ const EditPost: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error } = useSWRImmutable<Post>(
-    id ? `/post/${id}` : null,
+    id && user ? `/post/${id}?nickname=${user.nickname}` : null,
     fetcher
   );
   const { dispatch } = usePostsContext();

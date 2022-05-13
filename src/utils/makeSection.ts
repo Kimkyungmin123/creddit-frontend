@@ -1,20 +1,15 @@
-import dayjs from 'dayjs';
+import { Message } from 'types';
+// import { chatdate } from 'utils/chatdate';
 
-export interface ChatMsg {
-  sender: string;
-  receiver: string;
-  message: string;
-  createdDate: Date;
-}
-export default function makeSection<T extends ChatMsg>(chatList: T[]) {
-  const sections: { [key: string]: T[] } = {};
-  dayjs.locale('ko');
+export default function makeSectionMessage(chatList: Message[]) {
+  const sections: { [key: string]: Message[] } = {};
+
   chatList.forEach((chat) => {
-    const monthDate = dayjs(chat.createdDate).format('YYYY년 MM월 DD일 dddd');
-    if (Array.isArray(sections[monthDate])) {
-      sections[monthDate].push(chat);
+    const day = `${new Date().getFullYear()}년 ${new Date().getMonth()}월 ${new Date().getDate()}일 ${new Date().getDay()}요일 `;
+    if (Array.isArray(sections[day])) {
+      sections[day].push(chat);
     } else {
-      sections[monthDate] = [chat];
+      sections[day] = [chat];
     }
   });
   return sections;

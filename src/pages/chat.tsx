@@ -14,14 +14,11 @@ import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
 import useSWR from 'swr';
-import dayjs from 'dayjs';
 import ChatDelete from 'components/ChatDelete';
-
-import 'dayjs/locale/ko';
-
 import { Message } from 'types';
 import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
-// import 'dayjs/locale/ko';
+import NonLogin from 'components/NonLogin';
+// import { time } from 'utils/chatdate';
 
 const Chat: NextPage = () => {
   const { user } = useUser();
@@ -29,6 +26,7 @@ const Chat: NextPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+
   const client = useRef<Client | null>(null);
 
   const { data: chatData } = useSWR(
@@ -93,7 +91,11 @@ const Chat: NextPage = () => {
       message: chat,
       sender: user.nickname,
       receiver: currChatUser,
-      createdDate: dayjs().format('HH:MM'),
+      createdDate: `${('0' + new Date().getHours()).slice(-2)} :${(
+        '0' + new Date().getMinutes()
+      ).slice(-2)} `,
+      // createdDate: time,
+      // createdDate: dayjs().format('HH:MM'),
     };
     setMessages((prev) => [...prev, messageInfo]);
 
@@ -102,6 +104,9 @@ const Chat: NextPage = () => {
     // console.log(messageInfo);
     // console.log('messages: ', messages);
     // console.log(dayjs().format('HH:MM'));
+
+    //console.log(dayjs().format('HH:MM'));
+    console.log(new Date());
   };
 
   return (
@@ -159,7 +164,7 @@ const Chat: NextPage = () => {
           </div>
         </>
       ) : (
-        <div>로그인해주세요</div>
+        <NonLogin />
       )}
     </Layout>
   );

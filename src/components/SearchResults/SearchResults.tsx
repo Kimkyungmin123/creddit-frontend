@@ -16,7 +16,7 @@ export interface SearchResultsProps {
 function SearchResults({ value, onClick }: SearchResultsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const { data } = useSWR<Post[]>(
-    `/post/search?keyword=${value}&lastPostId=${Number.MAX_SAFE_INTEGER}&size=5`,
+    `/post/search?keyword=${value}&index=0&size=5&sort=like`,
     fetcher
   );
   const { dispatch } = usePostsContext();

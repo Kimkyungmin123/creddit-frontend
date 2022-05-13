@@ -69,8 +69,11 @@ function Comment({
                     onConfirm={async () => {
                       await api.delete(`/comment/${commentId}`);
                       closeModal();
+                      const userQuery = user
+                        ? `?nickname=${user.nickname}`
+                        : '';
                       const data = await mutate(
-                        `/post/${postId}`,
+                        `/post/${postId}${userQuery}`,
                         (post: Post) => ({
                           ...post,
                           comments: post.comments - 1,
@@ -146,7 +149,8 @@ function Comment({
                 parentCommentId: commentId,
                 postId: postId,
               });
-              const data = await mutate<Post>(`/post/${postId}`);
+              const userQuery = user ? `?nickname=${user.nickname}` : '';
+              const data = await mutate<Post>(`/post/${postId}${userQuery}`);
               dispatch({ type: 'CHANGE_POST', post: data });
               dispatchComments({ type: 'RESET' });
               setIsReplying(false);

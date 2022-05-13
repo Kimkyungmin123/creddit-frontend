@@ -14,13 +14,7 @@ const Search: NextPage = () => {
     <Layout title="creddit">
       <div className={styles.container}>
         <h2>{q} 검색 결과</h2>
-        {q && (
-          <PostList
-            url="/post/search"
-            params={{ keyword: q }}
-            disableSort={true}
-          />
-        )}
+        {q && <PostList url="/post/search" params={{ keyword: q }} />}
       </div>
     </Layout>
   );

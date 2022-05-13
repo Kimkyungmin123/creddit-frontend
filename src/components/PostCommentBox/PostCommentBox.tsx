@@ -70,7 +70,8 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               content: comment,
               postId: post.id,
             });
-            const data = await mutate<Post>(`/post/${post.id}`);
+            const userQuery = user ? `?nickname=${user.nickname}` : '';
+            const data = await mutate<Post>(`/post/${post.id}${userQuery}`);
             dispatchComments({ type: 'RESET' });
             dispatch({ type: 'CHANGE_POST', post: data });
           }}

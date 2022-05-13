@@ -5,7 +5,7 @@
   gap: 1.25rem;
   width: 17.625rem;
   margin-top: 1rem;
-  padding: 1.875rem 1.25rem 0.625rem;
+  padding: 1.875rem 1.25rem 1rem;
   border: solid 0.0625rem var(--border);
   border-radius: 0.25rem;
   overflow: hidden;
@@ -51,7 +51,8 @@
   flex-direction: column;
   gap: 0.75rem;
 
-  a {
+  a,
+  button {
     padding: 0.25rem 1.5rem;
   }
 }

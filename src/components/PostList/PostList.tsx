@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import InfiniteScroll from 'components/InfiniteScroll';
 import PostCard from 'components/PostCard';
 import { usePostsContext } from 'context/PostsContext';
+import useUser from 'hooks/useUser';
 import { Rising, Time } from 'icons';
 import { useRouter } from 'next/router';
 import { Post } from 'types';
@@ -14,16 +15,17 @@ export interface PostListProps {
   url: string;
   params?: any;
   disableSort?: boolean;
+  className?: string;
 }
 
-// TODO: userID가 존재하면 해당 유저의 글만 받아오기
-function PostList({ url, params, disableSort }: PostListProps) {
+function PostList({ url, params, disableSort, className }: PostListProps) {
   const { state, dispatch } = usePostsContext();
   const { posts, sortBy, page } = state;
   const router = useRouter();
+  const { isLoading, user } = useUser();
 
   return (
-    <div className={styles.container}>
+    <div className={classNames(styles.container, className)}>
       {!disableSort && (
         <div className={styles.sortContainer}>
           <button
@@ -59,39 +61,42 @@ function PostList({ url, params, disableSort }: PostListProps) {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
-      <InfiniteScroll
-        data={posts}
-        size={SIZE}
-        onIntersect={async () => {
-          const getIndex = () => {
-            switch (sortBy) {
-              case 'new':
-                return !posts || posts.length === 0
-                  ? Number.MAX_SAFE_INTEGER
-                  : posts[posts.length - 1].id;
-              case 'like':
-                return !posts || posts.length === 0 ? 0 : page || 0;
-            }
-          };
+      {!isLoading && (
+        <InfiniteScroll
+          data={posts}
+          size={SIZE}
+          onIntersect={async () => {
+            const getIndex = () => {
+              switch (sortBy) {
+                case 'new':
+                  return !posts || posts.length === 0
+                    ? Number.MAX_SAFE_INTEGER
+                    : posts[posts.length - 1].id;
+                case 'like':
+                  return !posts || posts.length === 0 ? 0 : page || 0;
+              }
+            };
 
-          const index = getIndex();
-          const { data } = await api.get<Post[]>(url, {
-            params: {
-              ...params,
-              index,
-              size: SIZE,
-              sort: disableSort ? null : sortBy,
-            },
-          });
-          dispatch({
-            type: 'ADD_POSTS',
-            posts: data,
-            url: router.asPath,
-            page: index + 1,
-          });
-          return data;
-        }}
-      />
+            const index = getIndex();
+            const { data } = await api.get<Post[]>(url, {
+              params: {
+                ...params,
+                nickname: user?.nickname,
+                index,
+                size: SIZE,
+                sort: disableSort ? null : sortBy,
+              },
+            });
+            dispatch({
+              type: 'ADD_POSTS',
+              posts: data,
+              url: router.asPath,
+              page: index + 1,
+            });
+            return data;
+          }}
+        />
+      )}
     </div>
   );
 }

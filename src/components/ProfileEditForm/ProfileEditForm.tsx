@@ -4,6 +4,7 @@ import ERRORS from 'constants/errors';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
+import { useRouter } from 'next/router';
 import { mutate } from 'swr';
 import { User } from 'types';
 import focusOnFormElement from 'utils/focusOnFormElement';
@@ -23,6 +24,7 @@ export type ProfileEditFormProps = {
 function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
   const { error: nicknameError, onChange: onChangeNickname } =
     useDuplicateError('nickname');
+  const router = useRouter();
 
   return (
     <Formik
@@ -43,6 +45,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
             { user: { ...user, nickname, introduction } },
             false
           );
+          router.replace(`/profile/${nickname}`);
         } catch (_err) {
           const error = _err as { nicknameDuplicate?: boolean };
           if (error.nicknameDuplicate) {

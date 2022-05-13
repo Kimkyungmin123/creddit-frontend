@@ -1,9 +1,11 @@
+import Button from 'components/Button';
 import ButtonLink from 'components/ButtonLink';
 import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
+import useUser from 'hooks/useUser';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { User } from 'types';
 import api from 'utils/api';
 import editProfile from 'utils/editProfile';
@@ -17,10 +19,15 @@ export type ProfileBoxProps = {
 function ProfileBox({ user }: ProfileBoxProps) {
   const { nickname, introduction, createdDate, image } = user;
   const [isEditing, setIsEditing] = useState(false);
+  const { user: currentUser } = useUser();
+  const isAuthor = useMemo(
+    () => currentUser?.nickname === nickname,
+    [currentUser, nickname]
+  );
 
   return (
     <div className={styles.profileBox}>
-      <ImageBox image={image} introduction={introduction} />
+      <ImageBox image={image} introduction={introduction} isAuthor={isAuthor} />
       {isEditing ? (
         <ProfileEditForm
           user={user}
@@ -65,19 +72,30 @@ function ProfileBox({ user }: ProfileBoxProps) {
             <MyDate date={createdDate} />
           </div>
           <div className={styles.buttons}>
-            <ButtonLink href="/create-post" round={true}>
-              새 글 작성
-            </ButtonLink>
-            <ButtonLink href="/chat" round={true}>
-              대화 목록
-            </ButtonLink>
+            {isAuthor ? (
+              <>
+                <ButtonLink href="/create-post" round={true}>
+                  새 글 작성
+                </ButtonLink>
+                <ButtonLink href="/chat" round={true}>
+                  대화 목록
+                </ButtonLink>
+              </>
+            ) : (
+              <>
+                <Button round={true}>팔로우</Button>
+                <Button round={true}>대화하기</Button>
+              </>
+            )}
           </div>
-          <div className={styles.bottomButtons}>
-            <button onClick={() => setIsEditing(true)}>프로필 수정</button>
-            <Link href="/reset-password">
-              <a>비밀번호 변경</a>
-            </Link>
-          </div>
+          {isAuthor && (
+            <div className={styles.bottomButtons}>
+              <button onClick={() => setIsEditing(true)}>프로필 수정</button>
+              <Link href="/reset-password">
+                <a>비밀번호 변경</a>
+              </Link>
+            </div>
+          )}
         </>
       )}
     </div>

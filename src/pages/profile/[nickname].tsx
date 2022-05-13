@@ -25,6 +25,7 @@ const Profile: NextPage = () => {
           <PostList
             url={`/post/user/${nickname}`}
             className={styles.postList}
+            hideFollowing={true}
           />
         )}
         {userData && <ProfileBox user={userData} />}

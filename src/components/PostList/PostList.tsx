@@ -3,7 +3,7 @@ import InfiniteScroll from 'components/InfiniteScroll';
 import PostCard from 'components/PostCard';
 import { usePostsContext } from 'context/PostsContext';
 import useUser from 'hooks/useUser';
-import { Rising, Time } from 'icons';
+import { PersonSmall, Rising, Time } from 'icons';
 import { useRouter } from 'next/router';
 import { Post } from 'types';
 import api from 'utils/api';
@@ -16,9 +16,16 @@ export interface PostListProps {
   params?: any;
   disableSort?: boolean;
   className?: string;
+  hideFollowing?: boolean;
 }
 
-function PostList({ url, params, disableSort, className }: PostListProps) {
+function PostList({
+  url,
+  params,
+  disableSort,
+  className,
+  hideFollowing,
+}: PostListProps) {
   const { state, dispatch } = usePostsContext();
   const { posts, sortBy, page } = state;
   const router = useRouter();
@@ -54,6 +61,21 @@ function PostList({ url, params, disableSort, className }: PostListProps) {
             <Time />
             <span>최신</span>
           </button>
+          {!hideFollowing && (
+            <button
+              className={classNames(sortBy === 'following' && styles.selected)}
+              onClick={() => {
+                if (sortBy !== 'following') {
+                  dispatch({ type: 'CHANGE_SORT', sortBy: 'following' });
+                  dispatch({ type: 'RESET' });
+                }
+              }}
+              aria-label="팔로우 중인 사용자 글 모아보기"
+            >
+              <PersonSmall />
+              <span>팔로잉</span>
+            </button>
+          )}
         </div>
       )}
       <div className={styles.postsContainer}>
@@ -69,6 +91,7 @@ function PostList({ url, params, disableSort, className }: PostListProps) {
             const getIndex = () => {
               switch (sortBy) {
                 case 'new':
+                case 'following':
                   return !posts || posts.length === 0
                     ? Number.MAX_SAFE_INTEGER
                     : posts[posts.length - 1].id;
@@ -91,7 +114,7 @@ function PostList({ url, params, disableSort, className }: PostListProps) {
               type: 'ADD_POSTS',
               posts: data,
               url: router.asPath,
-              page: index + 1,
+              page: (index || 0) + 1,
             });
             return data;
           }}

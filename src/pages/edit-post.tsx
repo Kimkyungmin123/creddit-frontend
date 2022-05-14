@@ -13,7 +13,6 @@ import { Post } from 'types';
 import api, { fetcher } from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
 
-// TODO: 기존 이미지를 없앨 수 있도록 하기
 const EditPost: NextPage = () => {
   const { isLoading, user } = useUser({
     redirectTo: '/',
@@ -22,7 +21,7 @@ const EditPost: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data, error } = useSWRImmutable<Post>(
-    id ? `/post/${id}` : null,
+    id && user ? `/post/${id}?nickname=${user.nickname}` : null,
     fetcher
   );
   const { dispatch } = usePostsContext();
@@ -44,11 +43,8 @@ const EditPost: NextPage = () => {
           onSubmit={async (values, imageFile) => {
             const formData = getPostFormData({ values, imageFile });
             await api.post(`/post/${id}/edit`, formData);
-            const { title, content } = values;
             const post = await mutate<Post>(
-              `/post/${id}?nickname=${user.nickname}`,
-              { ...data, title, content },
-              false
+              `/post/${id}?nickname=${user.nickname}`
             );
             dispatch({ type: 'CHANGE_POST', post });
             setClickedPostCard(false);

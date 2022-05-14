@@ -2,6 +2,7 @@ import CommentForm from 'components/CommentForm';
 import DeleteModal from 'components/DeleteModal';
 import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
+import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
 import { CommentsAction } from 'hooks/useComments';
@@ -41,11 +42,15 @@ function Comment({
 
   return (
     <div className={styles.container} data-testid="comment">
-      <ProfileImage imgUrl={profile.imgUrl} size={2.25} />
+      <ProfileImage
+        nickname={member.nickname}
+        imgUrl={profile.imgUrl}
+        size={2.25}
+      />
       <div className={styles.right}>
         <div className={styles.top}>
           <div className={styles.info}>
-            <span>{member.nickname}</span>
+            <NicknameLink nickname={member.nickname} />
             <span>•</span>
             <MyDate date={createdDate} />
             {user?.nickname === member.nickname && !isEditing && (

@@ -17,7 +17,7 @@ interface Values {
 
 export type PostFormProps = {
   title: string;
-  onSubmit: (values: Values, imageFile: File | null) => Promise<void>;
+  onSubmit: (values: Values, imageFile: File | Blob | null) => Promise<void>;
   imageUrl?: string | null;
   initialValues?: Values;
 };
@@ -28,8 +28,9 @@ function PostForm({
   imageUrl,
   initialValues = { title: '', content: '' },
 }: PostFormProps) {
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState<File | Blob | null>(null);
   const previewImgUrl = useMemo(() => {
+    if (imageFile?.size === 0) return null;
     if (imageFile) return URL.createObjectURL(imageFile);
     return imageUrl;
   }, [imageFile, imageUrl]);
@@ -93,7 +94,7 @@ function PostForm({
                     type="button"
                     variant="plain"
                     ariaLabel="글 이미지 제거"
-                    onClick={() => setImageFile(null)}
+                    onClick={() => setImageFile(new Blob())}
                   >
                     제거
                   </Button>

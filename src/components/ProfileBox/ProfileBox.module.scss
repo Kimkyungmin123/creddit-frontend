@@ -46,6 +46,22 @@
   }
 }
 
+.followingLink {
+  align-self: baseline;
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.875rem;
+
+  span {
+    font-weight: normal;
+    color: var(--text-secondary);
+  }
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
 .buttons {
   display: flex;
   flex-direction: column;

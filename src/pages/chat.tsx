@@ -1,7 +1,7 @@
 import ChatListBox from 'components/ChatListBox';
 import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
-import SendMessageDate from 'components/SendMessageDate';
+// import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
@@ -18,7 +18,7 @@ import ChatDelete from 'components/ChatDelete';
 import { Message } from 'types';
 import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
 import NonLogin from 'components/NonLogin';
-// import { time } from 'utils/chatdate';
+import SendMessageDate from 'components/SendMessageDate';
 
 const Chat: NextPage = () => {
   const { user } = useUser();
@@ -26,9 +26,7 @@ const Chat: NextPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
-
   const client = useRef<Client | null>(null);
-
   const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
     fetcher
@@ -63,7 +61,7 @@ const Chat: NextPage = () => {
       },
     });
     client.current.activate();
-
+    // localStorage.setItem(currChatUser, new Date().getTime().toString());
     return () => {
       client.current?.deactivate();
     };
@@ -91,22 +89,15 @@ const Chat: NextPage = () => {
       message: chat,
       sender: user.nickname,
       receiver: currChatUser,
-      createdDate: `${('0' + new Date().getHours()).slice(-2)} :${(
+      // createdDate: new Date(),
+      createdDate: `${('0' + new Date().getHours()).slice(-2)}:${(
         '0' + new Date().getMinutes()
       ).slice(-2)} `,
-      // createdDate: time,
-      // createdDate: dayjs().format('HH:MM'),
     };
     setMessages((prev) => [...prev, messageInfo]);
 
     publish(messageInfo);
-
-    // console.log(messageInfo);
-    // console.log('messages: ', messages);
-    // console.log(dayjs().format('HH:MM'));
-
-    //console.log(dayjs().format('HH:MM'));
-    console.log(new Date());
+    // localStorage.setItem(currChatUser, new Date().getTime().toString());
   };
 
   return (
@@ -137,7 +128,7 @@ const Chat: NextPage = () => {
               <div className={styles.messageBox}>
                 {/* 임시 시간 */}
                 {currChatUser && (
-                  <SendMessageDate date={'2022년 00월 00일 0요일'} />
+                  <SendMessageDate date="2022년 00월 00일 0요일" />
                 )}
 
                 {messages.map((data: any, i: number) => (

@@ -3,9 +3,12 @@ import ButtonLink from 'components/ButtonLink';
 import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
+import useFollowingList from 'hooks/useFollowingList';
 import useUser from 'hooks/useUser';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
+import { mutate } from 'swr';
 import { User } from 'types';
 import api from 'utils/api';
 import editProfile from 'utils/editProfile';
@@ -19,11 +22,13 @@ export type ProfileBoxProps = {
 function ProfileBox({ user }: ProfileBoxProps) {
   const { nickname, introduction, createdDate, image } = user;
   const [isEditing, setIsEditing] = useState(false);
-  const { user: currentUser } = useUser();
+  const { user: currentUser, isLoading: isLoadingCurrentUser } = useUser();
   const isAuthor = useMemo(
     () => currentUser?.nickname === nickname,
     [currentUser, nickname]
   );
+  const router = useRouter();
+  const { data: followingList, isFollowing } = useFollowingList();
 
   return (
     <div className={styles.profileBox}>
@@ -71,6 +76,13 @@ function ProfileBox({ user }: ProfileBoxProps) {
             <span>가입일</span>
             <MyDate date={createdDate} />
           </div>
+          {isAuthor && (
+            <Link href="/following">
+              <a className={styles.followingLink}>
+                {followingList?.length} <span>팔로우 중</span>
+              </a>
+            </Link>
+          )}
           <div className={styles.buttons}>
             {isAuthor ? (
               <>
@@ -83,8 +95,44 @@ function ProfileBox({ user }: ProfileBoxProps) {
               </>
             ) : (
               <>
-                <Button round={true}>팔로우</Button>
-                <Button round={true}>대화하기</Button>
+                <Button
+                  round={true}
+                  onClick={async () => {
+                    if (isLoadingCurrentUser) return;
+                    if (!currentUser) {
+                      router.push('/login');
+                      return;
+                    }
+
+                    const post = (url: string) =>
+                      api.post(url, nickname, {
+                        headers: { 'Content-Type': 'text/plain' },
+                      });
+
+                    if (isFollowing(nickname)) {
+                      await post('/member/follow/delete');
+                      mutate('/member/follow/list');
+                    } else {
+                      await post('/member/follow');
+                      mutate('/member/follow/list');
+                    }
+                  }}
+                >
+                  {isFollowing(nickname) ? '팔로우 해제' : '팔로우'}
+                </Button>
+                <Button
+                  round={true}
+                  onClick={() => {
+                    if (isLoadingCurrentUser) return;
+                    if (!currentUser) {
+                      router.push('/login');
+                      return;
+                    }
+                    // TODO: 대화하기 버튼 누르면 대화 페이지로 이동 후 방 생성
+                  }}
+                >
+                  대화하기
+                </Button>
               </>
             )}
           </div>

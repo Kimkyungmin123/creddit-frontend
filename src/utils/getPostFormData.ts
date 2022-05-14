@@ -1,6 +1,6 @@
 type Params = {
   values: { title: string; content: string };
-  imageFile?: File | null;
+  imageFile?: File | Blob | null;
 };
 
 function getPostFormData({ values, imageFile }: Params) {

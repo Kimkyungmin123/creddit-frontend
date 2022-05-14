@@ -5,7 +5,7 @@ import { Post } from 'types';
 interface State {
   posts: Post[] | null;
   url: string;
-  sortBy: 'like' | 'new';
+  sortBy: 'like' | 'new' | 'following';
   page?: number;
 }
 
@@ -15,7 +15,7 @@ interface Action {
   post?: Partial<Post>;
   posts?: Post[];
   url?: string;
-  sortBy?: 'like' | 'new';
+  sortBy?: 'like' | 'new' | 'following';
   page?: number;
 }
 

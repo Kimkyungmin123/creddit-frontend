@@ -13,6 +13,7 @@ import Menu from './assets/menu.svg';
 import MoonOutline from './assets/moon-outline.svg';
 import Naver from './assets/naver.svg';
 import Person from './assets/person.svg';
+import PersonSmall from './assets/person-small.svg';
 import Rising from './assets/rising.svg';
 import Search from './assets/search.svg';
 import Sort from './assets/sort.svg';
@@ -35,6 +36,7 @@ export {
   MoonOutline,
   Naver,
   Person,
+  PersonSmall,
   Rising,
   Search,
   Sort,

@@ -50,3 +50,10 @@ export type Message = {
   message: string;
   createdDate: string;
 };
+
+export type Follower = {
+  email: string;
+  imgName: string | null;
+  imgUrl: string | null;
+  nickname: string;
+};

@@ -14,6 +14,7 @@ const Menu = () => <></>;
 const MoonOutline = () => <></>;
 const Naver = () => <></>;
 const Person = () => <></>;
+const PersonSmall = () => <></>;
 const Rising = () => <></>;
 const Search = () => <></>;
 const Sort = () => <></>;
@@ -36,6 +37,7 @@ export {
   MoonOutline,
   Naver,
   Person,
+  PersonSmall,
   Rising,
   Search,
   Sort,

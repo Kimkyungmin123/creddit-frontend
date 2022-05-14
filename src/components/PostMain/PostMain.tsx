@@ -1,5 +1,6 @@
 import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
+import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
@@ -26,8 +27,12 @@ function PostMain({ post }: PostMainProps) {
       <h2>{title}</h2>
       <div className={styles.postDetail}>
         <div className={styles.author}>
-          <ProfileImage imgUrl={profile.imgUrl} size={1.5} />
-          <span>{member.nickname}</span>
+          <ProfileImage
+            nickname={member.nickname}
+            imgUrl={profile.imgUrl}
+            size={1.5}
+          />
+          <NicknameLink nickname={member.nickname} />
         </div>
         <MyDate date={createdDate} />
         {user?.nickname === member.nickname && (
@@ -47,7 +52,7 @@ function PostMain({ post }: PostMainProps) {
                 onConfirm={async () => {
                   await api.delete(`/post/${id}`);
                   dispatch({ type: 'RESET' });
-                  router.replace('/profile');
+                  router.replace(`/profile/${user.nickname}`);
                 }}
                 onCancel={closeModal}
               />

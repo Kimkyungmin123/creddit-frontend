@@ -3,6 +3,7 @@ import userDummy from 'data/user.json';
 import { rest } from 'msw';
 import { API_ENDPOINT } from 'utils/api';
 import commentsDummy from 'data/comments.json';
+import { Follower } from 'types';
 
 export function handlers() {
   return [
@@ -21,6 +22,7 @@ export function handlers() {
     rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
     rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
     rest.get(`${API_ENDPOINT}/comment/detail`, getComments),
+    rest.get(`${API_ENDPOINT}/follow/list`, getFollowingList),
   ];
 }
 
@@ -62,4 +64,14 @@ const postAny: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
 
 const getComments: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
   return res(ctx.status(200), ctx.json([commentsDummy[0]]));
+};
+
+const getFollowingList: Parameters<typeof rest.get>[1] = (_, res, ctx) => {
+  const user: Follower = {
+    email: 'a@a.com ',
+    imgName: null,
+    imgUrl: 'https://a.com/b.jpg',
+    nickname: 'abc',
+  };
+  return res(ctx.status(200), ctx.json([user]));
 };

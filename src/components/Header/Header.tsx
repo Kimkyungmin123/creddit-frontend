@@ -3,7 +3,6 @@ import ProfileImage from 'components/ProfileImage';
 import SearchBar from 'components/SearchBar';
 import useUser from 'hooks/useUser';
 import { CaretDown, EditOutline, Github, MoonOutline, SunOutline } from 'icons';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useLayoutEffect, useState } from 'react';
@@ -16,7 +15,6 @@ export type HeaderProps = {
 const Header = ({ hideSearchBar }: HeaderProps) => {
   const { user, isLoading, logout } = useUser();
   const [screenTheme, setScreenTheme] = useState(true);
-  const { status } = useSession();
   const router = useRouter();
 
   useLayoutEffect(() => {
@@ -64,7 +62,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
             creddit
           </a>
         </Link>
-        {!isLoading && status !== 'loading' && (
+        {!isLoading && (
           <>
             {hideSearchBar ? (
               <div style={{ flexGrow: 1 }}></div>

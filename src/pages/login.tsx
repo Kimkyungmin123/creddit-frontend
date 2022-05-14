@@ -6,11 +6,9 @@ import ERRORS from 'constants/errors';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik, FormikErrors } from 'formik';
 import useLogin from 'hooks/useLogin';
-import useSocialLogin from 'hooks/useSocialLogin';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Login.module.scss';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -19,8 +17,6 @@ import { object } from 'yup';
 const Login: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
-  const { status } = useSession();
-  useSocialLogin();
 
   return (
     <Layout
@@ -28,7 +24,7 @@ const Login: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && status === 'unauthenticated' && (
+      {!isLoading && !user && (
         <div className={styles.loginContainer}>
           <h1>로그인</h1>
           <LoginForm

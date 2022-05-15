@@ -10,14 +10,12 @@ import { mutate } from 'swr';
 export type ChatDeleteProps = {
   user: string;
   currentChatRoomId: string;
-  currChatUser: string;
+  // currChatUser?: string;
 };
 
 const ChatDelete = ({ user, currentChatRoomId }: ChatDeleteProps) => {
   const { isModalOpen, openModal, closeModal } = useModal();
-
   const router = useRouter();
-
   const onClickLeftChatRoom = () => {
     wsInstance
       .post<{ messages: Message[] }>(`/chat/${user}/chatroom/left`, {
@@ -27,6 +25,7 @@ const ChatDelete = ({ user, currentChatRoomId }: ChatDeleteProps) => {
         console.log(response);
         closeModal();
         // setDeleteChatUser('');
+
         mutate(`/chat/${user}/chatrooms`);
 
         router.replace(router.asPath);

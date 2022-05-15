@@ -14,7 +14,7 @@ import useInput from 'hooks/useInput';
 import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import ChatDelete from 'components/ChatDelete';
 import { Message } from 'types';
 import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
@@ -29,8 +29,10 @@ const Chat: NextPage = () => {
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
+  // const [chatDelete, setChatDelete] = useState(false);
   const client = useRef<Client | null>(null);
-  const { data: chatData, mutate: mutateChatData } = useSWR(
+
+  const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
     fetcher
   );
@@ -44,14 +46,8 @@ const Chat: NextPage = () => {
       .then(({ data }) => {
         console.log(data);
         setMessages(data.messages);
-        mutateChatData(chatData);
       });
-  }, [user, currChatUser, currentChatRoomId, mutateChatData, chatData]);
-
-  // const { data: localUser } = useSWR(currChatUser, (key) => {
-  //   localStorage.setItem('curUser', key);
-  //   return localStorage.getItem('curUser');
-  // });
+  }, [user, currChatUser, currentChatRoomId, chatData]);
 
   useEffect(() => {
     client.current = new Client({
@@ -66,7 +62,6 @@ const Chat: NextPage = () => {
       },
     });
     client.current.activate();
-    // localStorage.setItem(currChatUser, new Date().getTime().toString());
 
     return () => {
       client.current?.deactivate();
@@ -96,18 +91,18 @@ const Chat: NextPage = () => {
       sender: user.nickname,
       chatRoomId: currentChatRoomId,
       receiver: currChatUser,
-      // createdDate: new Date(),
-      createdDate: `${('0' + new Date().getHours()).slice(-2)}:${(
-        '0' + new Date().getMinutes()
-      ).slice(-2)} `,
+      createdDate: `${new Date().getFullYear()}년 ${
+        new Date().getMonth() + 1
+      }월 ${new Date().getDate()}일 ${('0' + new Date().getHours()).slice(
+        -2
+      )}:${('0' + new Date().getMinutes()).slice(-2)} `,
     };
+
     setMessages((prev) => [...prev, messageInfo]);
 
     publish(messageInfo);
-    console.log(messageInfo);
-    console.log(messages);
-
-    // localStorage.setItem(currChatUser, new Date().getTime().toString());
+    mutate(`/chat/${user.nickname}/chatrooms`);
+    mutate(`${user.nickname}/chatrooms`);
   };
 
   return (
@@ -127,8 +122,10 @@ const Chat: NextPage = () => {
                     console.log(currChatUser);
                     setChat('');
                   }}
-                  // lastMessage={}
-                  // sentDate={}
+                  lastMessage={data.messages[data.messages.length - 1]?.message}
+                  sentDate={data.messages[
+                    data.messages.length - 1
+                  ]?.createdDate.slice(13)}
                 />
               ))}
             </div>
@@ -141,14 +138,16 @@ const Chat: NextPage = () => {
                   <ChatDelete
                     user={user.nickname}
                     currentChatRoomId={currentChatRoomId}
-                    currChatUser={currChatUser}
+                    // currChatUser={currChatUser}
                   />
                 )}
               </div>
               <div className={styles.messageBox}>
-                {/* 임시 시간 */}
+                {/* 임시 날짜 */}
                 {currChatUser && (
-                  <SendMessageDate date="2022년 00월 00일 0요일" />
+                  <SendMessageDate
+                    date={messages[0]?.createdDate.slice(0, 12)}
+                  />
                 )}
 
                 {messages.map((data: any, i: number) => (
@@ -156,7 +155,7 @@ const Chat: NextPage = () => {
                     key={i}
                     interlocutorName={data.sender}
                     content={data.message}
-                    time={data.createdDate}
+                    time={data.createdDate.slice(13)}
                     isMe={data.receiver === currChatUser ? true : false}
                     isManager={data.receiver === 'CHAT_MANAGER' ? true : false}
                     chatManager={

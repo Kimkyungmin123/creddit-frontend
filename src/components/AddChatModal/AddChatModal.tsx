@@ -67,7 +67,7 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
       .catch((error) => {
         console.dir(error.response?.data);
         // setNonUser(true);
-        alert('없는 사용자입니다');
+        alert('임시 알림) 없는 사용자입니다');
       });
   }, [username, newMember, setNewMember, onCloseModal]);
 

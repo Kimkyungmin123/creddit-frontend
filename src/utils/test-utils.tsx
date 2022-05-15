@@ -1,13 +1,10 @@
 import { render, RenderOptions } from '@testing-library/react';
-import { SessionProvider } from 'next-auth/react';
 import React, { FC, ReactElement } from 'react';
 import { SWRConfig } from 'swr';
 
 const AllTheProviders: FC = ({ children }) => {
   return (
-    <SessionProvider session={null}>
-      <SWRConfig value={{ provider: () => new Map() }}>{children}</SWRConfig>
-    </SessionProvider>
+    <SWRConfig value={{ provider: () => new Map() }}>{children}</SWRConfig>
   );
 };
 

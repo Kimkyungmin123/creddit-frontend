@@ -23,6 +23,7 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   const { user } = useUser();
   const username = user?.nickname;
   const [currentIndex, setCurrentIndex] = useState(0);
+  // const [nonUser, setNonUser] = useState(false);
 
   const { data } = useSWR(
     `/member/search?page=0&keyword=${newMember}`,
@@ -48,7 +49,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   }, [subscribed]);
 
   const handleAddChatPartner = useCallback(() => {
-    // e.preventDefault();
     setNewMember('');
     setDebouncedValue('');
     onCloseModal();
@@ -66,6 +66,8 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
       })
       .catch((error) => {
         console.dir(error.response?.data);
+        // setNonUser(true);
+        alert('없는 사용자입니다');
       });
   }, [username, newMember, setNewMember, onCloseModal]);
 
@@ -132,6 +134,7 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
             </div>
           )}
         </form>
+        {/* {nonUser && } */}
       </div>
     </div>
   );

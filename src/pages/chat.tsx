@@ -35,6 +35,7 @@ const Chat: NextPage = () => {
   );
 
   useEffect(() => {
+    console.log(chatData);
     if (!user || !currChatUser) return;
     wsInstance
       .get<{ messages: Message[] }>(
@@ -128,7 +129,7 @@ const Chat: NextPage = () => {
             </div>
             <div className={styles.messageform}>
               <div className={styles.chatDelete}>
-                {currChatUser && <ChatDelete />}
+                {currChatUser && <ChatDelete user={user.nickname} currentChatRoomId={currentChatRoomId}/>}
               </div>
               <div className={styles.messageBox}>
                 {/* 임시 시간 */}

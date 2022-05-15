@@ -27,6 +27,7 @@ const Chat: NextPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [currentChatRoomId, setCurrentChatRoomId] = useState('');
   const client = useRef<Client | null>(null);
   const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
@@ -34,12 +35,14 @@ const Chat: NextPage = () => {
   );
 
   useEffect(() => {
+    console.log(chatData);
     if (!user || !currChatUser) return;
     wsInstance
       .get<{ messages: Message[] }>(
-        `/chat/${user.nickname}/chatrooms/${currChatUser}/messages`
+        `/chat/${user.nickname}/chatrooms/${currentChatRoomId}`
       )
       .then(({ data }) => {
+        console.log(data);
         setMessages(data.messages);
       });
   }, [user, currChatUser]);
@@ -53,7 +56,7 @@ const Chat: NextPage = () => {
     client.current = new Client({
       webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
       onConnect: () => {
-        client.current?.subscribe(`/topic/${user?.nickname}`, ({ body }) => {
+        client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
           if (currChatUser === message.sender) {
             setMessages((prev) => [...prev, message]);
@@ -89,6 +92,7 @@ const Chat: NextPage = () => {
     const messageInfo: Message = {
       message: chat,
       sender: user.nickname,
+      chatRoomId: currentChatRoomId,
       receiver: currChatUser,
       // createdDate: new Date(),
       createdDate: `${('0' + new Date().getHours()).slice(-2)}:${(
@@ -113,7 +117,9 @@ const Chat: NextPage = () => {
                   key={i}
                   interlocutorName={data.target}
                   onClick={() => {
+                    // console.log("click event: ", data);
                     setCurrChatUser(data.target);
+                    setCurrentChatRoomId(data.id);
                     console.log(currChatUser);
                     setChat('');
                   }}
@@ -127,7 +133,7 @@ const Chat: NextPage = () => {
                 {!currChatUser && <NonChatZone />}
               </div>
               <div className={styles.chatDelete}>
-                {currChatUser && <ChatDelete />}
+                {currChatUser && <ChatDelete user={user.nickname} currentChatRoomId={currentChatRoomId}/>}
               </div>
               <div className={styles.messageBox}>
                 {/* 임시 시간 */}

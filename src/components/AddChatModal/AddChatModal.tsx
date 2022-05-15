@@ -57,7 +57,10 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
       return;
     }
     wsInstance
-      .get(`/chat/register/${username}/${newMember}`)
+      .post(`/chat/register`, {
+        myId: username,
+        userId: newMember,
+      })
       .then(() => {
         mutate(`/chat/${username}/chatrooms`);
       })

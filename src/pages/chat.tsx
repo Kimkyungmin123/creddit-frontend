@@ -55,7 +55,7 @@ const Chat: NextPage = () => {
     client.current = new Client({
       webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
       onConnect: () => {
-        client.current?.subscribe(`/topic/${user?.nickname}`, ({ body }) => {
+        client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
           if (currChatUser === message.sender) {
             setMessages((prev) => [...prev, message]);
@@ -115,6 +115,7 @@ const Chat: NextPage = () => {
                   key={i}
                   interlocutorName={data.target}
                   onClick={() => {
+                    // console.log("click event: ", data);
                     setCurrChatUser(data.target);
                     setCurrentChatRoomId(data.id);
                     console.log(currChatUser);

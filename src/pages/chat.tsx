@@ -41,6 +41,7 @@ const Chat: NextPage = () => {
         `/chat/${user.nickname}/chatrooms/${currentChatRoomId}`
       )
       .then(({ data }) => {
+        console.log(data);
         setMessages(data.messages);
       });
   }, [user, currChatUser]);
@@ -90,6 +91,7 @@ const Chat: NextPage = () => {
     const messageInfo: Message = {
       message: chat,
       sender: user.nickname,
+      chatRoomId: currentChatRoomId,
       receiver: currChatUser,
       createdDate: dayjs().format('HH:MM'),
     };

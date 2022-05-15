@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  position: absolute;
+  // justify-content: center;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  border: solid 1px;
+  top: 10px;
+  margin: 0;
+  padding: 0;
+
+  h2 {
+    display: flex;
+    width: 100%;
+    justify-items: center;
+    // justify-content: center;
+  }
+
+  h3 {
+    display: flex;
+    width: 100%;
+    // justify-content: center;
+  }
+}

@@ -3,6 +3,7 @@ import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
 // import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
+import NonChatZone from 'components/NonChatZone';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
@@ -122,6 +123,9 @@ const Chat: NextPage = () => {
               ))}
             </div>
             <div className={styles.messageform}>
+              <div className={styles.encourageChat}>
+                {!currChatUser && <NonChatZone />}
+              </div>
               <div className={styles.chatDelete}>
                 {currChatUser && <ChatDelete />}
               </div>

@@ -26,6 +26,7 @@ const Chat: NextPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [currentChatRoomId, setCurrentChatRoomId] = useState('');
   const client = useRef<Client | null>(null);
 
   const { data: chatData } = useSWR(
@@ -37,7 +38,7 @@ const Chat: NextPage = () => {
     if (!user || !currChatUser) return;
     wsInstance
       .get<{ messages: Message[] }>(
-        `/chat/${user.nickname}/chatrooms/${currChatUser}/messages`
+        `/chat/${user.nickname}/chatrooms/${currentChatRoomId}`
       )
       .then(({ data }) => {
         setMessages(data.messages);
@@ -113,6 +114,7 @@ const Chat: NextPage = () => {
                   interlocutorName={data.target}
                   onClick={() => {
                     setCurrChatUser(data.target);
+                    setCurrentChatRoomId(data.id);
                     console.log(currChatUser);
                     setChat('');
                   }}

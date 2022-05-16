@@ -22,7 +22,7 @@ export function handlers() {
     rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
     rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
     rest.get(`${API_ENDPOINT}/comment/detail`, getComments),
-    rest.get(`${API_ENDPOINT}/follow/list`, getFollowingList),
+    rest.get(`${API_ENDPOINT}/member/follow/list`, getFollowingList),
   ];
 }
 

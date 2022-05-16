@@ -2,9 +2,35 @@ import styles from './ChatDelete.module.scss';
 import Button from 'components/Button';
 import useModal from 'hooks/useModal';
 import DeleteModal from 'components/DeleteModal';
+import wsInstance from 'utils/wsInstance';
+import { Message } from 'types';
+import { useRouter } from 'next/router';
+import { mutate } from 'swr';
 
-const ChatDelete = () => {
+export type ChatDeleteProps = {
+  user: string;
+  currentChatRoomId: string;
+  // currChatUser?: string;
+};
+
+const ChatDelete = ({ user, currentChatRoomId }: ChatDeleteProps) => {
   const { isModalOpen, openModal, closeModal } = useModal();
+  const router = useRouter();
+  const onClickLeftChatRoom = () => {
+    wsInstance
+      .post<{ messages: Message[] }>(`/chat/${user}/chatroom/left`, {
+        chatRoomId: currentChatRoomId,
+      })
+      .then((response) => {
+        console.log(response);
+        closeModal();
+        // setDeleteChatUser('');
+
+        mutate(`/chat/${user}/chatrooms`);
+
+        router.replace(router.asPath);
+      });
+  };
   return (
     <div className={styles.chatDelete}>
       <Button
@@ -20,8 +46,7 @@ const ChatDelete = () => {
           buttonName="확인"
           title="채팅방 나가기"
           message="채팅방을 나가시겠습니까?"
-          // TODO: 나가기 api 요청하기
-          onConfirm={closeModal}
+          onConfirm={onClickLeftChatRoom}
           onCancel={closeModal}
         />
       )}

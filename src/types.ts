@@ -47,6 +47,7 @@ export type Post = {
 export type Message = {
   sender: string;
   receiver: string;
+  chatRoomId: string;
   message: string;
   createdDate: string;
 };

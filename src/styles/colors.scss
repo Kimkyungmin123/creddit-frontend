@@ -39,6 +39,9 @@ body[data-theme='light'] {
   --my-message-box-bg: #8954fd;
   --search-bar-badge-bg: #f5f5f5;
   --reply-toggle-btn-text: #7c3ffd;
+  --chat-manager-text: #8954fd;
+  --chat-empty-zone-text: #7c3ffd;
+  --chat-empty-zone-rest: #501eba;
 }
 
 @mixin dark {
@@ -81,6 +84,9 @@ body[data-theme='light'] {
   --my-message-box-bg: #705e97;
   --search-bar-badge-bg: #4d4d4d;
   --reply-toggle-btn-text: #3ea6ff;
+  --chat-manager-text: #705e97;
+  --chat-empty-zone-text: #7c3ffd;
+  --chat-empty-zone-rest: #574a73;
 }
 
 @media (prefers-color-scheme: dark) {

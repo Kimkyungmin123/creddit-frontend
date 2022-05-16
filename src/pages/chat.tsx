@@ -1,8 +1,9 @@
 import ChatListBox from 'components/ChatListBox';
 import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
-import SendMessageDate from 'components/SendMessageDate';
+// import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
+import NonChatZone from 'components/NonChatZone';
 import type { NextPage } from 'next';
 import styles from 'styles/Chat.module.scss';
 import SockJS from 'sockjs-client';
@@ -13,12 +14,13 @@ import useInput from 'hooks/useInput';
 import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
-import useSWR from 'swr';
-import dayjs from 'dayjs';
+import useSWR, { mutate } from 'swr';
 import ChatDelete from 'components/ChatDelete';
 import { Message } from 'types';
 import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
-// import 'dayjs/locale/ko';
+import NonLogin from 'components/NonLogin';
+import SendMessageDate from 'components/SendMessageDate';
+import ChatManager from 'components/ChatManager';
 
 const Chat: NextPage = () => {
   const { user } = useUser();
@@ -26,7 +28,10 @@ const Chat: NextPage = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
+  const [currentChatRoomId, setCurrentChatRoomId] = useState('');
+  // const [chatDelete, setChatDelete] = useState(false);
   const client = useRef<Client | null>(null);
+  const scrollRef = useRef<null | HTMLDivElement>(null);
 
   const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
@@ -37,23 +42,19 @@ const Chat: NextPage = () => {
     if (!user || !currChatUser) return;
     wsInstance
       .get<{ messages: Message[] }>(
-        `/chat/${user.nickname}/chatrooms/${currChatUser}/messages`
+        `/chat/${user.nickname}/chatrooms/${currentChatRoomId}`
       )
       .then(({ data }) => {
+        console.log(data);
         setMessages(data.messages);
       });
-  }, [user, currChatUser]);
-
-  // const { data: localUser } = useSWR(currChatUser, (key) => {
-  //   localStorage.setItem('curUser', key);
-  //   return localStorage.getItem('curUser');
-  // });
+  }, [user, currChatUser, currentChatRoomId, chatData]);
 
   useEffect(() => {
     client.current = new Client({
       webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
       onConnect: () => {
-        client.current?.subscribe(`/topic/${user?.nickname}`, ({ body }) => {
+        client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
           if (currChatUser === message.sender) {
             setMessages((prev) => [...prev, message]);
@@ -66,7 +67,11 @@ const Chat: NextPage = () => {
     return () => {
       client.current?.deactivate();
     };
-  }, [user, currChatUser]);
+  }, [user, currChatUser, currentChatRoomId]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const publish = (messageInfo: Message) => {
     if (!client.current?.connected) {
@@ -89,15 +94,20 @@ const Chat: NextPage = () => {
     const messageInfo: Message = {
       message: chat,
       sender: user.nickname,
+      chatRoomId: currentChatRoomId,
       receiver: currChatUser,
-      createdDate: dayjs().format('HH:MM'),
+      createdDate: `${new Date().getFullYear()}년 ${
+        new Date().getMonth() + 1
+      }월 ${new Date().getDate()}일 ${('0' + new Date().getHours()).slice(
+        -2
+      )}:${('0' + new Date().getMinutes()).slice(-2)} `,
     };
+
     setMessages((prev) => [...prev, messageInfo]);
 
     publish(messageInfo);
-    // console.log(messageInfo);
-    // console.log('messages: ', messages);
-    // console.log(dayjs().format('HH:MM'));
+    mutate(`/chat/${user.nickname}/chatrooms`);
+    mutate(`${user.nickname}/chatrooms`);
   };
 
   return (
@@ -113,32 +123,60 @@ const Chat: NextPage = () => {
                   interlocutorName={data.target}
                   onClick={() => {
                     setCurrChatUser(data.target);
+                    setCurrentChatRoomId(data.id);
                     console.log(currChatUser);
                     setChat('');
                   }}
-                  // lastMessage={}
-                  // sentDate={}
+                  lastMessage={data.messages[data.messages.length - 1]?.message}
+                  sentDate={data.messages[
+                    data.messages.length - 1
+                  ]?.createdDate.slice(13)}
                 />
               ))}
             </div>
             <div className={styles.messageform}>
+              <div className={styles.encourageChat}>
+                {!isModalOpen && !currChatUser && <NonChatZone />}{' '}
+              </div>
               <div className={styles.chatDelete}>
-                {currChatUser && <ChatDelete />}
+                {currChatUser && (
+                  <ChatDelete
+                    user={user.nickname}
+                    currentChatRoomId={currentChatRoomId}
+                    // currChatUser={currChatUser}
+                  />
+                )}
               </div>
               <div className={styles.messageBox}>
-                {/* 임시 시간 */}
+                {/* 임시 날짜 */}
                 {currChatUser && (
-                  <SendMessageDate date={'2022년 00월 00일 0요일'} />
+                  <SendMessageDate
+                    date={messages[0]?.createdDate.slice(0, 12)}
+                  />
                 )}
 
                 {messages.map((data: any, i: number) => (
-                  <MessageBox
-                    key={i}
-                    interlocutorName={data.sender}
-                    content={data.message}
-                    time={data.createdDate}
-                    isMe={data.receiver === currChatUser ? true : false}
-                  />
+                  <div ref={scrollRef} key={i}>
+                    <MessageBox
+                      key={i}
+                      interlocutorName={data.sender}
+                      content={data.message}
+                      time={data.createdDate.slice(13)}
+                      isMe={data.receiver === currChatUser ? true : false}
+                      isManager={
+                        data.receiver === 'CHAT_MANAGER' ? true : false
+                      }
+                      chatManager={
+                        data.receiver === 'CHAT_MANAGER' && (
+                          <ChatManager
+                            key={i}
+                            managerMessage={data.message}
+                            time={data.createdDate}
+                          />
+                        )
+                      }
+                    />
+                  </div>
                 ))}
               </div>
               {currChatUser && (
@@ -155,7 +193,7 @@ const Chat: NextPage = () => {
           </div>
         </>
       ) : (
-        <div>로그인해주세요</div>
+        <NonLogin />
       )}
     </Layout>
   );

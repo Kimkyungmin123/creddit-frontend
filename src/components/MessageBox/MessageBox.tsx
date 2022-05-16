@@ -6,7 +6,9 @@ export type MessageBoxProps = {
   interlocutorName: string;
   content: string;
   time: string;
-  isMe?: boolean;
+  isMe: boolean;
+  isManager: boolean;
+  chatManager: any;
 };
 
 const MessageBox = ({
@@ -14,31 +16,36 @@ const MessageBox = ({
   content,
   time,
   isMe,
+  chatManager,
+  isManager,
 }: MessageBoxProps) => {
   return (
     <>
-      {!isMe ? (
-        <div className={styles.messageBox}>
-          <div className={styles.profileImg}>
-            <Image src={profile} alt="상대방 프로필 이미지" />
-          </div>
+      {chatManager}
+      {!isManager &&
+        (!isMe ? (
+          <div className={styles.messageBox}>
+            <div className={styles.profileImg}>
+              <Image src={profile} alt="상대방 프로필 이미지" />
+            </div>
 
-          <div className={styles.messageContent}>
-            <div className={styles.middleContent}>
-              <span>{interlocutorName}</span>
+            <div className={styles.messageContent}>
+              <div className={styles.middleContent}>
+                <span>{interlocutorName}</span>
+
+                <div className={styles.textBox}>{content}</div>
+              </div>
+              <span className={styles.time}>{time}</span>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.isMeMessageBox}>
+            <div className={styles.isMeMessageContent}>
               <div className={styles.textBox}>{content}</div>
             </div>
             <span className={styles.time}>{time}</span>
           </div>
-        </div>
-      ) : (
-        <div className={styles.isMeMessageBox}>
-          <div className={styles.isMeMessageContent}>
-            <div className={styles.textBox}>{content}</div>
-          </div>
-          <span className={styles.time}>{time}</span>
-        </div>
-      )}
+        ))}
     </>
   );
 };

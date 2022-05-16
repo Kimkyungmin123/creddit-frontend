@@ -1,0 +1,18 @@
+.ChatManager {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+
+  h2 {
+    display: flex;
+    justify-content: center;
+    color: var(--chat-manager-text);
+  }
+  span {
+    display: flex;
+    justify-content: center;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+}

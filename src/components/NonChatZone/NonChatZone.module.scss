@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  position: absolute;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  border: solid 0.125rem var(--chat-empty-zone-rest);
+  border-radius: 0 3.125rem 3.125rem 3.125rem;
+  top: 0.625rem;
+  margin: 1.25rem;
+  padding: 1.25rem 1.875rem 1.25rem 2.5rem;
+
+  h2 {
+    display: flex;
+    width: 100%;
+    justify-items: center;
+    color: var(--chat-empty-zone-text);
+  }
+
+  h3 {
+    display: flex;
+    width: 100%;
+    color: var(--chat-empty-zone-rest);
+  }
+}

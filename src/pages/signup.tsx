@@ -7,11 +7,9 @@ import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
 import useLogin from 'hooks/useLogin';
-import useSocialLogin from 'hooks/useSocialLogin';
 import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import styles from 'styles/Signup.module.scss';
 import api from 'utils/api';
@@ -23,8 +21,6 @@ import { object } from 'yup';
 const Signup: NextPage = () => {
   const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
-  const { status } = useSession();
-  useSocialLogin();
 
   return (
     <Layout
@@ -32,7 +28,7 @@ const Signup: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && status === 'unauthenticated' && (
+      {!isLoading && !user && (
         <div className={styles.signupContainer}>
           <h1>회원가입</h1>
           <SignupForm

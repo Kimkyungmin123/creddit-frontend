@@ -58,3 +58,47 @@ export type Follower = {
   imgUrl: string | null;
   nickname: string;
 };
+
+export interface KaKaoTokens {
+  access_token: string;
+  token_type: 'bearer';
+  refresh_token: string;
+  expires_in: number;
+  scope: string;
+  refresh_token_expires_in: number;
+}
+
+export interface KaKaoUser {
+  id: number;
+  connected_at: string;
+  properties: { nickname: string };
+  kakao_account: {
+    profile_nickname_needs_agreement: boolean;
+    profile: { nickname: string };
+    has_email: boolean;
+    email_needs_agreement: boolean;
+    is_email_valid: boolean;
+    is_email_verified: boolean;
+    email: string;
+  };
+}
+
+export interface NaverTokens {
+  access_token: string;
+  refresh_token: string;
+  token_type: 'bearer';
+  expires_in: string;
+}
+
+export interface NaverUser {
+  resultcode: string;
+  message: string;
+  response: {
+    id: string;
+    gender: string;
+    email: string;
+    mobile: string;
+    mobile_e164: string;
+    name: string;
+  };
+}

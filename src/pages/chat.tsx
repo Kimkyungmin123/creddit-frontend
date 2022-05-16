@@ -31,6 +31,7 @@ const Chat: NextPage = () => {
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
   // const [chatDelete, setChatDelete] = useState(false);
   const client = useRef<Client | null>(null);
+  const scrollRef = useRef<null | HTMLDivElement>(null);
 
   const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
@@ -67,6 +68,10 @@ const Chat: NextPage = () => {
       client.current?.deactivate();
     };
   }, [user, currChatUser, currentChatRoomId]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   const publish = (messageInfo: Message) => {
     if (!client.current?.connected) {
@@ -151,23 +156,27 @@ const Chat: NextPage = () => {
                 )}
 
                 {messages.map((data: any, i: number) => (
-                  <MessageBox
-                    key={i}
-                    interlocutorName={data.sender}
-                    content={data.message}
-                    time={data.createdDate.slice(13)}
-                    isMe={data.receiver === currChatUser ? true : false}
-                    isManager={data.receiver === 'CHAT_MANAGER' ? true : false}
-                    chatManager={
-                      data.receiver === 'CHAT_MANAGER' && (
-                        <ChatManager
-                          key={i}
-                          managerMessage={data.message}
-                          time={data.createdDate}
-                        />
-                      )
-                    }
-                  />
+                  <div ref={scrollRef} key={i}>
+                    <MessageBox
+                      key={i}
+                      interlocutorName={data.sender}
+                      content={data.message}
+                      time={data.createdDate.slice(13)}
+                      isMe={data.receiver === currChatUser ? true : false}
+                      isManager={
+                        data.receiver === 'CHAT_MANAGER' ? true : false
+                      }
+                      chatManager={
+                        data.receiver === 'CHAT_MANAGER' && (
+                          <ChatManager
+                            key={i}
+                            managerMessage={data.message}
+                            time={data.createdDate}
+                          />
+                        )
+                      }
+                    />
+                  </div>
                 ))}
               </div>
               {currChatUser && (

@@ -1,7 +1,6 @@
 import styles from './MessageBox.module.scss';
 import Image from 'next/image';
 import profile from 'images/profileImg.png';
-// import { useEffect, useRef } from 'react';
 
 export type MessageBoxProps = {
   interlocutorName: string;
@@ -20,19 +19,6 @@ const MessageBox = ({
   chatManager,
   isManager,
 }: MessageBoxProps) => {
-  // const chatFocus = useRef<HTMLDivElement | null>(null);
-
-  // useEffect(() => {
-  //   if (chatFocus.current) {
-  //     chatFocus.current.scrollTo({
-  //       top: chatFocus.current.scrollHeight,
-  //       behavior: 'smooth',
-  //     });
-  //   }
-  //   chatFocus.current?.focus();
-  //   console.log(chatFocus.current?.scrollHeight);
-  // }, [chatFocus]);
-
   return (
     <>
       {chatManager}

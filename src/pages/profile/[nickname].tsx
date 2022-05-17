@@ -4,6 +4,8 @@ import ProfileBox from 'components/ProfileBox';
 import { useResetPosts } from 'context/PostsContext';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Profile.module.scss';
 import useSWRImmutable from 'swr/immutable';
 import { User } from 'types';
@@ -33,5 +35,12 @@ const Profile: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    await initUser(store, context);
+    return { props: {} };
+  }
+);
 
 export default Profile;

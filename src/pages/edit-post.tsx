@@ -3,10 +3,12 @@ import NotFound from 'components/NotFound';
 import PostForm from 'components/PostForm';
 import { usePostCardContext } from 'context/PostCardContext';
 import { usePostsContext } from 'context/PostsContext';
-import useUser from 'hooks/useUser';
+import useLogoutRedirect from 'hooks/useLogoutRedirect';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import { wrapper } from 'slices/store';
+import { initUser, useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import useSWRImmutable from 'swr/immutable';
 import { Post } from 'types';
@@ -14,18 +16,16 @@ import api, { fetcher } from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
 
 const EditPost: NextPage = () => {
-  const { isLoading, user } = useUser({
-    redirectTo: '/',
-    redirectWhen: 'unauthorized',
-  });
   const router = useRouter();
   const { id } = router.query;
+  const user = useUser();
   const { data, error } = useSWRImmutable<Post>(
     id && user ? `/post/${id}?nickname=${user.nickname}` : null,
     fetcher
   );
   const { dispatch } = usePostsContext();
   const { setClickedPostCard } = usePostCardContext();
+  useLogoutRedirect({ to: '/' });
 
   const isAuthor = useCallback(() => {
     if (!user || !data) return true;
@@ -35,7 +35,7 @@ const EditPost: NextPage = () => {
   return (
     <Layout title="글 수정 - creddit">
       {(error || !isAuthor()) && <NotFound />}
-      {!isLoading && user && data && id !== undefined && (
+      {user && data && id !== undefined && (
         <PostForm
           title="수정"
           imageUrl={data.image.imgUrl}
@@ -55,5 +55,13 @@ const EditPost: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { user } = await initUser(store, context);
+    if (!user) return { redirect: { destination: '/', permanent: false } };
+    return { props: {} };
+  }
+);
 
 export default EditPost;

@@ -1,8 +1,5 @@
 import ERRORS from 'constants/errors';
-import { server } from 'mocks/server';
-import { rest } from 'msw';
 import FindPassword from 'pages/find-password';
-import { API_ENDPOINT } from 'utils/api';
 import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
 
 describe('FindPassword', () => {
@@ -20,14 +17,6 @@ describe('FindPassword', () => {
       submitButton,
     };
   };
-
-  beforeEach(() => {
-    server.use(
-      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(null));
-      })
-    );
-  });
 
   it('renders properly', async () => {
     const { emailInput, submitButton } = await setup();

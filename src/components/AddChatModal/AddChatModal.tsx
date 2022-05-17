@@ -6,10 +6,10 @@ import { Close } from 'icons';
 import useSWR, { mutate } from 'swr';
 import { useCallback, useEffect, useState } from 'react';
 import useDebounce from 'hooks/useDebounce';
-import useUser from 'hooks/useUser';
 import classNames from 'classnames';
 import wsInstance from 'utils/wsInstance';
 import { fetcher } from 'utils/api';
+import { useUser } from 'slices/userSlice';
 
 interface AddChatModalProps {
   show: boolean;
@@ -20,7 +20,7 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   const [newMember, onChangeNewMember, setNewMember] = useInput('');
   const [debouncedValue, setDebouncedValue] = useState('');
   const debounce = useDebounce();
-  const { user } = useUser();
+  const user = useUser();
   const username = user?.nickname;
   const [currentIndex, setCurrentIndex] = useState(0);
   // const [nonUser, setNonUser] = useState(false);

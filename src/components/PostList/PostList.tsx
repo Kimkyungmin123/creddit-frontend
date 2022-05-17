@@ -2,9 +2,9 @@ import classNames from 'classnames';
 import InfiniteScroll from 'components/InfiniteScroll';
 import PostCard from 'components/PostCard';
 import { usePostsContext } from 'context/PostsContext';
-import useUser from 'hooks/useUser';
 import { PersonSmall, Rising, Time } from 'icons';
 import { useRouter } from 'next/router';
+import { useUser } from 'slices/userSlice';
 import { Post } from 'types';
 import api from 'utils/api';
 import styles from './PostList.module.scss';
@@ -29,7 +29,7 @@ function PostList({
   const { state, dispatch } = usePostsContext();
   const { posts, sortBy, page } = state;
   const router = useRouter();
-  const { isLoading, user } = useUser();
+  const user = useUser();
 
   return (
     <div className={classNames(styles.container, className)}>
@@ -83,43 +83,41 @@ function PostList({
           <PostCard key={post.id} post={post} />
         ))}
       </div>
-      {!isLoading && (
-        <InfiniteScroll
-          data={posts}
-          size={SIZE}
-          onIntersect={async () => {
-            const getIndex = () => {
-              switch (sortBy) {
-                case 'new':
-                case 'following':
-                  return !posts || posts.length === 0
-                    ? Number.MAX_SAFE_INTEGER
-                    : posts[posts.length - 1].id;
-                case 'like':
-                  return !posts || posts.length === 0 ? 0 : page || 0;
-              }
-            };
+      <InfiniteScroll
+        data={posts}
+        size={SIZE}
+        onIntersect={async () => {
+          const getIndex = () => {
+            switch (sortBy) {
+              case 'new':
+              case 'following':
+                return !posts || posts.length === 0
+                  ? Number.MAX_SAFE_INTEGER
+                  : posts[posts.length - 1].id;
+              case 'like':
+                return !posts || posts.length === 0 ? 0 : page || 0;
+            }
+          };
 
-            const index = getIndex();
-            const { data } = await api.get<Post[]>(url, {
-              params: {
-                ...params,
-                nickname: user?.nickname,
-                index,
-                size: SIZE,
-                sort: disableSort ? null : sortBy,
-              },
-            });
-            dispatch({
-              type: 'ADD_POSTS',
-              posts: data,
-              url: router.asPath,
-              page: (index || 0) + 1,
-            });
-            return data;
-          }}
-        />
-      )}
+          const index = getIndex();
+          const { data } = await api.get<Post[]>(url, {
+            params: {
+              ...params,
+              nickname: user?.nickname,
+              index,
+              size: SIZE,
+              sort: disableSort ? null : sortBy,
+            },
+          });
+          dispatch({
+            type: 'ADD_POSTS',
+            posts: data,
+            url: router.asPath,
+            page: (index || 0) + 1,
+          });
+          return data;
+        }}
+      />
     </div>
   );
 }

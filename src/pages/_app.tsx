@@ -2,6 +2,7 @@ import ContextsProvider from 'context/ContextsProvider';
 import useIntentMouse from 'hooks/useIntentMouse';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { wrapper } from 'slices/store';
 import 'styles/app.scss';
 import 'styles/colors.scss';
 import 'styles/globals.css';
@@ -19,4 +20,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default wrapper.withRedux(MyApp);

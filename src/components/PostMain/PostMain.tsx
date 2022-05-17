@@ -4,9 +4,9 @@ import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
-import useUser from 'hooks/useUser';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useUser } from 'slices/userSlice';
 import { Post } from 'types';
 import api from 'utils/api';
 import styles from './PostMain.module.scss';
@@ -17,7 +17,7 @@ export type PostMainProps = {
 
 function PostMain({ post }: PostMainProps) {
   const { title, createdDate, content, member, id, image, profile } = post;
-  const { user } = useUser();
+  const user = useUser();
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
   const { dispatch } = usePostsContext();

@@ -21,7 +21,7 @@ import SockJS from 'sockjs-client';
 import styles from 'styles/Chat.module.scss';
 import useSWR, { mutate } from 'swr';
 import { Message } from 'types';
-import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
+import wsInstance, { fetcher } from 'utils/wsInstance';
 
 const Chat: NextPage = () => {
   const user = useUser();
@@ -53,7 +53,8 @@ const Chat: NextPage = () => {
 
   useEffect(() => {
     client.current = new Client({
-      webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
+      webSocketFactory: () =>
+        new SockJS(`${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/ws`),
       onConnect: () => {
         client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;

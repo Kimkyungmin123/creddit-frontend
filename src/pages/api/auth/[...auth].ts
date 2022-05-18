@@ -23,7 +23,7 @@ export default async function handler(
 }
 
 export const getRedirectUrl = (type: 'kakao' | 'naver') =>
-  `http://localhost:3000/api/auth/callback/${type}`;
+  `${process.env.NEXT_PUBLIC_CLIENT_URL}/api/auth/callback/${type}`;
 
 const getType = (url?: string): 'kakao' | 'naver' =>
   url?.includes('/api/auth/callback/naver') ? 'naver' : 'kakao';
@@ -41,7 +41,7 @@ async function getUser(req: NextApiRequest) {
           client_id: process.env.NEXT_PUBLIC_KAKAO_ID,
           redirect_uri: getRedirectUrl('kakao'),
           code,
-          client_secret: process.env.NEXT_PUBLIC_KAKAO_SECRET,
+          client_secret: process.env.KAKAO_SECRET,
         })
       );
 
@@ -63,7 +63,7 @@ async function getUser(req: NextApiRequest) {
     }
     case 'naver': {
       const { data: tokens } = await axios.post<NaverTokens>(
-        `https://nid.naver.com/oauth2.0/token?client_id=${process.env.NEXT_PUBLIC_NAVER_ID}&client_secret=${process.env.NEXT_PUBLIC_NAVER_SECRET}&grant_type=authorization_code&code=${code}`
+        `https://nid.naver.com/oauth2.0/token?client_id=${process.env.NEXT_PUBLIC_NAVER_ID}&client_secret=${process.env.NAVER_SECRET}&grant_type=authorization_code&code=${code}`
       );
 
       const { access_token } = tokens;

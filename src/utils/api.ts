@@ -2,10 +2,9 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 import reIssueAuthToken from './reIssueAuthToken';
 
-export const API_ENDPOINT = 'http://localhost:8080';
 export const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-const api = axios.create({ baseURL: API_ENDPOINT });
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT });
 
 api.interceptors.request.use(
   (config: RequestConfig) => {

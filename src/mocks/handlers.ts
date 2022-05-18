@@ -1,9 +1,10 @@
+import commentsDummy from 'data/comments.json';
 import postDummy from 'data/post.json';
 import userDummy from 'data/user.json';
 import { rest } from 'msw';
-import { API_ENDPOINT } from 'utils/api';
-import commentsDummy from 'data/comments.json';
 import { Follower } from 'types';
+
+const API_ENDPOINT = 'http://localhost:8080';
 
 export function handlers() {
   return [

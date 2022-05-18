@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
-import { API_ENDPOINT } from './api';
 import setAuthCookies from './setAuthCookies';
 
-const axiosInstance = axios.create({ baseURL: API_ENDPOINT });
+const axiosInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,
+});
 
 async function getCurrentUser(context: GetServerSidePropsContext) {
   const { access_token, refresh_token } = context.req.cookies;

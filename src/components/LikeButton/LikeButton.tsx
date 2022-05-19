@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { usePostsContext } from 'context/PostsContext';
-import useUser from 'hooks/useUser';
 import { HeartFill, HeartOutline } from 'icons';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+import { useUser } from 'slices/userSlice';
 import api from 'utils/api';
 import getFormData from 'utils/getFormData';
 import styles from './LikeButton.module.scss';
@@ -26,7 +26,7 @@ function LikeButton({
   onClick,
 }: LikeButtonProps) {
   const { dispatch } = usePostsContext();
-  const { user } = useUser();
+  const user = useUser();
   const router = useRouter();
 
   return (

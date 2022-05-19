@@ -1,8 +1,13 @@
 import commentsDummy from 'data/comments.json';
-import { server } from 'mocks/server';
-import { rest } from 'msw';
-import { API_ENDPOINT } from 'utils/api';
-import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
+import { logout } from 'slices/userSlice';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  store,
+  waitFor,
+} from 'utils/test-utils';
 import Comment, { commentProps } from './Comment';
 
 describe('Comment', () => {
@@ -83,12 +88,10 @@ describe('Comment', () => {
   });
 
   it('hides edit and delete buttons if the current user is not the author', () => {
-    server.use(
-      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(null));
-      })
-    );
     setup();
+    act(() => {
+      store.dispatch(logout());
+    });
     expect(screen.queryByLabelText('댓글 수정')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('댓글 삭제')).not.toBeInTheDocument();
   });

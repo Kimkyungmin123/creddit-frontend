@@ -7,8 +7,8 @@ import ProfileImage from 'components/ProfileImage';
 import { usePostsContext } from 'context/PostsContext';
 import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
-import useUser from 'hooks/useUser';
 import { Dispatch, ReactNode, useState } from 'react';
+import { useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import { Comment as CommentType, Post } from 'types';
 import api from 'utils/api';
@@ -33,7 +33,7 @@ function Comment({
 }: commentProps) {
   const { member, createdDate, content, liked, likes, commentId, profile } =
     comment;
-  const { user } = useUser();
+  const user = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
   const { dispatch } = usePostsContext();

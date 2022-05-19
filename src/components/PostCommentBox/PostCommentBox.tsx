@@ -4,9 +4,9 @@ import InfiniteScroll from 'components/InfiniteScroll';
 import ParentComment from 'components/ParentComment';
 import { usePostsContext } from 'context/PostsContext';
 import useComments from 'hooks/useComments';
-import useUser from 'hooks/useUser';
 import { CaretDown, Sort } from 'icons';
 import { useEffect, useMemo, useRef } from 'react';
+import { useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import { Comment as CommentType, Post, User } from 'types';
 import api from 'utils/api';
@@ -24,7 +24,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
     () => (sortBy === 'like' ? '좋아요순' : '최신순'),
     [sortBy]
   );
-  const { user } = useUser();
+  const user = useUser();
   const prevUser = useRef<User | undefined>(user);
 
   useEffect(() => {

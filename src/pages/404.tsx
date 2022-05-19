@@ -4,7 +4,7 @@ import type { NextPage } from 'next';
 
 const Custom404: NextPage = () => {
   return (
-    <Layout title="존재하지 않는 페이지 - creddit">
+    <Layout title="존재하지 않는 페이지 - creddit" hideHeader={true}>
       <NotFound />
     </Layout>
   );

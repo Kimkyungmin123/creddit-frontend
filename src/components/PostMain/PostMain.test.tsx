@@ -1,8 +1,13 @@
 import postDummy from 'data/post.json';
-import { server } from 'mocks/server';
-import { rest } from 'msw';
-import { API_ENDPOINT } from 'utils/api';
-import { fireEvent, render, screen, waitFor } from 'utils/test-utils';
+import { logout } from 'slices/userSlice';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  store,
+  waitFor,
+} from 'utils/test-utils';
 import PostMain, { PostMainProps } from './PostMain';
 
 describe('PostMain', () => {
@@ -81,12 +86,11 @@ describe('PostMain', () => {
   });
 
   it('hides edit and delete buttons if the current user is not the author', () => {
-    server.use(
-      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(null));
-      })
-    );
     setup();
+    act(() => {
+      store.dispatch(logout());
+    });
+
     expect(screen.queryByLabelText('게시물 수정')).not.toBeInTheDocument();
     expect(screen.queryByLabelText('게시물 삭제')).not.toBeInTheDocument();
   });

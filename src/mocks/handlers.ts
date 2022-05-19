@@ -1,9 +1,10 @@
+import commentsDummy from 'data/comments.json';
 import postDummy from 'data/post.json';
 import userDummy from 'data/user.json';
 import { rest } from 'msw';
-import { API_ENDPOINT } from 'utils/api';
-import commentsDummy from 'data/comments.json';
 import { Follower } from 'types';
+
+const API_ENDPOINT = 'http://localhost:8080';
 
 export function handlers() {
   return [
@@ -22,7 +23,7 @@ export function handlers() {
     rest.post(`${API_ENDPOINT}/member/sendEmail/password`, postAny),
     rest.post(`${API_ENDPOINT}/member/changePassword`, postAny),
     rest.get(`${API_ENDPOINT}/comment/detail`, getComments),
-    rest.get(`${API_ENDPOINT}/follow/list`, getFollowingList),
+    rest.get(`${API_ENDPOINT}/member/follow/list`, getFollowingList),
   ];
 }
 

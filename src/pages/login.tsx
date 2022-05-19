@@ -6,16 +6,16 @@ import ERRORS from 'constants/errors';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik, FormikErrors } from 'formik';
 import useLogin from 'hooks/useLogin';
-import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Login.module.scss';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
 
 const Login: NextPage = () => {
-  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
 
   return (
@@ -24,30 +24,28 @@ const Login: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && (
-        <div className={styles.loginContainer}>
-          <h1>로그인</h1>
-          <LoginForm
-            onSubmit={async (values) => {
-              await login(values);
-            }}
-          />
-          <SocialLoginButtons />
-          <div className={styles.bottomPanel}>
-            <Link href="/find-password">
-              <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
-                비밀번호를 잊으셨습니까?
-              </a>
+      <div className={styles.loginContainer}>
+        <h1>로그인</h1>
+        <LoginForm
+          onSubmit={async (values) => {
+            await login(values);
+          }}
+        />
+        <SocialLoginButtons />
+        <div className={styles.bottomPanel}>
+          <Link href="/find-password">
+            <a aria-label="비밀번호 찾기" className={styles.forgotPW}>
+              비밀번호를 잊으셨습니까?
+            </a>
+          </Link>
+          <div className={styles.signupSuggestion}>
+            <span>아직 회원이 아니신가요?</span>
+            <Link href="/signup">
+              <a>회원가입</a>
             </Link>
-            <div className={styles.signupSuggestion}>
-              <span>아직 회원이 아니신가요?</span>
-              <Link href="/signup">
-                <a>회원가입</a>
-              </Link>
-            </div>
           </div>
         </div>
-      )}
+      </div>
     </Layout>
   );
 };
@@ -125,5 +123,13 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
     </Formik>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { user } = await initUser(store, context);
+    if (user) return { redirect: { destination: '/', permanent: false } };
+    return { props: {} };
+  }
+);
 
 export default Login;

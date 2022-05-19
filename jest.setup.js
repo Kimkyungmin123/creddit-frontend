@@ -18,6 +18,8 @@ window.IntersectionObserver = class {
   disconnect() {}
 };
 
+process.env.NEXT_PUBLIC_API_ENDPOINT = 'http://localhost:8080';
+
 // Establish API mocking before all tests.
 beforeAll(() => server.listen());
 // Reset any request handlers that we may add during the tests,

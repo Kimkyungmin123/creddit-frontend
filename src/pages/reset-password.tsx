@@ -6,10 +6,11 @@ import Layout from 'components/Layout';
 import ERRORS from 'constants/errors';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
-import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import { useState } from 'react';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/ResetPassword.module.scss';
 import api from 'utils/api';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -17,10 +18,6 @@ import { object } from 'yup';
 
 const ResetPassword: NextPage = () => {
   const [submitted, setSubmitted] = useState(false);
-  const { isLoading, user } = useUser({
-    redirectTo: '/',
-    redirectWhen: 'unauthorized',
-  });
 
   return (
     <Layout
@@ -28,33 +25,31 @@ const ResetPassword: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && user && (
-        <div
-          className={classNames(
-            styles.resetPasswordContainer,
-            submitted && styles.submitted
-          )}
-        >
-          <h1>비밀번호 변경</h1>
-          {submitted ? (
-            <>
-              <p className={styles.description}>
-                비밀번호를 성공적으로 변경했습니다.
-              </p>
-              <ButtonLink href="/">홈으로</ButtonLink>
-            </>
-          ) : (
-            <ResetPasswordForm
-              onSubmit={async ({ newPassword }) => {
-                await api.post('/member/changePassword', {
-                  password: newPassword,
-                });
-                setSubmitted(true);
-              }}
-            />
-          )}
-        </div>
-      )}
+      <div
+        className={classNames(
+          styles.resetPasswordContainer,
+          submitted && styles.submitted
+        )}
+      >
+        <h1>비밀번호 변경</h1>
+        {submitted ? (
+          <>
+            <p className={styles.description}>
+              비밀번호를 성공적으로 변경했습니다.
+            </p>
+            <ButtonLink href="/">홈으로</ButtonLink>
+          </>
+        ) : (
+          <ResetPasswordForm
+            onSubmit={async ({ newPassword }) => {
+              await api.post('/member/changePassword', {
+                password: newPassword,
+              });
+              setSubmitted(true);
+            }}
+          />
+        )}
+      </div>
     </Layout>
   );
 };
@@ -123,5 +118,13 @@ function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
     </Formik>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { user } = await initUser(store, context);
+    if (user) return { redirect: { destination: '/', permanent: false } };
+    return { props: {} };
+  }
+);
 
 export default ResetPassword;

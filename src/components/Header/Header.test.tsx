@@ -1,7 +1,5 @@
-import { server } from 'mocks/server';
-import { rest } from 'msw';
-import { API_ENDPOINT } from 'utils/api';
-import { render, screen, waitFor } from 'utils/test-utils';
+import { logout } from 'slices/userSlice';
+import { render, screen, store, waitFor, act } from 'utils/test-utils';
 import Header, { HeaderProps } from './Header';
 
 describe('Header', () => {
@@ -39,12 +37,10 @@ describe('Header', () => {
   });
 
   it('renders properly when not logged in', async () => {
-    server.use(
-      rest.get(`${API_ENDPOINT}/profile/show`, (_, res, ctx) => {
-        return res(ctx.status(200), ctx.json(null));
-      })
-    );
     setup();
+    act(() => {
+      store.dispatch(logout());
+    });
 
     await waitFor(() => {
       expect(screen.getByText('로그인')).toHaveAttribute('href', '/login');

@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
+import { useUser } from 'slices/userSlice';
 import useSWRImmutable from 'swr/immutable';
 import { Follower } from 'types';
 import { fetcher } from 'utils/api';
-import useUser from './useUser';
 
 function useFollowingList() {
-  const { user } = useUser();
+  const user = useUser();
 
   const { data, error, ...rest } = useSWRImmutable<Follower[]>(
     user ? '/member/follow/list' : null,

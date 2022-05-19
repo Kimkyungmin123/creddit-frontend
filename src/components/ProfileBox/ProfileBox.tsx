@@ -4,10 +4,10 @@ import ImageBox from 'components/ImageBox';
 import MyDate from 'components/MyDate';
 import ProfileEditForm from 'components/ProfileEditForm/ProfileEditForm';
 import useFollowingList from 'hooks/useFollowingList';
-import useUser from 'hooks/useUser';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMemo, useState } from 'react';
+import { useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import { User } from 'types';
 import api from 'utils/api';
@@ -22,7 +22,7 @@ export type ProfileBoxProps = {
 function ProfileBox({ user }: ProfileBoxProps) {
   const { nickname, introduction, createdDate, image } = user;
   const [isEditing, setIsEditing] = useState(false);
-  const { user: currentUser, isLoading: isLoadingCurrentUser } = useUser();
+  const currentUser = useUser();
   const isAuthor = useMemo(
     () => currentUser?.nickname === nickname,
     [currentUser, nickname]
@@ -98,7 +98,6 @@ function ProfileBox({ user }: ProfileBoxProps) {
                 <Button
                   round={true}
                   onClick={async () => {
-                    if (isLoadingCurrentUser) return;
                     if (!currentUser) {
                       router.push('/login');
                       return;
@@ -123,7 +122,6 @@ function ProfileBox({ user }: ProfileBoxProps) {
                 <Button
                   round={true}
                   onClick={() => {
-                    if (isLoadingCurrentUser) return;
                     if (!currentUser) {
                       router.push('/login');
                       return;

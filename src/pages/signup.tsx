@@ -7,10 +7,11 @@ import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
 import useLogin from 'hooks/useLogin';
-import useUser from 'hooks/useUser';
 import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Signup.module.scss';
 import api from 'utils/api';
 import focusOnFormElement from 'utils/focusOnFormElement';
@@ -19,7 +20,6 @@ import isDuplicate from 'utils/isDuplicate';
 import { object } from 'yup';
 
 const Signup: NextPage = () => {
-  const { isLoading, user } = useUser({ redirectTo: '/' });
   const login = useLogin();
 
   return (
@@ -28,47 +28,42 @@ const Signup: NextPage = () => {
       backgroundColor="clean"
       hideSearchBar={true}
     >
-      {!isLoading && !user && (
-        <div className={styles.signupContainer}>
-          <h1>회원가입</h1>
-          <SignupForm
-            onSubmit={async (values) => {
-              const error: { [key: string]: boolean } = {};
-              const checkEmailDuplicate = async () => {
-                const duplicate = await isDuplicate('email', values.email);
-                if (duplicate) error.emailDuplicate = true;
-              };
+      <div className={styles.signupContainer}>
+        <h1>회원가입</h1>
+        <SignupForm
+          onSubmit={async (values) => {
+            const error: { [key: string]: boolean } = {};
+            const checkEmailDuplicate = async () => {
+              const duplicate = await isDuplicate('email', values.email);
+              if (duplicate) error.emailDuplicate = true;
+            };
 
-              const checkNicknameDuplicate = async () => {
-                const duplicate = await isDuplicate(
-                  'nickname',
-                  values.nickname
-                );
-                if (duplicate) error.nicknameDuplicate = true;
-              };
+            const checkNicknameDuplicate = async () => {
+              const duplicate = await isDuplicate('nickname', values.nickname);
+              if (duplicate) error.nicknameDuplicate = true;
+            };
 
-              await Promise.all([
-                checkEmailDuplicate(),
-                checkNicknameDuplicate(),
-              ]);
+            await Promise.all([
+              checkEmailDuplicate(),
+              checkNicknameDuplicate(),
+            ]);
 
-              if (Object.keys(error).length > 0) {
-                throw error;
-              }
+            if (Object.keys(error).length > 0) {
+              throw error;
+            }
 
-              await api.post('/auth/signup', values);
-              await login(values);
-            }}
-          />
-          <SocialLoginButtons />
-          <div className={styles.loginSuggestion}>
-            <span>이미 회원이신가요?</span>
-            <Link href="/login">
-              <a>로그인</a>
-            </Link>
-          </div>
+            await api.post('/auth/signup', values);
+            await login(values);
+          }}
+        />
+        <SocialLoginButtons />
+        <div className={styles.loginSuggestion}>
+          <span>이미 회원이신가요?</span>
+          <Link href="/login">
+            <a>로그인</a>
+          </Link>
         </div>
-      )}
+      </div>
     </Layout>
   );
 };
@@ -170,5 +165,13 @@ export function SignupForm({ onSubmit }: SignupFormProps) {
     </Formik>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    const { user } = await initUser(store, context);
+    if (user) return { redirect: { destination: '/', permanent: false } };
+    return { props: {} };
+  }
+);
 
 export default Signup;

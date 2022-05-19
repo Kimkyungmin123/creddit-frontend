@@ -7,6 +7,7 @@ import styles from './Layout.module.scss';
 export type LayoutProps = {
   children: ReactNode;
   title?: string;
+  hideHeader?: boolean;
   hideSearchBar?: boolean;
   backgroundColor?: 'base' | 'clean';
 };
@@ -14,6 +15,7 @@ export type LayoutProps = {
 const Layout = ({
   children,
   title,
+  hideHeader,
   hideSearchBar,
   backgroundColor = 'base',
 }: LayoutProps) => {
@@ -28,7 +30,7 @@ const Layout = ({
       <Head>
         <title>{title || 'creddit'}</title>
       </Head>
-      <Header hideSearchBar={hideSearchBar} />
+      {!hideHeader && <Header hideSearchBar={hideSearchBar} />}
       <div className={styles.childrenContainer}>{children}</div>
     </div>
   );

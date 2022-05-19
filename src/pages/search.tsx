@@ -3,6 +3,8 @@ import PostList from 'components/PostList';
 import { useResetPosts } from 'context/PostsContext';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Search.module.scss';
 
 const Search: NextPage = () => {
@@ -19,5 +21,12 @@ const Search: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    await initUser(store, context);
+    return { props: {} };
+  }
+);
 
 export default Search;

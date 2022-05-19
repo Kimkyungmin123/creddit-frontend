@@ -3,7 +3,7 @@ import DeleteModal from 'components/DeleteModal';
 import ImageUploadButton from 'components/ImageUploadButton';
 import ProfileImage from 'components/ProfileImage';
 import useModal from 'hooks/useModal';
-import useUser from 'hooks/useUser';
+import { useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import { MyImage } from 'types';
 import editProfile from 'utils/editProfile';
@@ -18,7 +18,7 @@ export type ImageBoxProps = {
 function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
   const { imgUrl } = image;
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { user } = useUser();
+  const user = useUser();
 
   return (
     <div className={styles.imageBox} data-testid="image-box">

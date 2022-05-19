@@ -4,8 +4,9 @@ import PostCommentBox from 'components/PostCommentBox';
 import PostMain from 'components/PostMain';
 import PostTop from 'components/PostTop';
 import { usePostCardContext } from 'context/PostCardContext';
-import useUser from 'hooks/useUser';
 import { useRouter } from 'next/router';
+import { wrapper } from 'slices/store';
+import { initUser, useUser } from 'slices/userSlice';
 import styles from 'styles/Post.module.scss';
 import useSWR from 'swr';
 import { Post as PostType } from 'types';
@@ -14,10 +15,10 @@ import { fetcher } from 'utils/api';
 const Post = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { user, isLoading } = useUser();
+  const user = useUser();
   const userQuery = user ? `?nickname=${user.nickname}` : '';
   const { data, error } = useSWR<PostType>(
-    id && !isLoading ? `/post/${id}${userQuery}` : null,
+    id ? `/post/${id}${userQuery}` : null,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -51,5 +52,12 @@ const Post = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    await initUser(store, context);
+    return { props: {} };
+  }
+);
 
 export default Post;

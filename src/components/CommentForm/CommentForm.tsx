@@ -3,8 +3,8 @@ import Button from 'components/Button';
 import Textarea from 'components/Textarea';
 import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
-import useUser from 'hooks/useUser';
 import { useRouter } from 'next/router';
+import { useUser } from 'slices/userSlice';
 import getValidationSchema from 'utils/getValidationSchema';
 import { object } from 'yup';
 import styles from './CommentForm.module.scss';
@@ -22,7 +22,7 @@ function CommentForm({
   onCancel,
   type = 'create',
 }: CommentFormProps) {
-  const { isLoading, user } = useUser();
+  const user = useUser();
   const router = useRouter();
 
   return (
@@ -57,7 +57,7 @@ function CommentForm({
           <form
             onSubmit={(event) => {
               event.preventDefault();
-              if (!isLoading && !user) router.push('/login');
+              if (!user) router.push('/login');
               else handleSubmit(event);
             }}
             className={classNames(styles.form, styles[type])}

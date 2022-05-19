@@ -4,6 +4,8 @@ import ProfileImage from 'components/ProfileImage';
 import { useResetPosts } from 'context/PostsContext';
 import useFollowingList from 'hooks/useFollowingList';
 import type { NextPage } from 'next';
+import { wrapper } from 'slices/store';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Following.module.scss';
 
 const Following: NextPage = () => {
@@ -30,5 +32,12 @@ const Following: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    await initUser(store, context);
+    return { props: {} };
+  }
+);
 
 export default Following;

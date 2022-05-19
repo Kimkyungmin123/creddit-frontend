@@ -1,8 +1,8 @@
 import LikeButton from 'components/LikeButton';
 import { usePostCardContext } from 'context/PostCardContext';
-import useUser from 'hooks/useUser';
 import { Close } from 'icons';
 import { useRouter } from 'next/router';
+import { useUser } from 'slices/userSlice';
 import { mutate } from 'swr';
 import { Post } from 'types';
 import styles from './PostTop.module.scss';
@@ -15,7 +15,7 @@ function PostTop({ post }: PostTopProps) {
   const router = useRouter();
   const { likes, title, id, liked } = post;
   const { clickedPostCard } = usePostCardContext();
-  const { user } = useUser();
+  const user = useUser();
 
   return (
     <div className={styles.container} data-testid="post-top">

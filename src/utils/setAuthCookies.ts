@@ -1,12 +1,13 @@
 import { AUTH_EXP_DATE, DAY } from 'constants/date';
 import { CookieSerializeOptions, serialize } from 'cookie';
+import { ServerResponse } from 'http';
 import { NextApiResponse } from 'next';
 
 /**
- * 소셜 로그인을 할 때 토큰을 쿠키에 저장하기 위해 사용하는 함수
+ * 서버 사이드에서 토큰을 쿠키에 저장하기 위해 사용하는 함수
  */
 function setAuthCookies(
-  res: NextApiResponse,
+  res: NextApiResponse | ServerResponse,
   accessToken: string,
   refreshToken: string
 ) {

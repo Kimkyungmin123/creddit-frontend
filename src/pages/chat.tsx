@@ -1,29 +1,30 @@
-import ChatListBox from 'components/ChatListBox';
-import Layout from 'components/Layout';
-import MessageBox from 'components/MessageBox';
-// import SendMessageDate from 'components/SendMessageDate';
-import SendMessageForm from 'components/SendMessageForm';
-import NonChatZone from 'components/NonChatZone';
-import type { NextPage } from 'next';
-import styles from 'styles/Chat.module.scss';
-import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
-import { useEffect, useRef, useState } from 'react';
-import useUser from 'hooks/useUser';
-import useInput from 'hooks/useInput';
-import useModal from 'hooks/useModal';
 import AddChatButton from 'components/AddChatButton';
 import AddChatModal from 'components/AddChatModal';
-import useSWR, { mutate } from 'swr';
 import ChatDelete from 'components/ChatDelete';
-import { Message } from 'types';
-import wsInstance, { fetcher, WEBSOCKET_URL } from 'utils/wsInstance';
+import ChatListBox from 'components/ChatListBox';
+import ChatManager from 'components/ChatManager';
+import Layout from 'components/Layout';
+import MessageBox from 'components/MessageBox';
+import NonChatZone from 'components/NonChatZone';
 import NonLogin from 'components/NonLogin';
 import SendMessageDate from 'components/SendMessageDate';
-import ChatManager from 'components/ChatManager';
+// import SendMessageDate from 'components/SendMessageDate';
+import SendMessageForm from 'components/SendMessageForm';
+import useInput from 'hooks/useInput';
+import useModal from 'hooks/useModal';
+import type { NextPage } from 'next';
+import { useEffect, useRef, useState } from 'react';
+import { wrapper } from 'slices/store';
+import { initUser, useUser } from 'slices/userSlice';
+import SockJS from 'sockjs-client';
+import styles from 'styles/Chat.module.scss';
+import useSWR, { mutate } from 'swr';
+import { Message } from 'types';
+import wsInstance, { fetcher } from 'utils/wsInstance';
 
 const Chat: NextPage = () => {
-  const { user } = useUser();
+  const user = useUser();
   const [chat, onChangeChat, setChat] = useInput('');
   const { isModalOpen, openModal, closeModal } = useModal();
   const [currChatUser, setCurrChatUser] = useState('');
@@ -52,7 +53,8 @@ const Chat: NextPage = () => {
 
   useEffect(() => {
     client.current = new Client({
-      webSocketFactory: () => new SockJS(`${WEBSOCKET_URL}/ws`),
+      webSocketFactory: () =>
+        new SockJS(`${process.env.NEXT_PUBLIC_WEBSOCKET_URL}/ws`),
       onConnect: () => {
         client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
@@ -198,5 +200,12 @@ const Chat: NextPage = () => {
     </Layout>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) => async (context) => {
+    await initUser(store, context);
+    return { props: {} };
+  }
+);
 
 export default Chat;

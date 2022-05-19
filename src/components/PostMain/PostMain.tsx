@@ -2,10 +2,11 @@ import DeleteModal from 'components/DeleteModal';
 import MyDate from 'components/MyDate';
 import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
-import { usePostsContext } from 'context/PostsContext';
 import useModal from 'hooks/useModal';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { changePostsHydrate } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
 import { Post } from 'types';
 import api from 'utils/api';
@@ -20,7 +21,7 @@ function PostMain({ post }: PostMainProps) {
   const user = useUser();
   const router = useRouter();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { dispatch } = usePostsContext();
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.postMain} data-testid="post-main">
@@ -51,7 +52,7 @@ function PostMain({ post }: PostMainProps) {
                 }
                 onConfirm={async () => {
                   await api.delete(`/post/${id}`);
-                  dispatch({ type: 'RESET' });
+                  dispatch(changePostsHydrate({ block: false }));
                   router.replace(`/profile/${user.nickname}`);
                 }}
                 onCancel={closeModal}

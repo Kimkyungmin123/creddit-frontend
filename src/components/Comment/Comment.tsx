@@ -4,13 +4,14 @@ import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
-import { usePostsContext } from 'context/PostsContext';
 import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
 import { Dispatch, ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { changePostDetailComments } from 'slices/postDetailSlice';
+import { changePostComments } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
-import { mutate } from 'swr';
-import { Comment as CommentType, Post } from 'types';
+import { Comment as CommentType } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
 
@@ -36,9 +37,9 @@ function Comment({
   const user = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
-  const { dispatch } = usePostsContext();
   const [isReplying, setIsReplying] = useState(false);
-  const postId = pid || comment.postId;
+  const postId = pid || (comment.postId as number);
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -74,18 +75,10 @@ function Comment({
                     onConfirm={async () => {
                       await api.delete(`/comment/${commentId}`);
                       closeModal();
-                      const userQuery = user
-                        ? `?nickname=${user.nickname}`
-                        : '';
-                      const data = await mutate(
-                        `/post/${postId}${userQuery}`,
-                        (post: Post) => ({
-                          ...post,
-                          comments: post.comments - 1,
-                        }),
-                        false
+                      dispatch(changePostDetailComments('delete'));
+                      dispatch(
+                        changePostComments({ id: postId, type: 'delete' })
                       );
-                      dispatch({ type: 'CHANGE_POST', post: data });
                       dispatchComments({ type: 'REMOVE_COMMENT', commentId });
                       if (onDelete) onDelete();
                     }}
@@ -154,9 +147,8 @@ function Comment({
                 parentCommentId: commentId,
                 postId: postId,
               });
-              const userQuery = user ? `?nickname=${user.nickname}` : '';
-              const data = await mutate<Post>(`/post/${postId}${userQuery}`);
-              dispatch({ type: 'CHANGE_POST', post: data });
+              dispatch(changePostDetailComments('add'));
+              dispatch(changePostComments({ id: postId, type: 'add' }));
               dispatchComments({ type: 'RESET' });
               setIsReplying(false);
             }}

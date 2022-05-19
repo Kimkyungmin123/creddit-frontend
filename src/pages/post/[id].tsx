@@ -3,48 +3,51 @@ import NotFound from 'components/NotFound';
 import PostCommentBox from 'components/PostCommentBox';
 import PostMain from 'components/PostMain';
 import PostTop from 'components/PostTop';
-import { usePostCardContext } from 'context/PostCardContext';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { initPostDetail, usePostDetail } from 'slices/postDetailSlice';
+import { changePostsHydrate, usePosts } from 'slices/postsSlice';
 import { wrapper } from 'slices/store';
-import { initUser, useUser } from 'slices/userSlice';
+import { initUser } from 'slices/userSlice';
 import styles from 'styles/Post.module.scss';
-import useSWR from 'swr';
-import { Post as PostType } from 'types';
-import { fetcher } from 'utils/api';
 
 const Post = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const user = useUser();
-  const userQuery = user ? `?nickname=${user.nickname}` : '';
-  const { data, error } = useSWR<PostType>(
-    id ? `/post/${id}${userQuery}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
-  const { clickedPostCard } = usePostCardContext();
+  const dispatch = useDispatch();
+  const { blockHydrate } = usePosts();
+  const post = usePostDetail();
+
+  useEffect(() => {
+    const clickEvent = (event: MouseEvent) => {
+      if ((event.target as HTMLElement).closest('a')) {
+        dispatch(changePostsHydrate({ block: false }));
+      }
+    };
+    window.addEventListener('click', clickEvent);
+    return () => window.removeEventListener('click', clickEvent);
+  }, [dispatch]);
 
   return (
-    <Layout title={data?.title}>
-      {error && <NotFound />}
-      {data && (
+    <Layout title={post?.title}>
+      {!post ? (
+        <NotFound />
+      ) : (
         <div
           className={styles.postContainer}
           onClick={(event) => {
             const target = event.target as HTMLElement;
             if (target.classList.contains(styles.postContainer)) {
-              if (clickedPostCard) router.back();
+              if (blockHydrate) router.back();
               else router.push('/');
             }
           }}
         >
           <div className={styles.postBox}>
-            <PostTop post={data} />
+            <PostTop post={post} />
             <section className={styles.postContent}>
-              <PostMain post={data} />
-              <PostCommentBox post={data} />
+              <PostMain post={post} />
+              <PostCommentBox post={post} />
             </section>
           </div>
         </div>
@@ -56,6 +59,7 @@ const Post = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     await initUser(store, context);
+    await initPostDetail(store, context);
     return { props: {} };
   }
 );

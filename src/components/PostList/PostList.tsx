@@ -1,9 +1,16 @@
 import classNames from 'classnames';
 import InfiniteScroll from 'components/InfiniteScroll';
 import PostCard from 'components/PostCard';
-import { usePostsContext } from 'context/PostsContext';
 import { PersonSmall, Rising, Time } from 'icons';
-import { useRouter } from 'next/router';
+import { useEffect, useLayoutEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  addPosts,
+  changePostsHydrate,
+  changePostsSort,
+  resetPosts,
+  usePosts,
+} from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
 import { Post } from 'types';
 import api from 'utils/api';
@@ -26,10 +33,17 @@ function PostList({
   className,
   hideFollowing,
 }: PostListProps) {
-  const { state, dispatch } = usePostsContext();
-  const { posts, sortBy, page } = state;
-  const router = useRouter();
   const user = useUser();
+  const { data: postsData, sortBy, page, scrollY, blockHydrate } = usePosts();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(changePostsHydrate({ block: false }));
+  }, [dispatch]);
+
+  useLayoutEffect(() => {
+    if (blockHydrate) window.scrollTo(0, scrollY || 0);
+  }, [blockHydrate, scrollY]);
 
   return (
     <div className={classNames(styles.container, className)}>
@@ -39,8 +53,8 @@ function PostList({
             className={classNames(sortBy === 'like' && styles.selected)}
             onClick={() => {
               if (sortBy !== 'like') {
-                dispatch({ type: 'CHANGE_SORT', sortBy: 'like' });
-                dispatch({ type: 'RESET' });
+                dispatch(changePostsSort('like'));
+                dispatch(resetPosts());
               }
             }}
             aria-label="인기순으로 정렬"
@@ -52,8 +66,8 @@ function PostList({
             className={classNames(sortBy === 'new' && styles.selected)}
             onClick={() => {
               if (sortBy !== 'new') {
-                dispatch({ type: 'CHANGE_SORT', sortBy: 'new' });
-                dispatch({ type: 'RESET' });
+                dispatch(changePostsSort('new'));
+                dispatch(resetPosts());
               }
             }}
             aria-label="최신순으로 정렬"
@@ -66,8 +80,8 @@ function PostList({
               className={classNames(sortBy === 'following' && styles.selected)}
               onClick={() => {
                 if (sortBy !== 'following') {
-                  dispatch({ type: 'CHANGE_SORT', sortBy: 'following' });
-                  dispatch({ type: 'RESET' });
+                  dispatch(changePostsSort('following'));
+                  dispatch(resetPosts());
                 }
               }}
               aria-label="팔로우 중인 사용자 글 모아보기"
@@ -79,27 +93,28 @@ function PostList({
         </div>
       )}
       <div className={styles.postsContainer}>
-        {posts?.map((post) => (
+        {postsData?.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}
       </div>
       <InfiniteScroll
-        data={posts}
+        data={postsData}
         size={SIZE}
         onIntersect={async () => {
           const getIndex = () => {
             switch (sortBy) {
               case 'new':
               case 'following':
-                return !posts || posts.length === 0
+                return !postsData || postsData.length === 0
                   ? Number.MAX_SAFE_INTEGER
-                  : posts[posts.length - 1].id;
+                  : postsData[postsData.length - 1].id;
               case 'like':
-                return !posts || posts.length === 0 ? 0 : page || 0;
+                return !postsData || postsData.length === 0 ? 0 : page || 0;
             }
           };
 
           const index = getIndex();
+          if (index === -1) return [];
           const { data } = await api.get<Post[]>(url, {
             params: {
               ...params,
@@ -109,12 +124,8 @@ function PostList({
               sort: disableSort ? null : sortBy,
             },
           });
-          dispatch({
-            type: 'ADD_POSTS',
-            posts: data,
-            url: router.asPath,
-            page: (index || 0) + 1,
-          });
+
+          dispatch(addPosts({ data, page: data.length > 0 ? index + 1 : -1 }));
           return data;
         }}
       />

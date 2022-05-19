@@ -2,12 +2,13 @@ import CommentForm from 'components/CommentForm';
 import Dropdown from 'components/Dropdown';
 import InfiniteScroll from 'components/InfiniteScroll';
 import ParentComment from 'components/ParentComment';
-import { usePostsContext } from 'context/PostsContext';
 import useComments from 'hooks/useComments';
 import { CaretDown, Sort } from 'icons';
 import { useEffect, useMemo, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { changePostDetailComments } from 'slices/postDetailSlice';
+import { changePostComments } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
-import { mutate } from 'swr';
 import { Comment as CommentType, Post, User } from 'types';
 import api from 'utils/api';
 import styles from './PostCommentBox.module.scss';
@@ -17,7 +18,6 @@ export type PostCommentBoxProps = {
 };
 
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { dispatch } = usePostsContext();
   const { state: commentsState, dispatch: dispatchComments } = useComments();
   const { comments, sortBy, page } = commentsState;
   const message = useMemo(
@@ -26,6 +26,7 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
   );
   const user = useUser();
   const prevUser = useRef<User | undefined>(user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (prevUser.current !== user) {
@@ -70,10 +71,9 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               content: comment,
               postId: post.id,
             });
-            const userQuery = user ? `?nickname=${user.nickname}` : '';
-            const data = await mutate<Post>(`/post/${post.id}${userQuery}`);
+            dispatch(changePostDetailComments('add'));
+            dispatch(changePostComments({ id: post.id, type: 'add' }));
             dispatchComments({ type: 'RESET' });
-            dispatch({ type: 'CHANGE_POST', post: data });
           }}
         />
       </div>

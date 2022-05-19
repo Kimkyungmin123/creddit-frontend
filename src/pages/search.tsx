@@ -1,6 +1,5 @@
 import Layout from 'components/Layout';
 import PostList from 'components/PostList';
-import { useResetPosts } from 'context/PostsContext';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { wrapper } from 'slices/store';
@@ -10,7 +9,6 @@ import styles from 'styles/Search.module.scss';
 const Search: NextPage = () => {
   const router = useRouter();
   const { q } = router.query;
-  useResetPosts();
 
   return (
     <Layout title="creddit">

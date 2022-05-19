@@ -1,8 +1,9 @@
 import classNames from 'classnames';
-import { usePostsContext } from 'context/PostsContext';
 import { HeartFill, HeartOutline } from 'icons';
 import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
+import { useDispatch } from 'react-redux';
+import { likePost } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
 import api from 'utils/api';
 import getFormData from 'utils/getFormData';
@@ -25,9 +26,9 @@ function LikeButton({
   variant,
   onClick,
 }: LikeButtonProps) {
-  const { dispatch } = usePostsContext();
   const user = useUser();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   return (
     <button
@@ -45,7 +46,7 @@ function LikeButton({
         }
 
         await api.post(`/like/${id}`, getFormData({ type }));
-        if (type === 'post') dispatch({ type: 'LIKE_POST', postId: id });
+        if (type === 'post') dispatch(likePost(id));
         if (onClick) onClick();
       }}
     >

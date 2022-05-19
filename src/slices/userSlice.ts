@@ -20,15 +20,15 @@ const userSlice = createSlice({
       Cookies.remove('auth_exp_date');
       return null;
     },
+    changeUser: (state, action: PayloadAction<Partial<User>>) =>
+      state ? { ...state, ...action.payload } : state,
   },
   extraReducers: {
-    [HYDRATE]: (state, action) => {
-      return state || action.payload.user;
-    },
+    [HYDRATE]: (_, action) => action.payload.user,
   },
 });
 
-export const { setUser, logout } = userSlice.actions;
+export const { setUser, logout, changeUser } = userSlice.actions;
 
 export const useUser = () =>
   useSelector<State, UserState>((state) => state.user);

@@ -1,7 +1,6 @@
 import Layout from 'components/Layout';
 import PostList from 'components/PostList';
 import ProfileBox from 'components/ProfileBox';
-import { useResetPosts } from 'context/PostsContext';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { wrapper } from 'slices/store';
@@ -12,7 +11,6 @@ import { User } from 'types';
 import { fetcher } from 'utils/api';
 
 const Profile: NextPage = () => {
-  useResetPosts();
   const router = useRouter();
   const { nickname } = router.query;
   const { data: userData } = useSWRImmutable<User>(

@@ -66,7 +66,7 @@ function reducer(state: State, action: CommentsAction) {
         ...state,
         comments: [
           ...(state.comments || []),
-          // PostsContext.tsx 참고
+          // PostsSlice.tsx 참고
           ...(action.comments?.filter(
             (comment) =>
               !state.comments?.filter(

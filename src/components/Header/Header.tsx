@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { resetPosts } from 'slices/postsSlice';
 import { logout, useUser } from 'slices/userSlice';
 import styles from './Header.module.scss';
 
@@ -60,7 +61,11 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
     <header className={styles.header} data-testid="header">
       <div className={styles.container}>
         <Link href="/">
-          <a aria-label="홈" className={styles.logo}>
+          <a
+            aria-label="홈"
+            className={styles.logo}
+            onClick={() => dispatch(resetPosts())}
+          >
             creddit
           </a>
         </Link>

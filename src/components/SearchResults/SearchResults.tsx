@@ -1,6 +1,4 @@
 import classNames from 'classnames';
-import { usePostCardContext } from 'context/PostCardContext';
-import { usePostsContext } from 'context/PostsContext';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -19,8 +17,6 @@ function SearchResults({ value, onClick }: SearchResultsProps) {
     `/post/search?keyword=${value}&index=0&size=5&sort=like`,
     fetcher
   );
-  const { dispatch } = usePostsContext();
-  const { setClickedPostCard } = usePostCardContext();
 
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
@@ -52,10 +48,7 @@ function SearchResults({ value, onClick }: SearchResultsProps) {
   return (
     <ul
       className={styles.results}
-      onClick={() => {
-        setClickedPostCard(true);
-        onClick();
-      }}
+      onClick={onClick}
       data-testid="search-results"
     >
       <li
@@ -64,7 +57,6 @@ function SearchResults({ value, onClick }: SearchResultsProps) {
           currentIndex === 0 && styles.selected
         )}
         data-index={0}
-        onClick={() => dispatch({ type: 'RESET' })}
       >
         <Link href={`/search?q=${value}`}>
           <a tabIndex={-1}>

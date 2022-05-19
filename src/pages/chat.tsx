@@ -42,6 +42,8 @@ const Chat: NextPage = () => {
     if (!user || !currChatUser) return;
 
     setChatList(chatData);
+    console.log(chatData);
+
     if (currentChatRoomId) {
       wsInstance
         .get<{ messages: Message[] }>(
@@ -77,6 +79,7 @@ const Chat: NextPage = () => {
       },
     });
     client.current.activate();
+    console.log(messages);
 
     return () => {
       client.current?.deactivate();
@@ -144,6 +147,7 @@ const Chat: NextPage = () => {
                   sentDate={data.messages[
                     data.messages.length - 1
                   ]?.createdDate.slice(13)}
+                  senderProfileImg={data.users[1]?.image?.imgUrl}
                 />
               ))}
             </div>
@@ -188,6 +192,7 @@ const Chat: NextPage = () => {
                             />
                           )
                         }
+                        // senderProfileImg={}
                       />
                     </div>
                   ))}

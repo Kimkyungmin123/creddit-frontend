@@ -1,7 +1,6 @@
 import ChatListBox from 'components/ChatListBox';
 import Layout from 'components/Layout';
 import MessageBox from 'components/MessageBox';
-// import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
 import NonChatZone from 'components/NonChatZone';
 import type { NextPage } from 'next';
@@ -29,7 +28,6 @@ const Chat: NextPage = () => {
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
-  // const [chatDelete, setChatDelete] = useState(false);
   const client = useRef<Client | null>(null);
   const scrollRef = useRef<null | HTMLDivElement>(null);
 
@@ -48,7 +46,7 @@ const Chat: NextPage = () => {
         console.log(data);
         setMessages(data.messages);
       });
-  }, [user, currChatUser, currentChatRoomId, chatData]);
+  }, [user, currChatUser, currentChatRoomId]);
 
   useEffect(() => {
     client.current = new Client({
@@ -107,7 +105,6 @@ const Chat: NextPage = () => {
 
     publish(messageInfo);
     mutate(`/chat/${user.nickname}/chatrooms`);
-    mutate(`${user.nickname}/chatrooms`);
   };
 
   return (
@@ -143,7 +140,6 @@ const Chat: NextPage = () => {
                   <ChatDelete
                     user={user.nickname}
                     currentChatRoomId={currentChatRoomId}
-                    // currChatUser={currChatUser}
                   />
                 )}
               </div>

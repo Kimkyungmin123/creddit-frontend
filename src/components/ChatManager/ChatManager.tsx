@@ -7,7 +7,7 @@ export type ChatManagerProps = {
 
 const ChatManager = ({ managerMessage, time }: ChatManagerProps) => {
   return (
-    <div className={styles.ChatManager}>
+    <div className={styles.chatManager}>
       <h2>{managerMessage}</h2>
       <span>{time}</span>
     </div>

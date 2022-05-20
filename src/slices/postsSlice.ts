@@ -1,5 +1,6 @@
 import { AnyAction, createSlice, PayloadAction, Store } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { GetServerSidePropsContext } from 'next';
 import { HYDRATE } from 'next-redux-wrapper';
 import { useSelector } from 'react-redux';
 import { State } from 'slices/store';
@@ -13,6 +14,7 @@ export interface PostsState {
   page?: number;
   blockHydrate?: boolean;
   scrollY?: number;
+  finished?: boolean;
 }
 
 const initialState: PostsState = { data: null, sortBy: 'like' };
@@ -21,10 +23,10 @@ const postsSlice = createSlice({
   name: 'posts',
   initialState,
   reducers: {
-    resetPosts: (state) => ({ ...initialState, sortBy: state.sortBy }),
+    resetPosts: () => ({ ...initialState }),
     addPosts: (
       state,
-      action: PayloadAction<{ data: Post[]; page: number }>
+      action: PayloadAction<{ data: Post[]; sortBy?: SortBy }>
     ) => ({
       ...state,
       data: [
@@ -35,11 +37,9 @@ const postsSlice = createSlice({
           (post) => !state.data?.filter((el) => el.id === post.id).length
         ) || []),
       ],
-      page: action.payload.page,
-    }),
-    changePostsSort: (state, action: PayloadAction<SortBy>) => ({
-      ...state,
-      sortBy: action.payload,
+      page: state.sortBy === 'like' ? (state.page || 0) + 1 : undefined,
+      sortBy: action.payload.sortBy || state.sortBy,
+      finished: action.payload.data.length === 0 ? true : false,
     }),
     changePostsHydrate: (
       state,
@@ -108,7 +108,6 @@ const postsSlice = createSlice({
 export const {
   resetPosts,
   addPosts,
-  changePostsSort,
   changePostsHydrate,
   likePost,
   changePostComments,
@@ -118,22 +117,49 @@ export const {
 export const usePosts = () =>
   useSelector<State, PostsState>((state) => state.posts);
 
-export async function initPosts(store: Store<State, AnyAction>) {
+export { initPosts, getIndex };
+
+async function initPosts(
+  url: string,
+  store: Store<State, AnyAction>,
+  context: GetServerSidePropsContext
+) {
   const { user, posts } = store.getState();
   if (posts.blockHydrate) return;
 
+  const { resolvedUrl } = context;
+  const sortBy = getSortByUrl(resolvedUrl);
+  const index = getIndex(posts, sortBy);
   const { data } = await axios.get<Post[]>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/post`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`,
     {
       params: {
-        index: 0,
+        index,
         size: 10,
-        sort: posts.sortBy,
+        sort: sortBy,
         nickname: user?.nickname,
+        keyword: context.query.q ? context.query.q : null,
       },
     }
   );
-  store.dispatch(addPosts({ data, page: 1 }));
+  store.dispatch(addPosts({ data, sortBy }));
+}
+
+function getSortByUrl(url: string) {
+  if (url?.match(/.*\/recent.*/)) return 'new';
+  if (url?.match(/.*\/following.*/)) return 'following';
+  return 'like';
+}
+
+function getIndex(posts: PostsState, sortBy?: SortBy) {
+  const { sortBy: s, data, page } = posts;
+  switch (sortBy || s) {
+    case 'new':
+    case 'following':
+      return !data ? Number.MAX_SAFE_INTEGER : data[data.length - 1].id;
+    case 'like':
+      return !data ? 0 : page || 0;
+  }
 }
 
 export default postsSlice;

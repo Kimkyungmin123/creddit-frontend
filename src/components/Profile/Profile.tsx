@@ -1,16 +1,13 @@
 import Layout from 'components/Layout';
 import PostList from 'components/PostList';
 import ProfileBox from 'components/ProfileBox';
-import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { wrapper } from 'slices/store';
-import { initUser } from 'slices/userSlice';
-import styles from 'styles/Profile.module.scss';
+import styles from './Profile.module.scss';
 import useSWRImmutable from 'swr/immutable';
 import { User } from 'types';
 import { fetcher } from 'utils/api';
 
-const Profile: NextPage = () => {
+function Profile() {
   const router = useRouter();
   const { nickname } = router.query;
   const { data: userData } = useSWRImmutable<User>(
@@ -23,7 +20,8 @@ const Profile: NextPage = () => {
       <div className={styles.profileContainer}>
         {nickname && (
           <PostList
-            url={`/post/user/${nickname}`}
+            clientUrl={`/profile/${nickname}`}
+            serverUrl={`/post/user/${nickname}`}
             className={styles.postList}
             hideFollowing={true}
           />
@@ -32,13 +30,6 @@ const Profile: NextPage = () => {
       </div>
     </Layout>
   );
-};
-
-export const getServerSideProps = wrapper.getServerSideProps(
-  (store) => async (context) => {
-    await initUser(store, context);
-    return { props: {} };
-  }
-);
+}
 
 export default Profile;

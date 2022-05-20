@@ -1,14 +1,14 @@
-import Home from 'components/Home';
+import Search from 'components/Search';
 import { initPosts } from 'slices/postsSlice';
 import { wrapper } from 'slices/store';
 import { initUser } from 'slices/userSlice';
 
-export default Home;
+export default Search;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     await initUser(store, context);
-    await initPosts('/post', store, context);
+    await initPosts('/post/search', store, context);
     return { props: {} };
   }
 );

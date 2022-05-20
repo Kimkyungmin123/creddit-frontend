@@ -1,24 +1,14 @@
-import Layout from 'components/Layout';
-import PostList from 'components/PostList';
-import type { NextPage } from 'next';
+import Home from 'components/Home';
 import { initPosts } from 'slices/postsSlice';
 import { wrapper } from 'slices/store';
 import { initUser } from 'slices/userSlice';
 
-const Home: NextPage = () => {
-  return (
-    <Layout title="creddit">
-      <PostList url="/post" />
-    </Layout>
-  );
-};
+export default Home;
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     await initUser(store, context);
-    await initPosts(store);
+    await initPosts('/post', store, context);
     return { props: {} };
   }
 );
-
-export default Home;

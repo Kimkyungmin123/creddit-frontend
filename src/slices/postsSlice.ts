@@ -124,25 +124,29 @@ async function initPosts(
   store: Store<State, AnyAction>,
   context: GetServerSidePropsContext
 ) {
-  const { user, posts } = store.getState();
-  if (posts.blockHydrate) return;
+  try {
+    const { user, posts } = store.getState();
+    if (posts.blockHydrate) return;
 
-  const { resolvedUrl } = context;
-  const sortBy = getSortByUrl(resolvedUrl);
-  const index = getIndex(posts, sortBy);
-  const { data } = await axios.get<Post[]>(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`,
-    {
-      params: {
-        index,
-        size: 10,
-        sort: sortBy,
-        nickname: user?.nickname,
-        keyword: context.query.q ? context.query.q : null,
-      },
-    }
-  );
-  store.dispatch(addPosts({ data, sortBy }));
+    const { resolvedUrl } = context;
+    const sortBy = getSortByUrl(resolvedUrl);
+    const index = getIndex(posts, sortBy);
+    const { data } = await axios.get<Post[]>(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}${url}`,
+      {
+        params: {
+          index,
+          size: 10,
+          sort: sortBy,
+          nickname: user?.nickname,
+          keyword: context.query.q ? context.query.q : null,
+        },
+      }
+    );
+    store.dispatch(addPosts({ data, sortBy }));
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 function getSortByUrl(url: string) {

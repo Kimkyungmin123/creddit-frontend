@@ -7,17 +7,20 @@ import { createWrapper } from 'next-redux-wrapper';
 import userSlice, { UserState } from 'slices/userSlice';
 import postDetailSlice, { PostDetailState } from './postDetailSlice';
 import postsSlice, { PostsState } from './postsSlice';
+import profileSlice, { ProfileState } from './profileSlice';
 
 export interface State {
   user: UserState;
   posts: PostsState;
   postDetail: PostDetailState;
+  profile: ProfileState;
 }
 
 export const reducer = {
   [userSlice.name]: userSlice.reducer,
   [postsSlice.name]: postsSlice.reducer,
   [postDetailSlice.name]: postDetailSlice.reducer,
+  [profileSlice.name]: profileSlice.reducer,
 };
 
 const makeStore = wrapMakeStore(() =>

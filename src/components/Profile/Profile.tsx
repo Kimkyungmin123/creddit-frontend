@@ -1,33 +1,33 @@
 import Layout from 'components/Layout';
+import NotFound from 'components/NotFound';
 import PostList from 'components/PostList';
 import ProfileBox from 'components/ProfileBox';
 import { useRouter } from 'next/router';
+import { useProfile } from 'slices/profileSlice';
 import styles from './Profile.module.scss';
-import useSWRImmutable from 'swr/immutable';
-import { User } from 'types';
-import { fetcher } from 'utils/api';
 
 function Profile() {
   const router = useRouter();
   const { nickname } = router.query;
-  const { data: userData } = useSWRImmutable<User>(
-    nickname ? `/profile/show/${nickname}` : null,
-    fetcher
-  );
+  const profile = useProfile();
 
   return (
     <Layout title={`${nickname} - creddit`}>
-      <div className={styles.profileContainer}>
-        {nickname && (
-          <PostList
-            clientUrl={`/profile/${nickname}`}
-            serverUrl={`/post/user/${nickname}`}
-            className={styles.postList}
-            hideFollowing={true}
-          />
-        )}
-        {userData && <ProfileBox user={userData} />}
-      </div>
+      {!profile ? (
+        <NotFound />
+      ) : (
+        <div className={styles.profileContainer}>
+          {nickname && (
+            <PostList
+              clientUrl={`/profile/${nickname}`}
+              serverUrl={`/post/user/${nickname}`}
+              className={styles.postList}
+              hideFollowing={true}
+            />
+          )}
+          {profile && <ProfileBox user={profile} />}
+        </div>
+      )}
     </Layout>
   );
 }

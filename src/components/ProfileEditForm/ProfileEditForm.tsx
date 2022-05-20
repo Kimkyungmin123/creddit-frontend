@@ -7,8 +7,8 @@ import useDuplicateError from 'hooks/useDuplicateError';
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { changePostAuthor } from 'slices/postsSlice';
+import { changeProfile } from 'slices/profileSlice';
 import { changeUser } from 'slices/userSlice';
-import { mutate } from 'swr';
 import { User } from 'types';
 import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -43,20 +43,15 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
         try {
           await onSubmit(values);
           onCancel();
+
           const { nickname } = values;
+          const nextUser = { ...user, ...values };
+          dispatch(changeUser(nextUser));
           if (nickname !== user.nickname) {
-            const nextUser = { ...user, ...values };
-            dispatch(changeUser(nextUser));
             router.replace(`/profile/${nickname}`);
           } else {
-            const nextUser = {
-              ...user,
-              ...values,
-              image: { imgName: '', imgUrl: null },
-            };
-            dispatch(changeUser(nextUser));
             dispatch(changePostAuthor(nextUser));
-            mutate(`/profile/show/${user?.nickname}`, nextUser, false);
+            dispatch(changeProfile(nextUser));
           }
         } catch (_err) {
           const error = _err as { nicknameDuplicate?: boolean };

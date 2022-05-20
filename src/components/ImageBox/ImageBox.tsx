@@ -5,8 +5,8 @@ import ProfileImage from 'components/ProfileImage';
 import useModal from 'hooks/useModal';
 import { useDispatch } from 'react-redux';
 import { changePostAuthor } from 'slices/postsSlice';
+import { changeProfile } from 'slices/profileSlice';
 import { changeUser } from 'slices/userSlice';
-import { mutate } from 'swr';
 import { MyImage } from 'types';
 import editProfile from 'utils/editProfile';
 import styles from './ImageBox.module.scss';
@@ -37,11 +37,7 @@ function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
               const { image } = user;
               dispatch(changeUser({ image }));
               dispatch(changePostAuthor(user));
-              mutate(
-                `/profile/show/${user?.nickname}`,
-                { ...user, image },
-                false
-              );
+              dispatch(changeProfile({ ...user, image }));
             }}
           />
           {imgUrl && (
@@ -63,11 +59,7 @@ function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
                 closeModal();
                 dispatch(changeUser({ image }));
                 dispatch(changePostAuthor(user));
-                mutate(
-                  `/profile/show/${user?.nickname}`,
-                  { ...user, image },
-                  false
-                );
+                dispatch(changeProfile({ ...user, image }));
               }}
               onCancel={closeModal}
               buttonName="제거"

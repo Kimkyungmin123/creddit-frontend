@@ -4,13 +4,14 @@ import profileImg from 'images/profileImg.png';
 
 export type ChatListBoxProps = {
   interlocutorName: string;
-  lastMessage?: string;
-  sentDate?: string;
+  lastMessage: string;
+  sentDate: string;
+  senderProfileImg: string | null;
   sendMessageData?: {
-    message?: any;
+    message: string;
     sender: string;
     receiver: string;
-    createdDate: string | number;
+    createdDate: string;
   };
 
   onClick?: (id: React.MouseEvent<HTMLDivElement>) => void;
@@ -23,6 +24,7 @@ const ChatListBox = ({
   sentDate,
   onClick,
   sendMessageData,
+  senderProfileImg,
 }: ChatListBoxProps) => {
   {
     sendMessageData;
@@ -30,7 +32,16 @@ const ChatListBox = ({
   return (
     <div className={styles.ChatBox} onClick={onClick}>
       <div className={styles.profileImg}>
-        <Image src={profileImg} alt="프로필 이미지" />
+        {senderProfileImg ? (
+          <Image
+            src={senderProfileImg}
+            alt="프로필 이미지"
+            width={200}
+            height={200}
+          />
+        ) : (
+          <Image src={profileImg} alt="프로필 이미지" />
+        )}
       </div>
       <div className={styles.chatContent}>
         <div>{interlocutorName}</div>

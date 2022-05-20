@@ -9,6 +9,7 @@ export type MessageBoxProps = {
   isMe: boolean;
   isManager: boolean;
   chatManager: any;
+  senderProfileImg?: string;
 };
 
 const MessageBox = ({
@@ -18,6 +19,7 @@ const MessageBox = ({
   isMe,
   chatManager,
   isManager,
+  senderProfileImg,
 }: MessageBoxProps) => {
   return (
     <>
@@ -26,7 +28,11 @@ const MessageBox = ({
         (!isMe ? (
           <div className={styles.messageBox}>
             <div className={styles.profileImg}>
-              <Image src={profile} alt="상대방 프로필 이미지" />
+              {senderProfileImg ? (
+                <Image src={senderProfileImg} alt="상대방 프로필 이미지" />
+              ) : (
+                <Image src={profile} alt="상대방 프로필 이미지" />
+              )}
             </div>
 
             <div className={styles.messageContent}>

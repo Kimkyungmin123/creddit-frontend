@@ -9,7 +9,6 @@ import MessageBox from 'components/MessageBox';
 import NonChatZone from 'components/NonChatZone';
 import NonLogin from 'components/NonLogin';
 import SendMessageDate from 'components/SendMessageDate';
-// import SendMessageDate from 'components/SendMessageDate';
 import SendMessageForm from 'components/SendMessageForm';
 import useInput from 'hooks/useInput';
 import useModal from 'hooks/useModal';
@@ -30,9 +29,9 @@ const Chat: NextPage = () => {
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
-  // const [chatDelete, setChatDelete] = useState(false);
   const client = useRef<Client | null>(null);
   const scrollRef = useRef<null | HTMLDivElement>(null);
+  const [chatList, setChatList] = useState([]);
 
   const { data: chatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
@@ -41,15 +40,21 @@ const Chat: NextPage = () => {
 
   useEffect(() => {
     if (!user || !currChatUser) return;
-    wsInstance
-      .get<{ messages: Message[] }>(
-        `/chat/${user.nickname}/chatrooms/${currentChatRoomId}`
-      )
-      .then(({ data }) => {
-        console.log(data);
-        setMessages(data.messages);
-      });
-  }, [user, currChatUser, currentChatRoomId, chatData]);
+
+    setChatList(chatData);
+    console.log(chatData);
+
+    if (currentChatRoomId) {
+      wsInstance
+        .get<{ messages: Message[] }>(
+          `/chat/${user?.nickname}/chatrooms/${currentChatRoomId}`
+        )
+        .then(({ data }) => {
+          console.log(data);
+          setMessages(data.messages);
+        });
+    }
+  }, [user, currChatUser, currentChatRoomId, chatList, chatData]);
 
   useEffect(() => {
     client.current = new Client({
@@ -58,6 +63,15 @@ const Chat: NextPage = () => {
       onConnect: () => {
         client.current?.subscribe(`/topic/${currentChatRoomId}`, ({ body }) => {
           const message = JSON.parse(body) as Message;
+          if (message.sender === 'CHAT_MANAGER') {
+            wsInstance
+              .get<{ messages: Message[] }>(
+                `/chat/${user?.nickname}/chatrooms/${currentChatRoomId}`
+              )
+              .then(({ data }) => {
+                setMessages(data.messages);
+              });
+          }
           if (currChatUser === message.sender) {
             setMessages((prev) => [...prev, message]);
           }
@@ -65,11 +79,12 @@ const Chat: NextPage = () => {
       },
     });
     client.current.activate();
+    console.log(messages);
 
     return () => {
       client.current?.deactivate();
     };
-  }, [user, currChatUser, currentChatRoomId]);
+  }, [user, currChatUser, currentChatRoomId, messages]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -109,7 +124,6 @@ const Chat: NextPage = () => {
 
     publish(messageInfo);
     mutate(`/chat/${user.nickname}/chatrooms`);
-    mutate(`${user.nickname}/chatrooms`);
   };
 
   return (
@@ -133,6 +147,7 @@ const Chat: NextPage = () => {
                   sentDate={data.messages[
                     data.messages.length - 1
                   ]?.createdDate.slice(13)}
+                  senderProfileImg={data.users[1]?.image.imgUrl}
                 />
               ))}
             </div>
@@ -141,45 +156,46 @@ const Chat: NextPage = () => {
                 {!isModalOpen && !currChatUser && <NonChatZone />}{' '}
               </div>
               <div className={styles.chatDelete}>
-                {currChatUser && (
+                {currChatUser && messages && (
                   <ChatDelete
                     user={user.nickname}
                     currentChatRoomId={currentChatRoomId}
-                    // currChatUser={currChatUser}
                   />
                 )}
               </div>
               <div className={styles.messageBox}>
                 {/* 임시 날짜 */}
-                {currChatUser && (
+                {currChatUser && messages && (
                   <SendMessageDate
                     date={messages[0]?.createdDate.slice(0, 12)}
                   />
                 )}
 
-                {messages.map((data: any, i: number) => (
-                  <div ref={scrollRef} key={i}>
-                    <MessageBox
-                      key={i}
-                      interlocutorName={data.sender}
-                      content={data.message}
-                      time={data.createdDate.slice(13)}
-                      isMe={data.receiver === currChatUser ? true : false}
-                      isManager={
-                        data.receiver === 'CHAT_MANAGER' ? true : false
-                      }
-                      chatManager={
-                        data.receiver === 'CHAT_MANAGER' && (
-                          <ChatManager
-                            key={i}
-                            managerMessage={data.message}
-                            time={data.createdDate}
-                          />
-                        )
-                      }
-                    />
-                  </div>
-                ))}
+                {messages &&
+                  messages.map((data: any, i: number) => (
+                    <div ref={scrollRef} key={i}>
+                      <MessageBox
+                        key={i}
+                        interlocutorName={data.sender}
+                        content={data.message}
+                        time={data.createdDate.slice(13)}
+                        isMe={data.receiver === currChatUser ? true : false}
+                        isManager={
+                          data.receiver === 'CHAT_MANAGER' ? true : false
+                        }
+                        chatManager={
+                          data.receiver === 'CHAT_MANAGER' && (
+                            <ChatManager
+                              key={i}
+                              managerMessage={data.message}
+                              time={data.createdDate}
+                            />
+                          )
+                        }
+                        // senderProfileImg={}
+                      />
+                    </div>
+                  ))}
               </div>
               {currChatUser && (
                 <div className={styles.SendMessageBox}>

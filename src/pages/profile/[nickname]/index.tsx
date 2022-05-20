@@ -9,8 +9,10 @@ export default Profile;
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     await initUser(store, context);
-    await initPosts(`/post/user/${context.params?.nickname}`, store, context);
-    await initProfile(store, context);
+    await Promise.all([
+      initPosts(`/post/user/${context.params?.nickname}`, store, context),
+      initProfile(store, context),
+    ]);
     return { props: {} };
   }
 );

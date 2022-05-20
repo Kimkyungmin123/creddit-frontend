@@ -4,12 +4,11 @@ import profileImg from 'images/profileImg.png';
 
 export type ChatListBoxProps = {
   interlocutorName: string;
-  lastMessage?: string;
-  sentDate?: string;
-  senderProfileImg?: string;
-
+  lastMessage: string;
+  sentDate: string;
+  senderProfileImg: string | null;
   sendMessageData?: {
-    message?: any;
+    message: string;
     sender: string;
     receiver: string;
     createdDate: string;

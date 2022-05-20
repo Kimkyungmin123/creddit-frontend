@@ -147,7 +147,7 @@ const Chat: NextPage = () => {
                   sentDate={data.messages[
                     data.messages.length - 1
                   ]?.createdDate.slice(13)}
-                  senderProfileImg={data.users[1]?.image?.imgUrl}
+                  senderProfileImg={data.users[1]?.image.imgUrl}
                 />
               ))}
             </div>
@@ -156,7 +156,7 @@ const Chat: NextPage = () => {
                 {!isModalOpen && !currChatUser && <NonChatZone />}{' '}
               </div>
               <div className={styles.chatDelete}>
-                {currChatUser && (
+                {currChatUser && messages && (
                   <ChatDelete
                     user={user.nickname}
                     currentChatRoomId={currentChatRoomId}

@@ -6,3 +6,4 @@ creddit:
     bucketName: iaf2ie9-f8x7kp
     cloudfront:
       distributionId: E1YT0H46UXV64N
+    removeOldLambdaVersions: true

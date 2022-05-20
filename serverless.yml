@@ -1,0 +1,8 @@
+creddit:
+  component: '@sls-next/serverless-component'
+  inputs:
+    build:
+      cmd: yarn
+    bucketName: iaf2ie9-f8x7kp
+    cloudfront:
+      distributionId: E1YT0H46UXV64N

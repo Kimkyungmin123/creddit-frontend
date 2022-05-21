@@ -74,7 +74,7 @@ function PostForm({
                   onChange={(file) => {
                     if (!file) return;
 
-                    if (file.size > 1000000) {
+                    if (file.size > 10000000) {
                       setImageError(ERRORS.imageLarge);
                       return;
                     }

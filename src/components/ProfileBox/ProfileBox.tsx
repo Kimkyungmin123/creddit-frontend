@@ -77,7 +77,7 @@ function ProfileBox({ user }: ProfileBoxProps) {
             <MyDate date={createdDate} />
           </div>
           {isAuthor && (
-            <Link href="/following">
+            <Link href="/following-list">
               <a className={styles.followingLink}>
                 {followingList?.length} <span>팔로우 중</span>
               </a>

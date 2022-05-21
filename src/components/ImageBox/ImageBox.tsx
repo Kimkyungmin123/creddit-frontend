@@ -3,8 +3,10 @@ import DeleteModal from 'components/DeleteModal';
 import ImageUploadButton from 'components/ImageUploadButton';
 import ProfileImage from 'components/ProfileImage';
 import useModal from 'hooks/useModal';
-import { useUser } from 'slices/userSlice';
-import { mutate } from 'swr';
+import { useDispatch } from 'react-redux';
+import { changePostAuthor } from 'slices/postsSlice';
+import { changeProfile } from 'slices/profileSlice';
+import { changeUser } from 'slices/userSlice';
 import { MyImage } from 'types';
 import editProfile from 'utils/editProfile';
 import styles from './ImageBox.module.scss';
@@ -18,7 +20,7 @@ export type ImageBoxProps = {
 function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
   const { imgUrl } = image;
   const { isModalOpen, openModal, closeModal } = useModal();
-  const user = useUser();
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.imageBox} data-testid="image-box">
@@ -28,14 +30,14 @@ function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
           <ImageUploadButton
             ariaLabel={'프로필 이미지 업로드'}
             onChange={async (file) => {
-              const { data } = await editProfile({
+              const { data: user } = await editProfile({
                 introduction,
                 imageFile: file,
               });
-              const { image } = data;
-              const nextUser = { ...user, image };
-              mutate('/profile/show', { user: nextUser }, false);
-              mutate(`/profile/show/${user?.nickname}`, { ...nextUser }, false);
+              const { image } = user;
+              dispatch(changeUser({ image }));
+              dispatch(changePostAuthor(user));
+              dispatch(changeProfile({ ...user, image }));
             }}
           />
           {imgUrl && (
@@ -52,16 +54,12 @@ function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
               title="이미지 제거"
               message={'정말 이미지를 제거하시겠습니까?'}
               onConfirm={async () => {
-                const { data } = await editProfile({ introduction });
-                const { image } = data;
+                const { data: user } = await editProfile({ introduction });
+                const { image } = user;
                 closeModal();
-                const nextUser = { ...user, image };
-                mutate('/profile/show', { user: nextUser }, false);
-                mutate(
-                  `/profile/show/${user?.nickname}`,
-                  { ...nextUser },
-                  false
-                );
+                dispatch(changeUser({ image }));
+                dispatch(changePostAuthor(user));
+                dispatch(changeProfile({ ...user, image }));
               }}
               onCancel={closeModal}
               buttonName="제거"

@@ -5,7 +5,10 @@ import { ConnectedFocusError } from 'focus-formik-error';
 import { Formik } from 'formik';
 import useDuplicateError from 'hooks/useDuplicateError';
 import { useRouter } from 'next/router';
-import { mutate } from 'swr';
+import { useDispatch } from 'react-redux';
+import { changePostAuthor } from 'slices/postsSlice';
+import { changeProfile } from 'slices/profileSlice';
+import { changeUser } from 'slices/userSlice';
 import { User } from 'types';
 import focusOnFormElement from 'utils/focusOnFormElement';
 import getValidationSchema from 'utils/getValidationSchema';
@@ -25,6 +28,7 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
   const { error: nicknameError, onChange: onChangeNickname } =
     useDuplicateError('nickname');
   const router = useRouter();
+  const dispatch = useDispatch();
 
   return (
     <Formik
@@ -39,13 +43,16 @@ function ProfileEditForm({ user, onSubmit, onCancel }: ProfileEditFormProps) {
         try {
           await onSubmit(values);
           onCancel();
-          const { nickname, introduction } = values;
-          await mutate(
-            '/profile/show',
-            { user: { ...user, nickname, introduction } },
-            false
-          );
-          router.replace(`/profile/${nickname}`);
+
+          const { nickname } = values;
+          const nextUser = { ...user, ...values };
+          dispatch(changeUser(nextUser));
+          if (nickname !== user.nickname) {
+            router.replace(`/profile/${nickname}`);
+          } else {
+            dispatch(changePostAuthor(nextUser));
+            dispatch(changeProfile(nextUser));
+          }
         } catch (_err) {
           const error = _err as { nicknameDuplicate?: boolean };
           if (error.nicknameDuplicate) {

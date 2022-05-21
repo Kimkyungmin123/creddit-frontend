@@ -1,7 +1,5 @@
 import Layout from 'components/Layout';
 import PostForm from 'components/PostForm';
-import { usePostCardContext } from 'context/PostCardContext';
-import { usePostsContext } from 'context/PostsContext';
 import useLogoutRedirect from 'hooks/useLogoutRedirect';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
@@ -12,8 +10,6 @@ import getPostFormData from 'utils/getPostFormData';
 
 const CreatePost: NextPage = () => {
   const router = useRouter();
-  const { dispatch } = usePostsContext();
-  const { setClickedPostCard } = usePostCardContext();
   useLogoutRedirect({ to: '/' });
 
   return (
@@ -23,8 +19,6 @@ const CreatePost: NextPage = () => {
         onSubmit={async (values, imageFile) => {
           const formData = getPostFormData({ values, imageFile });
           const { data } = await api.post('/post/create', formData);
-          dispatch({ type: 'RESET' });
-          setClickedPostCard(false);
           router.push(`/post/${data}`);
         }}
       />

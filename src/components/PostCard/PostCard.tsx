@@ -2,9 +2,10 @@ import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
-import { usePostCardContext } from 'context/PostCardContext';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
+import { changePostsHydrate } from 'slices/postsSlice';
 import { Post } from 'types';
 import styles from './PostCard.module.scss';
 
@@ -31,7 +32,7 @@ const PostCard = ({ post }: PostCardProps) => {
     profile,
   } = post;
   const router = useRouter();
-  const { setClickedPostCard } = usePostCardContext();
+  const dispatch = useDispatch();
 
   return (
     <section
@@ -41,13 +42,13 @@ const PostCard = ({ post }: PostCardProps) => {
         if (target.closest('button') || target.closest('a')) {
           return;
         }
-        setClickedPostCard(true);
+        dispatch(changePostsHydrate({ block: true, scrollY: window.scrollY }));
         router.push({ pathname: `/post/${id}` });
       }}
       data-testid="post-card"
     >
       <Link href={`/post/${id}`}>
-        <a>
+        <a className={styles.title}>
           <h2>{title}</h2>
         </a>
       </Link>

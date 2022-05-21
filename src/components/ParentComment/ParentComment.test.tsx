@@ -6,13 +6,7 @@ function renderParentComment(props?: Partial<parentCommentProps>) {
   const comment = commentsDummy[0];
   const dispatchComments = jest.fn();
 
-  const utils = render(
-    <ParentComment
-      comment={comment}
-      dispatchComments={dispatchComments}
-      {...props}
-    />
-  );
+  const utils = render(<ParentComment comment={comment} {...props} />);
 
   const Comment = () => screen.getByTestId('comment');
   const ReplyToggleButton = () => screen.getByTestId('reply-toggle-button');

@@ -91,11 +91,15 @@ function PostList({
           )}
         </div>
       )}
-      <div className={styles.postsContainer}>
-        {postsData?.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
+      {postsData && postsData.length > 0 ? (
+        <div className={styles.postsContainer}>
+          {postsData.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <h2 className={styles.emptyMessage}>글이 존재하지 않습니다.</h2>
+      )}
       <InfiniteScroll
         data={postsData}
         size={SIZE}

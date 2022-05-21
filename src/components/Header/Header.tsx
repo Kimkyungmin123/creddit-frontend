@@ -2,13 +2,16 @@ import Dropdown from 'components/Dropdown';
 import ProfileImage from 'components/ProfileImage';
 import SearchBar from 'components/SearchBar';
 import { CaretDown, EditOutline, Github, MoonOutline, SunOutline } from 'icons';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { removeCommentsLike } from 'slices/commentsSlice';
 import { removePostDetailLike } from 'slices/postDetailSlice';
+import { setTheme, useTheme } from 'slices/themeSlice';
 import { logout, useUser } from 'slices/userSlice';
+import { Theme } from 'types';
 import styles from './Header.module.scss';
 
 export type HeaderProps = {
@@ -16,47 +19,28 @@ export type HeaderProps = {
 };
 
 const Header = ({ hideSearchBar }: HeaderProps) => {
-  const [screenTheme, setScreenTheme] = useState(true);
   const router = useRouter();
   const user = useUser();
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useLayoutEffect(() => {
-    const localTheme = window.localStorage.getItem('theme');
-    const stringLocalTheme = JSON.stringify(localTheme);
-    const userSetTheme = window.matchMedia(
-      '(prefers-color-scheme: light)'
-    ).matches;
-
-    if (document.body.dataset.theme === undefined) {
-      document.body.dataset.theme = JSON.parse(stringLocalTheme);
-      userSetTheme ? setScreenTheme(true) : setScreenTheme(false);
-    }
-    if (window.localStorage.getItem('theme') === null) {
-      userSetTheme
-        ? window.localStorage.setItem('theme', 'light')
-        : window.localStorage.setItem('theme', 'dark');
+    if (theme) {
+      document.body.dataset.theme = theme;
+      return;
     }
 
-    if (document.body.dataset.theme === 'dark') {
-      setScreenTheme(false);
-    }
+    const set = (t: Theme) => {
+      dispatch(setTheme(t));
+      document.body.dataset.theme = t;
+    };
 
-    if (document.body.dataset.theme === 'light') {
-      setScreenTheme(true);
-    }
-  }, []);
-
-  const themeHandle = () => {
-    setScreenTheme(() => !screenTheme);
-    if (window.localStorage.getItem('theme') === 'light') {
-      window.localStorage.setItem('theme', 'dark');
-      document.body.dataset.theme = 'dark';
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      set('light');
     } else {
-      window.localStorage.setItem('theme', 'light');
-      document.body.dataset.theme = 'light';
+      set('dark');
     }
-  };
+  }, [theme, dispatch]);
 
   return (
     <header className={styles.header} data-testid="header">
@@ -70,14 +54,23 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
           {hideSearchBar ? <div style={{ flexGrow: 1 }}></div> : <SearchBar />}
           <button
             className={styles.hoverElement}
-            onClick={themeHandle}
+            onClick={() => {
+              const set = (t: Theme) => {
+                dispatch(setTheme(t));
+                Cookies.set('theme', t, { expires: 10 * 365 });
+                document.body.dataset.theme = t;
+              };
+
+              if (theme === 'light') set('dark');
+              else if (theme === 'dark') set('light');
+            }}
             aria-label={
-              screenTheme
+              theme === 'light'
                 ? '색상 모드 변경(현재 밝은 모드)'
                 : '색상 모드 변경(현재 어두운 모드)'
             }
           >
-            {screenTheme ? <SunOutline /> : <MoonOutline />}
+            {theme === 'light' ? <SunOutline /> : <MoonOutline />}
           </button>
           {user && (
             <Link href="/create-post">

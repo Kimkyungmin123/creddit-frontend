@@ -104,3 +104,5 @@ export interface NaverUser {
 }
 
 export type SortBy = 'like' | 'new' | 'following';
+
+export type Theme = 'dark' | 'light';

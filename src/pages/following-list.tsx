@@ -4,6 +4,7 @@ import ProfileImage from 'components/ProfileImage';
 import useFollowingList from 'hooks/useFollowingList';
 import type { NextPage } from 'next';
 import { wrapper } from 'slices/store';
+import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 import styles from 'styles/Following.module.scss';
 
@@ -33,6 +34,7 @@ const FollowingList: NextPage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    initTheme(store, context);
     await initUser(store, context);
     return { props: {} };
   }

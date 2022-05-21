@@ -10,6 +10,7 @@ import { LoadingSpokes } from 'icons';
 import type { NextPage } from 'next';
 import { useState } from 'react';
 import { wrapper } from 'slices/store';
+import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 import styles from 'styles/FindPassword.module.scss';
 import api from 'utils/api';
@@ -124,6 +125,7 @@ function FindPasswordForm({ onSubmit }: FindPasswordFormProps) {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    initTheme(store, context);
     const { user } = await initUser(store, context);
     if (user) return { redirect: { destination: '/', permanent: false } };
     return { props: {} };

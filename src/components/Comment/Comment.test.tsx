@@ -8,13 +8,13 @@ import {
   store,
   waitFor,
 } from 'utils/test-utils';
-import Comment, { commentProps } from './Comment';
+import Comment, { CommentProps } from './Comment';
 
 describe('Comment', () => {
-  const setup = (props: Partial<commentProps> = {}) => {
-    const initialProps: commentProps = {
+  const setup = (props: Partial<CommentProps> = {}) => {
+    const initialProps: CommentProps = {
       comment: commentsDummy[0],
-      dispatchComments: jest.fn(),
+      dispatchReplies: jest.fn(),
     };
     const utils = render(<Comment {...initialProps} {...props} />);
     return {

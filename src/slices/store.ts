@@ -5,6 +5,7 @@ import {
 } from 'next-redux-cookie-wrapper';
 import { createWrapper } from 'next-redux-wrapper';
 import userSlice, { UserState } from 'slices/userSlice';
+import commentsSlice, { CommentsState } from './commentsSlice';
 import postDetailSlice, { PostDetailState } from './postDetailSlice';
 import postsSlice, { PostsState } from './postsSlice';
 import profileSlice, { ProfileState } from './profileSlice';
@@ -14,6 +15,7 @@ export interface State {
   posts: PostsState;
   postDetail: PostDetailState;
   profile: ProfileState;
+  comments: CommentsState;
 }
 
 export const reducer = {
@@ -21,6 +23,7 @@ export const reducer = {
   [postsSlice.name]: postsSlice.reducer,
   [postDetailSlice.name]: postDetailSlice.reducer,
   [profileSlice.name]: profileSlice.reducer,
+  [commentsSlice.name]: commentsSlice.reducer,
 };
 
 const makeStore = wrapMakeStore(() =>

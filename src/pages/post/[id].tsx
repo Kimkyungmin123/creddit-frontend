@@ -6,6 +6,7 @@ import PostTop from 'components/PostTop';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { initComments } from 'slices/commentsSlice';
 import { initPostDetail, usePostDetail } from 'slices/postDetailSlice';
 import { changePostsHydrate, usePosts } from 'slices/postsSlice';
 import { wrapper } from 'slices/store';
@@ -59,7 +60,10 @@ const Post = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     await initUser(store, context);
-    await initPostDetail(store, context);
+    await Promise.all([
+      initPostDetail(store, context),
+      initComments(store, context),
+    ]);
     return { props: {} };
   }
 );

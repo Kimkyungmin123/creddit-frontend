@@ -34,14 +34,20 @@ const postDetailSlice = createSlice({
                 : state.comments + 1,
           }
         : state,
+    removePostDetailLike: (state) =>
+      state ? { ...state, liked: false } : state,
   },
   extraReducers: {
     [HYDRATE]: (_, action) => action.payload.postDetail,
   },
 });
 
-export const { setPostDetail, likePostDetail, changePostDetailComments } =
-  postDetailSlice.actions;
+export const {
+  setPostDetail,
+  likePostDetail,
+  changePostDetailComments,
+  removePostDetailLike,
+} = postDetailSlice.actions;
 
 export const usePostDetail = () =>
   useSelector<State, PostDetailState>((state) => state.postDetail);

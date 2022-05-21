@@ -2,15 +2,20 @@ import CommentForm from 'components/CommentForm';
 import Dropdown from 'components/Dropdown';
 import InfiniteScroll from 'components/InfiniteScroll';
 import ParentComment from 'components/ParentComment';
-import useComments from 'hooks/useComments';
 import { CaretDown, Sort } from 'icons';
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+  addComment,
+  addComments,
+  changeCommentsSort,
+  useComments,
+} from 'slices/commentsSlice';
 import { changePostDetailComments } from 'slices/postDetailSlice';
 import { changePostComments } from 'slices/postsSlice';
-import { useUser } from 'slices/userSlice';
-import { Comment as CommentType, Post, User } from 'types';
+import { Comment, Post } from 'types';
 import api from 'utils/api';
+import getInfiniteScrollIndex from 'utils/getInfiniteScrollIndex';
 import styles from './PostCommentBox.module.scss';
 
 export type PostCommentBoxProps = {
@@ -18,21 +23,13 @@ export type PostCommentBoxProps = {
 };
 
 function PostCommentBox({ post }: PostCommentBoxProps) {
-  const { state: commentsState, dispatch: dispatchComments } = useComments();
-  const { comments, sortBy, page } = commentsState;
+  const comments = useComments();
+  const { data: commentsData, sortBy } = comments;
   const message = useMemo(
     () => (sortBy === 'like' ? '좋아요순' : '최신순'),
     [sortBy]
   );
-  const user = useUser();
-  const prevUser = useRef<User | undefined>(user);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (prevUser.current !== user) {
-      dispatchComments({ type: 'RESET' });
-    }
-  }, [user, dispatchComments]);
 
   return (
     <div className={styles.commentBox} data-testid="post-comment-box">
@@ -45,15 +42,13 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
               {
                 name: '좋아요순',
                 onClick: () => {
-                  dispatchComments({ type: 'CHANGE_SORT', sortBy: 'like' });
-                  dispatchComments({ type: 'RESET' });
+                  dispatch(changeCommentsSort('like'));
                 },
               },
               {
                 name: '최신순',
                 onClick: () => {
-                  dispatchComments({ type: 'CHANGE_SORT', sortBy: 'new' });
-                  dispatchComments({ type: 'RESET' });
+                  dispatch(changeCommentsSort('new'));
                 },
               },
             ]}
@@ -67,51 +62,30 @@ function PostCommentBox({ post }: PostCommentBoxProps) {
         </div>
         <CommentForm
           onSubmit={async ({ comment }) => {
-            await api.post('/comment', {
+            const { data } = await api.post<Comment>('/comment', {
               content: comment,
               postId: post.id,
             });
             dispatch(changePostDetailComments('add'));
             dispatch(changePostComments({ id: post.id, type: 'add' }));
-            dispatchComments({ type: 'RESET' });
+            dispatch(addComment(data));
           }}
         />
       </div>
       <div className={styles.commentsContainer}>
-        {comments?.map((comment) => {
-          return (
-            <ParentComment
-              key={comment.commentId}
-              comment={comment}
-              dispatchComments={dispatchComments}
-            />
-          );
+        {commentsData?.map((comment) => {
+          return <ParentComment key={comment.commentId} comment={comment} />;
         })}
       </div>
       <InfiniteScroll
-        data={comments}
+        data={commentsData}
         size={10}
         onIntersect={async () => {
-          const getIndex = () => {
-            switch (sortBy) {
-              case 'new':
-                return !comments || comments.length === 0
-                  ? Number.MAX_SAFE_INTEGER
-                  : comments[comments.length - 1].commentId;
-              case 'like':
-                return !comments || comments.length === 0 ? 0 : page || 0;
-            }
-          };
-
-          const index = getIndex();
-          const { data } = await api.get<CommentType[]>(
+          const index = getInfiniteScrollIndex(comments);
+          const { data } = await api.get<Comment[]>(
             `/comment?postId=${post.id}&index=${index}&size=10&sort=${sortBy}`
           );
-          dispatchComments({
-            type: 'ADD_COMMENTS',
-            comments: data,
-            page: index + 1,
-          });
+          dispatch(addComments({ data }));
           return data;
         }}
       />

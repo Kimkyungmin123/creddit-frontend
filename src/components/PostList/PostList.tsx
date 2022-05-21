@@ -5,15 +5,11 @@ import { PersonSmall, Rising, Time } from 'icons';
 import Link from 'next/link';
 import { useEffect, useLayoutEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  addPosts,
-  changePostsHydrate,
-  getIndex,
-  usePosts,
-} from 'slices/postsSlice';
+import { addPosts, changePostsHydrate, usePosts } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
 import { Post } from 'types';
 import api from 'utils/api';
+import getInfiniteScrollIndex from 'utils/getInfiniteScrollIndex';
 import getURLSearchParams from 'utils/getURLSearchParams';
 import styles from './PostList.module.scss';
 
@@ -106,7 +102,7 @@ function PostList({
         onIntersect={async () => {
           if (finished) return [];
 
-          const index = getIndex(posts);
+          const index = getInfiniteScrollIndex(posts);
           const { data } = await api.get<Post[]>(serverUrl, {
             params: {
               ...serverParams,

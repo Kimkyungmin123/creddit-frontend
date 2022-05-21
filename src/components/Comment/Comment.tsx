@@ -4,10 +4,21 @@ import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
-import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
-import { Dispatch, ReactNode, useState } from 'react';
+import {
+  addReply,
+  changeReply,
+  CommentsAction,
+  likeReply,
+} from 'hooks/useReplies';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import {
+  changeComment,
+  changeReplyCount,
+  likeComment,
+  removeComment,
+} from 'slices/commentsSlice';
 import { changePostDetailComments } from 'slices/postDetailSlice';
 import { changePostComments } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
@@ -15,9 +26,10 @@ import { Comment as CommentType } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
 
-export type commentProps = {
+export type CommentProps = {
   comment: CommentType;
-  dispatchComments: Dispatch<CommentsAction>;
+  dispatchReplies: Dispatch<CommentsAction>;
+  setExpanded?: Dispatch<SetStateAction<boolean>>;
   children?: ReactNode;
   enableReply?: boolean;
   onDelete?: () => void;
@@ -26,12 +38,13 @@ export type commentProps = {
 
 function Comment({
   comment,
-  dispatchComments,
+  dispatchReplies,
+  setExpanded,
   children,
   enableReply,
   onDelete,
   postId: pid,
-}: commentProps) {
+}: CommentProps) {
   const { member, createdDate, content, liked, likes, commentId, profile } =
     comment;
   const user = useUser();
@@ -79,7 +92,7 @@ function Comment({
                       dispatch(
                         changePostComments({ id: postId, type: 'delete' })
                       );
-                      dispatchComments({ type: 'REMOVE_COMMENT', commentId });
+                      dispatch(removeComment(commentId));
                       if (onDelete) onDelete();
                     }}
                     onCancel={closeModal}
@@ -94,17 +107,15 @@ function Comment({
               initialValues={{ comment: content }}
               onSubmit={async ({ comment }) => {
                 if (comment !== content) {
-                  await api.post(`/comment/${commentId}`, {
-                    content: comment,
-                    id: commentId,
-                  });
-                  dispatchComments({
-                    type: 'CHANGE_COMMENT',
-                    comment: {
-                      commentId,
+                  const { data } = await api.post<CommentType>(
+                    `/comment/${commentId}`,
+                    {
                       content: comment,
-                    },
-                  });
+                      id: commentId,
+                    }
+                  );
+                  dispatchReplies(changeReply(data));
+                  dispatch(changeComment(data));
                 }
                 setIsEditing(false);
               }}
@@ -122,7 +133,8 @@ function Comment({
               liked={liked}
               variant="medium"
               onClick={() => {
-                dispatchComments({ type: 'LIKE_COMMENT', commentId });
+                dispatch(likeComment(commentId));
+                dispatchReplies(likeReply(commentId));
               }}
             >
               {likes}
@@ -142,14 +154,16 @@ function Comment({
           <CommentForm
             type="reply"
             onSubmit={async ({ comment }) => {
-              await api.post('/comment', {
+              const { data } = await api.post<CommentType>('/comment', {
                 content: comment,
                 parentCommentId: commentId,
                 postId: postId,
               });
               dispatch(changePostDetailComments('add'));
               dispatch(changePostComments({ id: postId, type: 'add' }));
-              dispatchComments({ type: 'RESET' });
+              dispatch(changeReplyCount({ id: commentId, type: 'add' }));
+              dispatchReplies(addReply(data));
+              if (setExpanded) setExpanded(true);
               setIsReplying(false);
             }}
             onCancel={() => setIsReplying(false)}

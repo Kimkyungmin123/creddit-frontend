@@ -13,6 +13,7 @@ import { User } from 'types';
 import api from 'utils/api';
 import editProfile from 'utils/editProfile';
 import isDuplicate from 'utils/isDuplicate';
+import wsInstance from 'utils/wsInstance';
 import styles from './ProfileBox.module.scss';
 
 export type ProfileBoxProps = {
@@ -124,9 +125,13 @@ function ProfileBox({ user }: ProfileBoxProps) {
                   onClick={() => {
                     if (!currentUser) {
                       router.push('/login');
-                      return;
+                    } else {
+                      wsInstance.post(`/chat/register`, {
+                        myId: currentUser.nickname,
+                        userId: user.nickname,
+                      });
+                      router.push('/chat');
                     }
-                    // TODO: 대화하기 버튼 누르면 대화 페이지로 이동 후 방 생성
                   }}
                 >
                   대화하기

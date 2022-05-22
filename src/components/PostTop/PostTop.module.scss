@@ -5,6 +5,10 @@
   position: sticky;
   top: 3.0625rem;
   background-color: var(--post-top-bg);
+
+  @media (max-width: $breakpoints-md) {
+    top: 2.25rem;
+  }
 }
 
 .inside {

@@ -10,6 +10,7 @@ import classNames from 'classnames';
 import wsInstance from 'utils/wsInstance';
 import { fetcher } from 'utils/api';
 import { useUser } from 'slices/userSlice';
+import { ToastContainer, toast } from 'react-toast';
 
 interface AddChatModalProps {
   show: boolean;
@@ -29,7 +30,7 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     fetcher
   );
   const subscribed = data?.data;
-
+  const nonUserAlert = () => toast('존재하지 않는 사용자입니다.');
   useEffect(() => {
     const moveFocus = (event: KeyboardEvent) => {
       if (!subscribed) return;
@@ -47,27 +48,31 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     return () => window.removeEventListener('keydown', moveFocus);
   }, [subscribed]);
 
-  const handleAddChatPartner = useCallback(() => {
-    setNewMember('');
-    setDebouncedValue('');
-    onCloseModal();
+  const handleAddChatPartner = useCallback(
+    (event) => {
+      setNewMember('');
+      setDebouncedValue('');
+      event.preventDefault();
 
-    if (!newMember || !newMember.trim()) {
-      return;
-    }
-    wsInstance
-      .post(`/chat/register`, {
-        myId: username,
-        userId: newMember,
-      })
-      .then(() => {
-        mutate(`/chat/${username}/chatrooms`);
-      })
-      .catch((error) => {
-        console.dir(error.response?.data);
-        alert('임시 알림) 없는 사용자입니다');
-      });
-  }, [username, newMember, setNewMember, onCloseModal]);
+      if (!newMember || !newMember.trim()) {
+        return;
+      }
+      wsInstance
+        .post(`/chat/register`, {
+          myId: username,
+          userId: newMember,
+        })
+        .then(() => {
+          mutate(`/chat/${username}/chatrooms`);
+          onCloseModal();
+        })
+        .catch((error) => {
+          console.dir(error.response?.data);
+          nonUserAlert();
+        });
+    },
+    [username, newMember, setNewMember, onCloseModal]
+  );
 
   if (!show) {
     return null;
@@ -77,63 +82,67 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   };
 
   return (
-    <div className={styles.chatModalContainer} onClick={onCloseModal}>
-      <div className={styles.chatModal} onClick={stopPropagation}>
-        <Button type="reset" variant="plain" onClick={onCloseModal}>
-          <Close />
-        </Button>
-        <form onSubmit={handleAddChatPartner}>
-          <Input
-            value={newMember}
-            onChange={(event) => {
-              const { value } = event.target;
-              onChangeNewMember;
-              setNewMember(value);
-              debounce(() => {
-                setDebouncedValue(value);
-              }, 150);
-            }}
-            placeholder="이메일 또는 닉네임을 입력하세요"
-          />
-
-          <Button type="submit" ariaLabel="확인">
-            추가
+    <>
+      <div className={styles.chatModalContainer} onClick={onCloseModal}>
+        <ToastContainer />
+        <div className={styles.chatModal} onClick={stopPropagation}>
+          <Button type="reset" variant="plain" onClick={onCloseModal}>
+            <Close />
           </Button>
-          {debouncedValue && (
-            <div className={styles.ChatSearchResults}>
-              <ul
-                className={styles.results}
-                onClick={() => setDebouncedValue('')}
-              >
-                <li
-                  className={classNames(
-                    styles.searchAll,
-                    currentIndex === 0 && styles.selected
-                  )}
-                  data-index={0}
+
+          <form onSubmit={handleAddChatPartner}>
+            <Input
+              value={newMember}
+              onChange={(event) => {
+                const { value } = event.target;
+                onChangeNewMember;
+                setNewMember(value);
+                debounce(() => {
+                  setDebouncedValue(value);
+                }, 150);
+              }}
+              placeholder="이메일 또는 닉네임을 입력하세요"
+            />
+
+            <Button type="submit" ariaLabel="확인">
+              추가
+            </Button>
+            {debouncedValue && (
+              <div className={styles.ChatSearchResults}>
+                <ul
+                  className={styles.results}
+                  onClick={() => setDebouncedValue('')}
                 >
-                  <span> {debouncedValue}</span>
-                </li>
-                {subscribed?.map((data: any, index: number) => (
                   <li
-                    key={index}
                     className={classNames(
-                      index + 1 === currentIndex && styles.selected
+                      styles.searchAll,
+                      currentIndex === 0 && styles.selected
                     )}
-                    data-index={index + 1}
-                    onClick={() => setNewMember(data.nickname)}
+                    data-index={0}
                   >
-                    <span>
-                      {data.nickname} ({data.email})
-                    </span>
+                    <span> {debouncedValue}</span>
                   </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </form>
+                  {subscribed?.map((data: any, index: number) => (
+                    <li
+                      key={index}
+                      className={classNames(
+                        index + 1 === currentIndex && styles.selected
+                      )}
+                      data-index={index + 1}
+                      onClick={() => setNewMember(data.nickname)}
+                    >
+                      <span>
+                        {data.nickname} ({data.email})
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

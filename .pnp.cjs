@@ -70,6 +70,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-focus-lock", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:2.9.1"],\
             ["react-redux", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:8.0.1"],\
             ["react-textarea-autosize", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:8.3.3"],\
+            ["react-toast", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.0.3"],\
             ["sass", "npm:1.49.9"],\
             ["serverless", "npm:2.72.2"],\
             ["sockjs-client", "npm:1.6.0"],\
@@ -6812,6 +6813,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-focus-lock", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:2.9.1"],\
             ["react-redux", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:8.0.1"],\
             ["react-textarea-autosize", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:8.3.3"],\
+            ["react-toast", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.0.3"],\
             ["sass", "npm:1.49.9"],\
             ["serverless", "npm:2.72.2"],\
             ["sockjs-client", "npm:1.6.0"],\
@@ -13318,6 +13320,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:18.0.0"],\
             ["use-composed-ref", "virtual:95ade80bfe79786a4054939bc2b2296ee5de49dca8979c34bebde689864e92baf7f31ac7e7eb9a9f5e5a1186628c19004c39dc6449580bc16571b72ea7c58cbc#npm:1.2.1"],\
             ["use-latest", "virtual:95ade80bfe79786a4054939bc2b2296ee5de49dca8979c34bebde689864e92baf7f31ac7e7eb9a9f5e5a1186628c19004c39dc6449580bc16571b72ea7c58cbc#npm:1.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["react-toast", [\
+        ["npm:1.0.3", {\
+          "packageLocation": "./.yarn/cache/react-toast-npm-1.0.3-4c5c104fab-951938a538.zip/node_modules/react-toast/",\
+          "packageDependencies": [\
+            ["react-toast", "npm:1.0.3"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.0.3", {\
+          "packageLocation": "./.yarn/__virtual__/react-toast-virtual-51af749b48/0/cache/react-toast-npm-1.0.3-4c5c104fab-951938a538.zip/node_modules/react-toast/",\
+          "packageDependencies": [\
+            ["react-toast", "virtual:50f2c4405067125eb8c7638f14dc26fc80c05a02416e354f52ec81bd357fba0fcb119c5a8341b17aa3ee64ad4b0c50dbeb9fa85f0be40f3e1868a5eef9390120#npm:1.0.3"],\
+            ["@types/react", "npm:17.0.41"],\
+            ["react", "npm:18.0.0"]\
           ],\
           "packagePeers": [\
             "@types/react",\

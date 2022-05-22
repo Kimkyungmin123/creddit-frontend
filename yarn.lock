@@ -4794,6 +4794,7 @@ __metadata:
     react-focus-lock: ^2.9.1
     react-redux: ^8.0.1
     react-textarea-autosize: ^8.3.3
+    react-toast: ^1.0.3
     sass: ^1.49.9
     serverless: 2.72.2
     sockjs-client: ^1.6.0
@@ -10356,6 +10357,15 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0
   checksum: da3d0192825df3d9f27eef33e7eddf928359a7e3e2b01ae7f7f672ecf4e5c1f7a34f27bdde9ccc24e2e9fbe1d1b9dd2a39c7d47323c9bdf63e7b9bd05c325a71
+  languageName: node
+  linkType: hard
+
+"react-toast@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "react-toast@npm:1.0.3"
+  peerDependencies:
+    react: ">=16"
+  checksum: 951938a53841999b382aa9c8632ac15fd555e4ac963d2ce75c8b662d3a431212f5ebf0635df6ecbdabc4b740f6c5302494b8098d5860f226585e9a9a842041ae
   languageName: node
   linkType: hard
 

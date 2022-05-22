@@ -33,7 +33,12 @@ function ProfileBox({ user }: ProfileBoxProps) {
 
   return (
     <div className={styles.profileBox}>
-      <ImageBox image={image} introduction={introduction} isAuthor={isAuthor} />
+      <ImageBox
+        className={styles.imageBox}
+        image={image}
+        introduction={introduction}
+        isAuthor={isAuthor}
+      />
       {isEditing ? (
         <ProfileEditForm
           user={user}

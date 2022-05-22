@@ -4,7 +4,9 @@ import { wrapper } from 'slices/store';
 import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 
-export default Home;
+export default function HomeRecent() {
+  return <Home title="최신 글 - creddit" />;
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {

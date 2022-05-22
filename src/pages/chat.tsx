@@ -128,7 +128,7 @@ const Chat: NextPage = () => {
   };
 
   return (
-    <Layout title="creddit: Chat">
+    <Layout title="대화 - creddit">
       {user ? (
         <>
           <div className={styles.chatContainer}>

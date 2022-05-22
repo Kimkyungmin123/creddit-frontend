@@ -5,7 +5,9 @@ import { wrapper } from 'slices/store';
 import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 
-export default Profile;
+export default function ProfileRecent() {
+  return <Profile subTitle="최신 글" />;
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {

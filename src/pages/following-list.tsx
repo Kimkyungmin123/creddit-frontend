@@ -12,7 +12,7 @@ const FollowingList: NextPage = () => {
   const { data: followingList } = useFollowingList();
 
   return (
-    <Layout title="creddit">
+    <Layout title="팔로우 중인 사용자 목록 - creddit">
       <div className={styles.container}>
         <h2>팔로우 중인 사용자 목록</h2>
         <ul className={styles.list}>

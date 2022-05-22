@@ -4,7 +4,9 @@ import { wrapper } from 'slices/store';
 import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 
-export default Search;
+export default function SearchFollowing() {
+  return <Search subTitle="팔로우 중인 글" />;
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {

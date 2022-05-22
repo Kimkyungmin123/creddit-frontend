@@ -32,6 +32,10 @@
   }
 }
 
+.title {
+  pointer-events: none;
+}
+
 .imageContainer {
   @media (max-width: $breakpoints-sm) {
     margin: 0 -0.75rem;

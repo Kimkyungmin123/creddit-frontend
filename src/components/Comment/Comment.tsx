@@ -4,19 +4,32 @@ import LikeButton from 'components/LikeButton';
 import MyDate from 'components/MyDate';
 import NicknameLink from 'components/NicknameLink';
 import ProfileImage from 'components/ProfileImage';
-import { usePostsContext } from 'context/PostsContext';
-import { CommentsAction } from 'hooks/useComments';
 import useModal from 'hooks/useModal';
-import { Dispatch, ReactNode, useState } from 'react';
+import {
+  addReply,
+  changeReply,
+  CommentsAction,
+  likeReply,
+} from 'hooks/useReplies';
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import {
+  changeComment,
+  changeReplyCount,
+  likeComment,
+  removeComment,
+} from 'slices/commentsSlice';
+import { changePostDetailComments } from 'slices/postDetailSlice';
+import { changePostComments } from 'slices/postsSlice';
 import { useUser } from 'slices/userSlice';
-import { mutate } from 'swr';
-import { Comment as CommentType, Post } from 'types';
+import { Comment as CommentType } from 'types';
 import api from 'utils/api';
 import styles from './Comment.module.scss';
 
-export type commentProps = {
+export type CommentProps = {
   comment: CommentType;
-  dispatchComments: Dispatch<CommentsAction>;
+  dispatchReplies: Dispatch<CommentsAction>;
+  setExpanded?: Dispatch<SetStateAction<boolean>>;
   children?: ReactNode;
   enableReply?: boolean;
   onDelete?: () => void;
@@ -25,20 +38,21 @@ export type commentProps = {
 
 function Comment({
   comment,
-  dispatchComments,
+  dispatchReplies,
+  setExpanded,
   children,
   enableReply,
   onDelete,
   postId: pid,
-}: commentProps) {
+}: CommentProps) {
   const { member, createdDate, content, liked, likes, commentId, profile } =
     comment;
   const user = useUser();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [isEditing, setIsEditing] = useState(false);
-  const { dispatch } = usePostsContext();
   const [isReplying, setIsReplying] = useState(false);
-  const postId = pid || comment.postId;
+  const postId = pid || (comment.postId as number);
+  const dispatch = useDispatch();
 
   return (
     <div className={styles.container} data-testid="comment">
@@ -74,19 +88,11 @@ function Comment({
                     onConfirm={async () => {
                       await api.delete(`/comment/${commentId}`);
                       closeModal();
-                      const userQuery = user
-                        ? `?nickname=${user.nickname}`
-                        : '';
-                      const data = await mutate(
-                        `/post/${postId}${userQuery}`,
-                        (post: Post) => ({
-                          ...post,
-                          comments: post.comments - 1,
-                        }),
-                        false
+                      dispatch(changePostDetailComments('delete'));
+                      dispatch(
+                        changePostComments({ id: postId, type: 'delete' })
                       );
-                      dispatch({ type: 'CHANGE_POST', post: data });
-                      dispatchComments({ type: 'REMOVE_COMMENT', commentId });
+                      dispatch(removeComment(commentId));
                       if (onDelete) onDelete();
                     }}
                     onCancel={closeModal}
@@ -101,17 +107,15 @@ function Comment({
               initialValues={{ comment: content }}
               onSubmit={async ({ comment }) => {
                 if (comment !== content) {
-                  await api.post(`/comment/${commentId}`, {
-                    content: comment,
-                    id: commentId,
-                  });
-                  dispatchComments({
-                    type: 'CHANGE_COMMENT',
-                    comment: {
-                      commentId,
+                  const { data } = await api.post<CommentType>(
+                    `/comment/${commentId}`,
+                    {
                       content: comment,
-                    },
-                  });
+                      id: commentId,
+                    }
+                  );
+                  dispatchReplies(changeReply(data));
+                  dispatch(changeComment(data));
                 }
                 setIsEditing(false);
               }}
@@ -129,7 +133,8 @@ function Comment({
               liked={liked}
               variant="medium"
               onClick={() => {
-                dispatchComments({ type: 'LIKE_COMMENT', commentId });
+                dispatch(likeComment(commentId));
+                dispatchReplies(likeReply(commentId));
               }}
             >
               {likes}
@@ -149,15 +154,16 @@ function Comment({
           <CommentForm
             type="reply"
             onSubmit={async ({ comment }) => {
-              await api.post('/comment', {
+              const { data } = await api.post<CommentType>('/comment', {
                 content: comment,
                 parentCommentId: commentId,
                 postId: postId,
               });
-              const userQuery = user ? `?nickname=${user.nickname}` : '';
-              const data = await mutate<Post>(`/post/${postId}${userQuery}`);
-              dispatch({ type: 'CHANGE_POST', post: data });
-              dispatchComments({ type: 'RESET' });
+              dispatch(changePostDetailComments('add'));
+              dispatch(changePostComments({ id: postId, type: 'add' }));
+              dispatch(changeReplyCount({ id: commentId, type: 'add' }));
+              dispatchReplies(addReply(data));
+              if (setExpanded) setExpanded(true);
               setIsReplying(false);
             }}
             onCancel={() => setIsReplying(false)}

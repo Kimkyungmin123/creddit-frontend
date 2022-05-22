@@ -102,3 +102,5 @@ export interface NaverUser {
     name: string;
   };
 }
+
+export type SortBy = 'like' | 'new' | 'following';

@@ -11,3 +11,7 @@
 !.yarn/versions
 
 .env.local
+.env
+
+.serverless
+.serverless_nextjs

@@ -1,20 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { render, RenderOptions } from '@testing-library/react';
+import postDummy from 'data/post.json';
 import userDummy from 'data/user.json';
 import React, { FC, ReactElement, useEffect } from 'react';
 import { Provider } from 'react-redux';
-import userSlice, { setUser } from 'slices/userSlice';
+import { setPostDetail } from 'slices/postDetailSlice';
+import { reducer } from 'slices/store';
+import { setUser } from 'slices/userSlice';
 import { SWRConfig } from 'swr';
 
 const store = configureStore({
-  reducer: {
-    [userSlice.name]: userSlice.reducer,
-  },
+  reducer,
 });
 
 const AllTheProviders: FC = ({ children }) => {
   useEffect(() => {
     store.dispatch(setUser(userDummy));
+    store.dispatch(setPostDetail(postDummy));
   }, []);
 
   return (

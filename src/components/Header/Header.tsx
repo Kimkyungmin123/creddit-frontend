@@ -6,6 +6,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { removeCommentsLike } from 'slices/commentsSlice';
+import { removePostDetailLike } from 'slices/postDetailSlice';
 import { logout, useUser } from 'slices/userSlice';
 import styles from './Header.module.scss';
 
@@ -100,7 +102,11 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
                 { name: '대화 목록', href: '/chat' },
                 {
                   name: '로그아웃',
-                  onClick: () => dispatch(logout()),
+                  onClick: () => {
+                    dispatch(logout());
+                    dispatch(removePostDetailLike());
+                    dispatch(removeCommentsLike());
+                  },
                 },
               ]}
             >

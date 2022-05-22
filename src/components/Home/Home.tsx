@@ -1,9 +1,13 @@
 import Layout from 'components/Layout';
 import PostList from 'components/PostList';
 
-function Home() {
+interface HomeProps {
+  title?: string;
+}
+
+function Home({ title }: HomeProps) {
   return (
-    <Layout title="creddit">
+    <Layout title={title}>
       <PostList clientUrl="/" serverUrl="/post" />
     </Layout>
   );

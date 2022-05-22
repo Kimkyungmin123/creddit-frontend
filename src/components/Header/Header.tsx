@@ -1,65 +1,63 @@
-import Dropdown from 'components/Dropdown';
-import ProfileImage from 'components/ProfileImage';
+import classNames from 'classnames';
 import SearchBar from 'components/SearchBar';
-import { CaretDown, EditOutline, Github, MoonOutline, SunOutline } from 'icons';
+import UserDropdown from 'components/UserDropdown';
+import {
+  Close,
+  EditOutline,
+  Github,
+  Menu,
+  MoonOutline,
+  SunOutline,
+} from 'icons';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { removeCommentsLike } from 'slices/commentsSlice';
-import { removePostDetailLike } from 'slices/postDetailSlice';
-import { logout, useUser } from 'slices/userSlice';
+import { setTheme, useTheme } from 'slices/themeSlice';
+import { useUser } from 'slices/userSlice';
+import { Theme } from 'types';
 import styles from './Header.module.scss';
 
 export type HeaderProps = {
   hideSearchBar?: boolean;
 };
 
-const Header = ({ hideSearchBar }: HeaderProps) => {
-  const [screenTheme, setScreenTheme] = useState(true);
-  const router = useRouter();
-  const user = useUser();
+function Header({ hideSearchBar }: HeaderProps) {
   const dispatch = useDispatch();
+  const theme = useTheme();
 
   useLayoutEffect(() => {
-    const localTheme = window.localStorage.getItem('theme');
-    const stringLocalTheme = JSON.stringify(localTheme);
-    const userSetTheme = window.matchMedia(
-      '(prefers-color-scheme: light)'
-    ).matches;
-
-    if (document.body.dataset.theme === undefined) {
-      document.body.dataset.theme = JSON.parse(stringLocalTheme);
-      userSetTheme ? setScreenTheme(true) : setScreenTheme(false);
-    }
-    if (window.localStorage.getItem('theme') === null) {
-      userSetTheme
-        ? window.localStorage.setItem('theme', 'light')
-        : window.localStorage.setItem('theme', 'dark');
+    if (theme) {
+      document.body.dataset.theme = theme;
+      return;
     }
 
-    if (document.body.dataset.theme === 'dark') {
-      setScreenTheme(false);
-    }
+    const set = (t: Theme) => {
+      dispatch(setTheme(t));
+      document.body.dataset.theme = t;
+    };
 
-    if (document.body.dataset.theme === 'light') {
-      setScreenTheme(true);
-    }
-  }, []);
-
-  const themeHandle = () => {
-    setScreenTheme(() => !screenTheme);
-    if (window.localStorage.getItem('theme') === 'light') {
-      window.localStorage.setItem('theme', 'dark');
-      document.body.dataset.theme = 'dark';
+    if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      set('light');
     } else {
-      window.localStorage.setItem('theme', 'light');
-      document.body.dataset.theme = 'light';
+      set('dark');
     }
-  };
+  }, [theme, dispatch]);
 
   return (
-    <header className={styles.header} data-testid="header">
+    <div data-testid="header" className={styles.headerContainer}>
+      <HeaderDesktop hideSearchBar={hideSearchBar} />
+      <HeaderMobile />
+    </div>
+  );
+}
+
+export function HeaderDesktop({ hideSearchBar }: HeaderProps) {
+  const user = useUser();
+
+  return (
+    <header className={classNames(styles.header, styles.headerDesktop)}>
       <div className={styles.container}>
         <Link href="/">
           <a aria-label="홈" className={styles.logo}>
@@ -68,17 +66,7 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
         </Link>
         <>
           {hideSearchBar ? <div style={{ flexGrow: 1 }}></div> : <SearchBar />}
-          <button
-            className={styles.hoverElement}
-            onClick={themeHandle}
-            aria-label={
-              screenTheme
-                ? '색상 모드 변경(현재 밝은 모드)'
-                : '색상 모드 변경(현재 어두운 모드)'
-            }
-          >
-            {screenTheme ? <SunOutline /> : <MoonOutline />}
-          </button>
+          <ThemeButton />
           {user && (
             <Link href="/create-post">
               <a className={styles.hoverElement} aria-label="글 작성">
@@ -86,56 +74,142 @@ const Header = ({ hideSearchBar }: HeaderProps) => {
               </a>
             </Link>
           )}
-          <a
-            className={styles.githubLink}
-            aria-label="깃허브 저장소"
-            href="https://github.com/project-creddit"
-          >
-            <Github />
-          </a>
+          <GitHubLink />
           {user ? (
-            <Dropdown
-              ariaLabel="계정 메뉴"
-              options={[
-                { name: '프로필', href: `/profile/${user.nickname}` },
-                { name: '새 글 작성', href: '/create-post' },
-                { name: '대화 목록', href: '/chat' },
-                {
-                  name: '로그아웃',
-                  onClick: () => {
-                    dispatch(logout());
-                    dispatch(removePostDetailLike());
-                    dispatch(removeCommentsLike());
-                  },
-                },
-              ]}
-            >
-              <ProfileImage imgUrl={user.image.imgUrl} size={1.875} />
-              <CaretDown />
-            </Dropdown>
+            <UserDropdown user={user} />
           ) : (
             <>
-              <Link href="/login">
-                <a
-                  className={styles.authLink}
-                  onClick={() => {
-                    if (router.asPath !== '/login') {
-                      sessionStorage.setItem('prevUrl', router.asPath);
-                    }
-                  }}
-                >
-                  로그인
-                </a>
-              </Link>
-              <Link href="/signup">
-                <a className={styles.authLink}>회원가입</a>
-              </Link>
+              <LoginButton />
+              <SignupButton />
             </>
           )}
         </>
       </div>
     </header>
   );
-};
+}
+
+function HeaderMobile() {
+  const user = useUser();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (isMenuOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+  }, [isMenuOpen]);
+
+  useEffect(() => {
+    const resizeEvent = () => {
+      setIsMenuOpen(false);
+    };
+    window.addEventListener('resize', resizeEvent);
+    return () => window.removeEventListener('resize', resizeEvent);
+  }, []);
+
+  return (
+    <>
+      <header className={classNames(styles.header, styles.headerMobile)}>
+        <button
+          className={styles.menuButton}
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+        >
+          {isMenuOpen ? <Close /> : <Menu />}
+        </button>
+        <Link href="/">
+          <a aria-label="홈" className={styles.logo}>
+            creddit
+          </a>
+        </Link>
+        {user ? (
+          <UserDropdown user={user} />
+        ) : (
+          <div className={styles.fragment}></div>
+        )}
+      </header>
+      {isMenuOpen && (
+        <div className={styles.menu}>
+          <SearchBar />
+          <div className={styles.menuBottom}>
+            <ThemeButton />
+            {user ? (
+              <Link href={`/profile/${user.nickname}`}>
+                <a>{user.nickname}</a>
+              </Link>
+            ) : (
+              <div className={styles.authButtons}>
+                <LoginButton />
+                /
+                <SignupButton />
+              </div>
+            )}
+            <GitHubLink />
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function LoginButton() {
+  const router = useRouter();
+  return (
+    <Link href="/login">
+      <a
+        className={styles.authLink}
+        onClick={() => {
+          if (router.asPath !== '/login') {
+            sessionStorage.setItem('prevUrl', router.asPath);
+          }
+        }}
+      >
+        로그인
+      </a>
+    </Link>
+  );
+}
+
+const SignupButton = () => (
+  <Link href="/signup">
+    <a className={styles.authLink}>회원가입</a>
+  </Link>
+);
+
+function ThemeButton() {
+  const dispatch = useDispatch();
+  const theme = useTheme();
+
+  return (
+    <button
+      className={styles.hoverElement}
+      onClick={() => {
+        const set = (t: Theme) => {
+          dispatch(setTheme(t));
+          Cookies.set('theme', t, { expires: 10 * 365 });
+          document.body.dataset.theme = t;
+        };
+
+        if (theme === 'light') set('dark');
+        else if (theme === 'dark') set('light');
+      }}
+      aria-label={
+        theme === 'light'
+          ? '색상 모드 변경(현재 밝은 모드)'
+          : '색상 모드 변경(현재 어두운 모드)'
+      }
+    >
+      {theme === 'light' ? <SunOutline /> : <MoonOutline />}
+    </button>
+  );
+}
+
+const GitHubLink = () => (
+  <a
+    className={styles.githubLink}
+    aria-label="깃허브 저장소"
+    href="https://github.com/project-creddit"
+  >
+    <Github />
+  </a>
+);
 
 export default Header;

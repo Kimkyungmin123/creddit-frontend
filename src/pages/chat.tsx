@@ -15,6 +15,7 @@ import useModal from 'hooks/useModal';
 import type { NextPage } from 'next';
 import { useEffect, useRef, useState } from 'react';
 import { wrapper } from 'slices/store';
+import { initTheme } from 'slices/themeSlice';
 import { initUser, useUser } from 'slices/userSlice';
 import SockJS from 'sockjs-client';
 import styles from 'styles/Chat.module.scss';
@@ -127,7 +128,7 @@ const Chat: NextPage = () => {
   };
 
   return (
-    <Layout title="creddit: Chat">
+    <Layout title="대화 - creddit">
       {user ? (
         <>
           <div className={styles.chatContainer}>
@@ -219,6 +220,7 @@ const Chat: NextPage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    initTheme(store, context);
     await initUser(store, context);
     return { props: {} };
   }

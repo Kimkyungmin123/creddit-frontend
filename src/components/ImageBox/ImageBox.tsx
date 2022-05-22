@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import Button from 'components/Button';
 import DeleteModal from 'components/DeleteModal';
 import ImageUploadButton from 'components/ImageUploadButton';
@@ -15,15 +16,19 @@ export type ImageBoxProps = {
   image: MyImage;
   introduction: string;
   isAuthor: boolean;
+  className?: string;
 };
 
-function ImageBox({ image, introduction, isAuthor }: ImageBoxProps) {
+function ImageBox({ image, introduction, isAuthor, className }: ImageBoxProps) {
   const { imgUrl } = image;
   const { isModalOpen, openModal, closeModal } = useModal();
   const dispatch = useDispatch();
 
   return (
-    <div className={styles.imageBox} data-testid="image-box">
+    <div
+      className={classNames(styles.imageBox, className && className)}
+      data-testid="image-box"
+    >
       <ProfileImage imgUrl={imgUrl} shape="rectangle" size={6} />
       {isAuthor && (
         <div className={styles.buttons}>

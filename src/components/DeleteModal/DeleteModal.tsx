@@ -1,6 +1,7 @@
 import Button from 'components/Button';
 import { MouseEventHandler } from 'react';
 import styles from './DeleteModal.module.scss';
+import FocusLock from 'react-focus-lock';
 
 export type DeleteModalProps = {
   title: string;
@@ -10,7 +11,6 @@ export type DeleteModalProps = {
   buttonName?: string;
 };
 
-// TODO: 포커스 트랩
 function DeleteModal({
   title,
   message,
@@ -19,29 +19,31 @@ function DeleteModal({
   buttonName,
 }: DeleteModalProps) {
   return (
-    <div
-      className={styles.container}
-      onClick={(event) => {
-        const target = event.target as HTMLElement;
-        if (target.classList.contains(styles.container)) {
-          onCancel(event);
-        }
-      }}
-      data-testid="delete-modal"
-    >
-      <div className={styles.main}>
-        <h3>{title}</h3>
-        <p>{message}</p>
-        <div className={styles.buttonsContainer}>
-          <Button variant="plain" onClick={onCancel} ariaLabel="삭제 취소">
-            취소
-          </Button>
-          <Button onClick={onConfirm} variant="error">
-            {buttonName || '삭제'}
-          </Button>
+    <FocusLock>
+      <div
+        className={styles.container}
+        onClick={(event) => {
+          const target = event.target as HTMLElement;
+          if (target.classList.contains(styles.container)) {
+            onCancel(event);
+          }
+        }}
+        data-testid="delete-modal"
+      >
+        <div className={styles.main}>
+          <h3>{title}</h3>
+          <p>{message}</p>
+          <div className={styles.buttonsContainer}>
+            <Button variant="plain" onClick={onCancel} ariaLabel="삭제 취소">
+              취소
+            </Button>
+            <Button onClick={onConfirm} variant="error">
+              {buttonName || '삭제'}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </FocusLock>
   );
 }
 

@@ -3,12 +3,18 @@ import PostList from 'components/PostList';
 import { useRouter } from 'next/router';
 import styles from './Search.module.scss';
 
-function Search() {
+interface SearchProps {
+  subTitle?: string;
+}
+
+function Search({ subTitle }: SearchProps) {
   const router = useRouter();
   const { q } = router.query;
 
   return (
-    <Layout title="creddit">
+    <Layout
+      title={`${q} 검색 결과${subTitle ? ` (${subTitle})` : ''} - credidt`}
+    >
       <div className={styles.container}>
         <h2>{q} 검색 결과</h2>
         {q && (

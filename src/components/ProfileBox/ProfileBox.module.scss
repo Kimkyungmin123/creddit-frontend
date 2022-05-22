@@ -1,3 +1,5 @@
+@import 'styles/app';
+
 .profileBox {
   position: relative;
   display: flex;
@@ -19,6 +21,18 @@
     right: 0;
     height: 4.5rem;
     background-color: var(--profile-top-bg);
+  }
+
+  @media (max-width: $breakpoints-lg) {
+    width: 100%;
+    max-width: 36.75rem;
+    margin: 0 auto;
+  }
+}
+
+.imageBox {
+  @media (max-width: $breakpoints-lg) {
+    align-self: center;
   }
 }
 
@@ -70,6 +84,16 @@
   a,
   button {
     padding: 0.25rem 1.5rem;
+  }
+
+  @media (max-width: $breakpoints-lg) {
+    flex-direction: row;
+    gap: 1rem;
+
+    a,
+    button {
+      width: 100%;
+    }
   }
 }
 

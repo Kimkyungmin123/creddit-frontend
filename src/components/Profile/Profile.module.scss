@@ -1,11 +1,24 @@
+@import 'styles/app';
+
 .profileContainer {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 1.5rem;
+
+  @media (max-width: $breakpoints-lg) {
+    flex-direction: column;
+    flex-flow: column-reverse;
+    margin: 0 auto;
+    gap: 0;
+  }
 }
 
 .postList {
   margin-left: 0;
   margin-right: 0;
+
+  @media (max-width: $breakpoints-lg) {
+    margin: 1rem auto;
+  }
 }

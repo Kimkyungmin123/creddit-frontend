@@ -1,10 +1,10 @@
 import { logout } from 'slices/userSlice';
-import { render, screen, store, waitFor, act } from 'utils/test-utils';
-import Header, { HeaderProps } from './Header';
+import { act, render, screen, store, waitFor } from 'utils/test-utils';
+import { HeaderDesktop, HeaderProps } from './Header';
 
 describe('Header', () => {
   const setup = (props: Partial<HeaderProps> = {}) => {
-    const utils = render(<Header {...props} />);
+    const utils = render(<HeaderDesktop {...props} />);
     return {
       ...utils,
     };

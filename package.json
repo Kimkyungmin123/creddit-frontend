@@ -27,6 +27,7 @@
     "next-redux-wrapper": "^7.0.5",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
+    "react-focus-lock": "^2.9.1",
     "react-redux": "^8.0.1",
     "react-textarea-autosize": "^8.3.3",
     "sockjs-client": "^1.6.0",

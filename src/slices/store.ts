@@ -9,6 +9,7 @@ import commentsSlice, { CommentsState } from './commentsSlice';
 import postDetailSlice, { PostDetailState } from './postDetailSlice';
 import postsSlice, { PostsState } from './postsSlice';
 import profileSlice, { ProfileState } from './profileSlice';
+import themeSlice, { ThemeState } from './themeSlice';
 
 export interface State {
   user: UserState;
@@ -16,6 +17,7 @@ export interface State {
   postDetail: PostDetailState;
   profile: ProfileState;
   comments: CommentsState;
+  theme: ThemeState;
 }
 
 export const reducer = {
@@ -24,6 +26,7 @@ export const reducer = {
   [postDetailSlice.name]: postDetailSlice.reducer,
   [profileSlice.name]: profileSlice.reducer,
   [commentsSlice.name]: commentsSlice.reducer,
+  [themeSlice.name]: themeSlice.reducer,
 };
 
 const makeStore = wrapMakeStore(() =>

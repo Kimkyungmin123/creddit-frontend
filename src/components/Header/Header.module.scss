@@ -1,12 +1,41 @@
-.header {
+@import 'styles/app';
+
+.headerContainer {
   z-index: 10;
   position: sticky;
   top: 0;
+
+  .headerMobile {
+    display: none;
+    justify-content: space-between;
+    padding: 0 1rem;
+  }
+
+  .headerDesktop {
+    justify-content: center;
+    padding: 0.375rem 1.5rem;
+  }
+
+  @media (max-width: $breakpoints-md) {
+    .headerMobile {
+      display: flex;
+    }
+
+    .headerDesktop {
+      display: none;
+    }
+  }
+}
+
+.header {
   display: flex;
-  justify-content: center;
+  align-items: center;
   border-bottom: 0.0625rem solid var(--header-border);
   background-color: var(--page-bg-secondary);
-  padding: 0.375rem 1.5rem;
+
+  @media (max-width: $breakpoints-md) {
+    height: 2.25rem;
+  }
 }
 
 .container {
@@ -22,6 +51,15 @@
 
 .logo {
   font-size: 1.5rem;
+  color: var(--text-primary);
+
+  @media (max-width: $breakpoints-md) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.375rem;
+  }
 }
 
 .hoverElement {
@@ -41,6 +79,7 @@
   display: flex;
   padding: 0.375rem;
   margin: -0.375rem;
+  color: var(--text-primary);
 
   @media (hover: hover) {
     &:hover {
@@ -50,9 +89,55 @@
 }
 
 .authLink {
+  color: var(--text-primary);
+
   @media (hover: hover) {
     &:hover {
       color: var(--header-element-hover-text);
     }
   }
+}
+
+.menuButton {
+  display: flex;
+  padding: 0;
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+
+.fragment {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.menu {
+  z-index: -1;
+  position: absolute;
+  top: 2.25rem;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 2.25rem);
+  padding: 0.875rem 0.25rem;
+  background-color: var(--page-bg-primary);
+
+  a {
+    color: var(--text-primary);
+  }
+}
+
+.menuBottom {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 1.25rem;
+}
+
+.authButtons {
+  display: flex;
+  gap: 1rem;
 }

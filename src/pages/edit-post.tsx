@@ -6,6 +6,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { initPostDetail, usePostDetail } from 'slices/postDetailSlice';
 import { wrapper } from 'slices/store';
+import { initTheme } from 'slices/themeSlice';
 import { initUser, useUser } from 'slices/userSlice';
 import api from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
@@ -40,6 +41,7 @@ const EditPost: NextPage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    initTheme(store, context);
     const { user } = await initUser(store, context);
     await initPostDetail(store, context);
     if (!user) return { redirect: { destination: '/', permanent: false } };

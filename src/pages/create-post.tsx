@@ -4,6 +4,7 @@ import useLogoutRedirect from 'hooks/useLogoutRedirect';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { wrapper } from 'slices/store';
+import { initTheme } from 'slices/themeSlice';
 import { initUser } from 'slices/userSlice';
 import api from 'utils/api';
 import getPostFormData from 'utils/getPostFormData';
@@ -28,6 +29,7 @@ const CreatePost: NextPage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
+    initTheme(store, context);
     const { user } = await initUser(store, context);
     if (!user) return { redirect: { destination: '/', permanent: false } };
     return { props: {} };

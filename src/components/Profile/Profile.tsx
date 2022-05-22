@@ -6,13 +6,17 @@ import { useRouter } from 'next/router';
 import { useProfile } from 'slices/profileSlice';
 import styles from './Profile.module.scss';
 
-function Profile() {
+interface ProfileProps {
+  subTitle?: string;
+}
+
+function Profile({ subTitle }: ProfileProps) {
   const router = useRouter();
   const { nickname } = router.query;
   const profile = useProfile();
 
   return (
-    <Layout title={`${nickname} - creddit`}>
+    <Layout title={`${nickname}${subTitle ? ` (${subTitle})` : ''} - creddit`}>
       {!profile ? (
         <NotFound />
       ) : (

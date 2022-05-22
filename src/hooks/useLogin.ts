@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import api from 'utils/api';
 import setAuthToken from 'utils/setAuthToken';
 
-function useLogin() {
+function useLogin(redirectTo?: string) {
   const router = useRouter();
 
   const login = useCallback(
@@ -11,9 +11,9 @@ function useLogin() {
       const { data } = await api.post('/auth/login', values);
       setAuthToken(data);
       const prevUrl = sessionStorage.getItem('prevUrl');
-      router.replace(prevUrl || '/');
+      router.replace(redirectTo || prevUrl || '/');
     },
-    [router]
+    [router, redirectTo]
   );
 
   return login;

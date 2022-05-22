@@ -56,9 +56,8 @@ describe('FindPassword', () => {
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(
-        screen.getByText('해당 이메일로 임시 비밀번호를 보내드렸습니다.')
+        screen.getByText('해당 이메일로 보내드린 임시 비밀번호를 입력해주세요.')
       ).toBeInTheDocument();
     });
-    expect(screen.getByText('홈으로')).toHaveAttribute('href', '/');
   });
 });

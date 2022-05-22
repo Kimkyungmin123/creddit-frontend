@@ -122,7 +122,7 @@ function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
     const { user } = await initUser(store, context);
-    if (user) return { redirect: { destination: '/', permanent: false } };
+    if (!user) return { redirect: { destination: '/', permanent: false } };
     return { props: {} };
   }
 );

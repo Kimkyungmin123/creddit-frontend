@@ -14,6 +14,7 @@ const ERRORS = Object.freeze({
   passwordLong: '비밀번호 길이는 20자 이하여야 합니다.',
   passwordRequired: '비밀번호를 입력해주세요.',
   newPasswordConfirmInvalid: '새 비밀번호가 일치하지 않습니다.',
+  tempPasswordInvalid: '임시 비밀번호가 일치하지 않습니다.',
   emailOrPasswordInvalid: '이메일 또는 비밀번호가 잘못되었습니다.',
   contentLong: '글 내용은 2,000자 이상 작성할 수 없습니다.',
   commentLong: '댓글 내용은 2,000자 이상 작성할 수 없습니다.',

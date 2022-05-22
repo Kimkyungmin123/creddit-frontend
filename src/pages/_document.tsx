@@ -4,7 +4,6 @@ import React from 'react';
 React.useLayoutEffect = React.useEffect;
 
 export default function Document(props: DocumentProps) {
-  const { initialState } = props.__NEXT_DATA__.props.pageProps;
   return (
     <Html lang="ko">
       <Head>
@@ -15,7 +14,7 @@ export default function Document(props: DocumentProps) {
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
         />
       </Head>
-      <body data-theme={initialState?.theme}>
+      <body data-theme={props?.__NEXT_DATA__?.props?.initialState?.pageProps}>
         <Main />
         <NextScript />
       </body>

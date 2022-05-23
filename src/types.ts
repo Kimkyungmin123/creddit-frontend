@@ -52,6 +52,24 @@ export type Message = {
   createdDate: string;
 };
 
+export type ChatList = {
+  id: string;
+  leftUsers: [] | null;
+  messages: {
+    chatRoomId: string;
+    createdDate: string;
+    message: string;
+    receiver: string;
+    sender: string;
+  } | null;
+  target: string;
+  users: {
+    image: { imgName: null | string; imgUrl: null | string };
+    introduction: null | string;
+    nickname: string;
+  };
+};
+
 export type Follower = {
   email: string;
   imgName: string | null;

@@ -30,7 +30,7 @@
     "react-focus-lock": "^2.9.1",
     "react-redux": "^8.0.1",
     "react-textarea-autosize": "^8.3.3",
-    "react-toast": "^1.0.3",
+    "react-toastify": "^9.0.1",
     "sockjs-client": "^1.6.0",
     "swr": "^1.2.2",
     "yup": "^0.32.11"

@@ -124,7 +124,7 @@ const Chat: NextPage = () => {
         -2
       )}:${('0' + new Date().getMinutes()).slice(
         -2
-      )}:${new Date().getSeconds()} `,
+      )} :${new Date().getSeconds()} `,
     };
 
     setMessages((prev) => [...prev, messageInfo]);
@@ -153,7 +153,7 @@ const Chat: NextPage = () => {
                   lastMessage={data.messages[data.messages.length - 1]?.message}
                   sentDate={data.messages[
                     data.messages.length - 1
-                  ]?.createdDate.slice(13, 18)}
+                  ]?.createdDate.slice(13, 19)}
                   senderProfileImg={data.users[1]?.image.imgUrl}
                 />
               ))}

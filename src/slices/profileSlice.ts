@@ -2,6 +2,7 @@ import { AnyAction, createSlice, PayloadAction, Store } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import { HYDRATE } from 'next-redux-wrapper';
+import loadConfig from 'next/dist/server/config';
 import { useSelector } from 'react-redux';
 import { State } from 'slices/store';
 import { User } from 'types';
@@ -34,9 +35,10 @@ export async function initProfile(
 ) {
   try {
     const { nickname } = context.query;
-    const { data: user } = await axios.get<User>(
+    const url = encodeURI(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/profile/show/${nickname}`
     );
+    const { data: user } = await axios.get<User>(url);
     store.dispatch(setProfile(user));
   } catch (err) {
     console.error(err);

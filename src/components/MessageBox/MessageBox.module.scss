@@ -33,14 +33,15 @@
 
   span {
     padding-left: 0.125rem;
-    margin-bottom: 2.4375rem;
-    position: absolute;
     font-size: 0.875rem;
-    width: 8.75rem;
   }
+}
+.textContainer {
+  display: flex;
 }
 
 .textBox {
+  margin-top: 0.375rem;
   background-color: var(--chat-element-bg);
   border-radius: 0.9375rem;
   padding: 0.375rem 0.625rem;
@@ -52,6 +53,7 @@
   font-size: 0.75rem;
   color: var(--header-element-hover-text);
   padding-left: 0.375rem;
+  padding-right: 0.375rem;
 }
 
 .isMeMessageBox {
@@ -62,10 +64,6 @@
 
   @media (max-width: $breakpoints-lg) {
     font-size: 0.875rem;
-  }
-
-  span {
-    padding-right: 0.375rem;
   }
 }
 

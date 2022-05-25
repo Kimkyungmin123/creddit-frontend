@@ -38,10 +38,11 @@ const MessageBox = ({
             <div className={styles.messageContent}>
               <div className={styles.middleContent}>
                 <span>{interlocutorName}</span>
-
-                <div className={styles.textBox}>{content}</div>
+                <div className={styles.textContainer}>
+                  <div className={styles.textBox}>{content}</div>
+                  <div className={styles.time}>{time}</div>
+                </div>
               </div>
-              <span className={styles.time}>{time}</span>
             </div>
           </div>
         ) : (
@@ -49,7 +50,7 @@ const MessageBox = ({
             <div className={styles.isMeMessageContent}>
               <div className={styles.textBox}>{content}</div>
             </div>
-            <span className={styles.time}>{time}</span>
+            <div className={styles.time}>{time}</div>
           </div>
         ))}
     </>

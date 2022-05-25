@@ -34,9 +34,10 @@ export async function initProfile(
 ) {
   try {
     const { nickname } = context.query;
-    const { data: user } = await axios.get<User>(
+    const url = encodeURI(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/profile/show/${nickname}`
     );
+    const { data: user } = await axios.get<User>(url);
     store.dispatch(setProfile(user));
   } catch (err) {
     console.error(err);

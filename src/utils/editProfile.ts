@@ -3,12 +3,12 @@ import api from './api';
 
 type Params = {
   introduction: string;
-  imageFile?: File | null;
+  imageFile?: File | Blob | null;
 };
 
 async function editProfile({ introduction, imageFile }: Params) {
   const formData = new FormData();
-  formData.append('image', imageFile || new Blob());
+  if (imageFile) formData.append('image', imageFile);
   formData.append(
     'profileRequestDto',
     new Blob([JSON.stringify({ introduction })], {

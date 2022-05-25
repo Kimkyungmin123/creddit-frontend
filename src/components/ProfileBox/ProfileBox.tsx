@@ -65,11 +65,12 @@ function ProfileBox({ user }: ProfileBoxProps) {
 
             const changeIntroduction = async () => {
               if (introduction !== user.introduction) {
-                await editProfile({ introduction });
+                await editProfile({ introduction, imageFile: new Blob() });
               }
             };
 
-            await Promise.all([changeNickname(), changeIntroduction()]);
+            await changeNickname();
+            await changeIntroduction();
           }}
         />
       ) : (

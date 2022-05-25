@@ -121,4 +121,4 @@
 
 
 ## Development Rules
-[개발 규칙, 기술 스택과 선택한 이유, 팁, 에러 해결 방법](https://leather-army-577.notion.site/creddit-22f27fb651844240a8dfa3a72499bc6a)
+[개발 규칙, 기술 스택과 선택한 이유, 팁, 에러 해결 방법](https://leather-army-577.notion.site/2c9ebed6cc4d44db9a2ba9da99773f82)

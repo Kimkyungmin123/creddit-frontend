@@ -2,7 +2,6 @@ import { AnyAction, createSlice, PayloadAction, Store } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { GetServerSidePropsContext } from 'next';
 import { HYDRATE } from 'next-redux-wrapper';
-import loadConfig from 'next/dist/server/config';
 import { useSelector } from 'react-redux';
 import { State } from 'slices/store';
 import { User } from 'types';

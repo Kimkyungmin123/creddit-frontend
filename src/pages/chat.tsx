@@ -39,6 +39,7 @@ const Chat: NextPage = () => {
   );
 
   mutateChatData();
+
   useEffect(() => {
     if (!user || !currChatUser) return;
     if (currentChatRoomId) {
@@ -179,7 +180,7 @@ const Chat: NextPage = () => {
             </div>
             <div className={styles.messageform}>
               <div className={styles.encourageChat}>
-                {!isModalOpen && !currChatUser && <NonChatZone />}{' '}
+                {!isModalOpen && !messages && <NonChatZone />}{' '}
               </div>
               <div className={styles.chatDelete}>
                 {currChatUser && messages && (

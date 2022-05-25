@@ -52,16 +52,10 @@ export type Message = {
   createdDate: string;
 };
 
-export type ChatList = {
+export type Chat = {
   id: string;
   leftUsers: [] | null;
-  messages: {
-    chatRoomId: string;
-    createdDate: string;
-    message: string;
-    receiver: string;
-    sender: string;
-  } | null;
+  messages: Message[] | null;
   target: string;
   users: {
     image: { imgName: null | string; imgUrl: null | string };

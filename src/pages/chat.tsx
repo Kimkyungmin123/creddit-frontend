@@ -19,10 +19,9 @@ import { initTheme } from 'slices/themeSlice';
 import { initUser, useUser } from 'slices/userSlice';
 import SockJS from 'sockjs-client';
 import styles from 'styles/Chat.module.scss';
-import useSWR, { mutate } from 'swr';
-import { ChatList, Message } from 'types';
+import useSWR from 'swr';
+import { Chat, Message } from 'types';
 import wsInstance, { fetcher } from 'utils/wsInstance';
-import SortChatDate from 'utils/SortChatDate';
 
 const Chat: NextPage = () => {
   const user = useUser();
@@ -31,14 +30,15 @@ const Chat: NextPage = () => {
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
+  const [chatList, setChatList] = useState<Chat[]>([]);
   const client = useRef<Client | null>(null);
   const scrollRef = useRef<null | HTMLDivElement>(null);
-  const [chatList, setChatList] = useState<ChatList[]>([]);
-  const { data: chatData } = useSWR(
+  const { data: chatData, mutate: mutateChatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
     fetcher
   );
 
+  mutateChatData();
   useEffect(() => {
     if (!user || !currChatUser) return;
     if (currentChatRoomId) {
@@ -75,21 +75,28 @@ const Chat: NextPage = () => {
       },
     });
 
-    chatData?.sort(function (a: any, b: any) {
-      const firstMessageData =
-        a?.messages[a?.messages.length - 1]?.createdDate?.split(/[년월일:]/);
-      const secondMessageData =
-        b?.messages[b?.messages.length - 1]?.createdDate?.split(/[년월일:]/);
-      return SortChatDate(firstMessageData, secondMessageData);
-    });
-
-    setChatList(chatData);
     client.current.activate();
 
     return () => {
       client.current?.deactivate();
     };
-  }, [user, currChatUser, currentChatRoomId, messages, chatData, chatList]);
+  }, [user, currChatUser, currentChatRoomId]);
+
+  useEffect(() => {
+    chatData?.sort(function (a: Chat, b: Chat) {
+      const dateA =
+        a.messages && a.messages.length > 0
+          ? a.messages[a.messages.length - 1].createdDate
+          : '9999';
+      const dateB =
+        b.messages && b.messages.length > 0
+          ? b.messages[b.messages.length - 1].createdDate
+          : '9999';
+      return dateA > dateB ? -1 : 1;
+    });
+
+    setChatList(chatData);
+  }, [chatData]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -124,13 +131,11 @@ const Chat: NextPage = () => {
         -2
       )}:${('0' + new Date().getMinutes()).slice(
         -2
-      )} :${new Date().getSeconds()} `,
+      )}:${new Date().getSeconds()} `,
     };
 
     setMessages((prev) => [...prev, messageInfo]);
-
     publish(messageInfo);
-    mutate(`/chat/${user.nickname}/chatrooms`);
   };
 
   return (
@@ -151,9 +156,23 @@ const Chat: NextPage = () => {
                     setChat('');
                   }}
                   lastMessage={data.messages[data.messages.length - 1]?.message}
-                  sentDate={data.messages[
-                    data.messages.length - 1
-                  ]?.createdDate.slice(13, 19)}
+                  sentDate={
+                    data.messages[0]?.createdDate.slice(0, 12) ===
+                    data.messages[data.messages.length - 1]?.createdDate.slice(
+                      0,
+                      12
+                    )
+                      ? data.receiver === 'CHAT_MANAGER'
+                        ? data.messages[
+                            data.messages.length - 1
+                          ]?.createdDate.slice(13, 19)
+                        : data.messages[
+                            data.messages.length - 1
+                          ]?.createdDate.slice(13, 18)
+                      : data.messages[
+                          data.messages.length - 1
+                        ]?.createdDate.slice(5, 12)
+                  }
                   senderProfileImg={data.users[1]?.image.imgUrl}
                 />
               ))}
@@ -204,7 +223,7 @@ const Chat: NextPage = () => {
                     </div>
                   ))}
               </div>
-              {currChatUser && (
+              {currChatUser && messages && (
                 <div className={styles.SendMessageBox}>
                   <SendMessageForm
                     onSubmit={onSubmitForm}

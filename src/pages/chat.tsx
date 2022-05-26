@@ -19,8 +19,8 @@ import { initTheme } from 'slices/themeSlice';
 import { initUser, useUser } from 'slices/userSlice';
 import SockJS from 'sockjs-client';
 import styles from 'styles/Chat.module.scss';
-import useSWR, { mutate } from 'swr';
-import { Message } from 'types';
+import useSWR from 'swr';
+import { Chat, Message } from 'types';
 import wsInstance, { fetcher } from 'utils/wsInstance';
 
 const Chat: NextPage = () => {
@@ -30,32 +30,28 @@ const Chat: NextPage = () => {
   const [currChatUser, setCurrChatUser] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentChatRoomId, setCurrentChatRoomId] = useState('');
+  const [chatList, setChatList] = useState<Chat[]>([]);
   const client = useRef<Client | null>(null);
   const scrollRef = useRef<null | HTMLDivElement>(null);
-  const [chatList, setChatList] = useState([]);
-
-  const { data: chatData } = useSWR(
+  const { data: chatData, mutate: mutateChatData } = useSWR(
     user ? `/chat/${user.nickname}/chatrooms` : null,
     fetcher
   );
 
+  mutateChatData();
+
   useEffect(() => {
     if (!user || !currChatUser) return;
-
-    setChatList(chatData);
-    console.log(chatData);
-
     if (currentChatRoomId) {
       wsInstance
         .get<{ messages: Message[] }>(
           `/chat/${user?.nickname}/chatrooms/${currentChatRoomId}`
         )
         .then(({ data }) => {
-          console.log(data);
           setMessages(data.messages);
         });
     }
-  }, [user, currChatUser, currentChatRoomId, chatList, chatData]);
+  }, [user, currChatUser, currentChatRoomId]);
 
   useEffect(() => {
     client.current = new Client({
@@ -79,13 +75,29 @@ const Chat: NextPage = () => {
         });
       },
     });
+
     client.current.activate();
-    console.log(messages);
 
     return () => {
       client.current?.deactivate();
     };
-  }, [user, currChatUser, currentChatRoomId, messages]);
+  }, [user, currChatUser, currentChatRoomId]);
+
+  useEffect(() => {
+    chatData?.sort(function (a: Chat, b: Chat) {
+      const dateA =
+        a.messages && a.messages.length > 0
+          ? a.messages[a.messages.length - 1].createdDate
+          : '9999';
+      const dateB =
+        b.messages && b.messages.length > 0
+          ? b.messages[b.messages.length - 1].createdDate
+          : '9999';
+      return dateA > dateB ? -1 : 1;
+    });
+
+    setChatList(chatData);
+  }, [chatData]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -118,13 +130,13 @@ const Chat: NextPage = () => {
         new Date().getMonth() + 1
       }월 ${new Date().getDate()}일 ${('0' + new Date().getHours()).slice(
         -2
-      )}:${('0' + new Date().getMinutes()).slice(-2)} `,
+      )}:${('0' + new Date().getMinutes()).slice(
+        -2
+      )}:${new Date().getSeconds()} `,
     };
 
     setMessages((prev) => [...prev, messageInfo]);
-
     publish(messageInfo);
-    mutate(`/chat/${user.nickname}/chatrooms`);
   };
 
   return (
@@ -134,7 +146,7 @@ const Chat: NextPage = () => {
           <div className={styles.chatContainer}>
             <div className={styles.chatBox}>
               <AddChatButton onClick={openModal} />
-              {chatData?.map((data: any, i: number) => (
+              {chatList?.map((data: any, i: number) => (
                 <ChatListBox
                   key={i}
                   interlocutorName={data.target}
@@ -145,16 +157,30 @@ const Chat: NextPage = () => {
                     setChat('');
                   }}
                   lastMessage={data.messages[data.messages.length - 1]?.message}
-                  sentDate={data.messages[
-                    data.messages.length - 1
-                  ]?.createdDate.slice(13)}
+                  sentDate={
+                    data.messages[0]?.createdDate.slice(0, 12) ===
+                    data.messages[data.messages.length - 1]?.createdDate.slice(
+                      0,
+                      12
+                    )
+                      ? data.receiver === 'CHAT_MANAGER'
+                        ? data.messages[
+                            data.messages.length - 1
+                          ]?.createdDate.slice(13, 19)
+                        : data.messages[
+                            data.messages.length - 1
+                          ]?.createdDate.slice(13, 18)
+                      : data.messages[
+                          data.messages.length - 1
+                        ]?.createdDate.slice(5, 12)
+                  }
                   senderProfileImg={data.users[1]?.image.imgUrl}
                 />
               ))}
             </div>
             <div className={styles.messageform}>
               <div className={styles.encourageChat}>
-                {!isModalOpen && !currChatUser && <NonChatZone />}{' '}
+                {!isModalOpen && !messages && <NonChatZone />}{' '}
               </div>
               <div className={styles.chatDelete}>
                 {currChatUser && messages && (
@@ -179,7 +205,7 @@ const Chat: NextPage = () => {
                         key={i}
                         interlocutorName={data.sender}
                         content={data.message}
-                        time={data.createdDate.slice(13)}
+                        time={data.createdDate.slice(13, 18)}
                         isMe={data.receiver === currChatUser ? true : false}
                         isManager={
                           data.receiver === 'CHAT_MANAGER' ? true : false
@@ -198,7 +224,7 @@ const Chat: NextPage = () => {
                     </div>
                   ))}
               </div>
-              {currChatUser && (
+              {currChatUser && messages && (
                 <div className={styles.SendMessageBox}>
                   <SendMessageForm
                     onSubmit={onSubmitForm}

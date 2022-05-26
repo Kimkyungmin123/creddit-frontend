@@ -10,7 +10,6 @@ import { mutate } from 'swr';
 export type ChatDeleteProps = {
   user: string;
   currentChatRoomId: string;
-  // currChatUser?: string;
 };
 
 const ChatDelete = ({ user, currentChatRoomId }: ChatDeleteProps) => {
@@ -24,10 +23,7 @@ const ChatDelete = ({ user, currentChatRoomId }: ChatDeleteProps) => {
       .then((response) => {
         console.log(response);
         closeModal();
-        // setDeleteChatUser('');
-
         mutate(`/chat/${user}/chatrooms`);
-
         router.replace(router.asPath);
       });
   };

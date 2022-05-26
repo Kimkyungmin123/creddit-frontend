@@ -10,6 +10,8 @@ import classNames from 'classnames';
 import wsInstance from 'utils/wsInstance';
 import { fetcher } from 'utils/api';
 import { useUser } from 'slices/userSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface AddChatModalProps {
   show: boolean;
@@ -23,7 +25,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
   const user = useUser();
   const username = user?.nickname;
   const [currentIndex, setCurrentIndex] = useState(0);
-  // const [nonUser, setNonUser] = useState(false);
 
   const { data } = useSWR(
     `/member/search?page=0&keyword=${newMember}`,
@@ -48,28 +49,33 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
     return () => window.removeEventListener('keydown', moveFocus);
   }, [subscribed]);
 
-  const handleAddChatPartner = useCallback(() => {
-    setNewMember('');
-    setDebouncedValue('');
-    onCloseModal();
+  const handleAddChatPartner = useCallback(
+    (event) => {
+      setNewMember('');
+      setDebouncedValue('');
+      event.preventDefault();
 
-    if (!newMember || !newMember.trim()) {
-      return;
-    }
-    wsInstance
-      .post(`/chat/register`, {
-        myId: username,
-        userId: newMember,
-      })
-      .then(() => {
-        mutate(`/chat/${username}/chatrooms`);
-      })
-      .catch((error) => {
-        console.dir(error.response?.data);
-        // setNonUser(true);
-        alert('임시 알림) 없는 사용자입니다');
-      });
-  }, [username, newMember, setNewMember, onCloseModal]);
+      if (!newMember || !newMember.trim()) {
+        return;
+      }
+      wsInstance
+        .post(`/chat/register`, {
+          myId: username,
+          userId: newMember,
+        })
+        .then(() => {
+          mutate(`/chat/${username}/chatrooms`);
+          onCloseModal();
+        })
+        .catch((error) => {
+          console.dir(error.response?.data);
+          toast.error('존재하지 않는 사용자입니다.', {
+            position: toast.POSITION.BOTTOM_LEFT,
+          });
+        });
+    },
+    [username, newMember, setNewMember, onCloseModal]
+  );
 
   if (!show) {
     return null;
@@ -80,10 +86,12 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
 
   return (
     <div className={styles.chatModalContainer} onClick={onCloseModal}>
+      <ToastContainer />
       <div className={styles.chatModal} onClick={stopPropagation}>
         <Button type="reset" variant="plain" onClick={onCloseModal}>
           <Close />
         </Button>
+
         <form onSubmit={handleAddChatPartner}>
           <Input
             value={newMember}
@@ -134,7 +142,6 @@ const AddChatModal = ({ show, onCloseModal }: AddChatModalProps) => {
             </div>
           )}
         </form>
-        {/* {nonUser && } */}
       </div>
     </div>
   );

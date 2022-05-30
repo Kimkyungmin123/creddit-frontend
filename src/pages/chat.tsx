@@ -172,7 +172,7 @@ const Chat: NextPage = () => {
                           ]?.createdDate.slice(13, 18)
                       : data.messages[
                           data.messages.length - 1
-                        ]?.createdDate.slice(5, 12)
+                        ]?.createdDate.slice(5, 13)
                   }
                   senderProfileImg={data.users[1]?.image.imgUrl}
                 />
@@ -180,7 +180,9 @@ const Chat: NextPage = () => {
             </div>
             <div className={styles.messageform}>
               <div className={styles.encourageChat}>
-                {!isModalOpen && !messages && <NonChatZone />}{' '}
+                {!currChatUser && !isModalOpen && messages?.length === 0 && (
+                  <NonChatZone />
+                )}{' '}
               </div>
               <div className={styles.chatDelete}>
                 {currChatUser && messages && (
